@@ -1,0 +1,4 @@
+{
+    "mongoURI":
+      "mongodb+srv://tatakae:erenyeager@flightsdb.mnfjr.mongodb.net/FlightsDB?retryWrites=true&w=majority"
+  }
