@@ -2,8 +2,17 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import FlightCard from './FlightCard'
 import Grid from '@mui/material/Grid';
+import axios from 'axios'
 
 export default function Dashboard() {
+  const [flights,setFlights] = useState([]);
+
+  useEffect(() => {
+
+    axios.get('http://localhost:8082/api/flights/flightgetall').then(res=>console.log(res.data))
+  
+  }, [flights])
+
   return (
     <div className='center'>
       <h1>Welcome Admin</h1>

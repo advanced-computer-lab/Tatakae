@@ -6,6 +6,6 @@ import CreateFlight from './components/CreateFlight'
 import Dashboard from './components/Dashboard'
 import FlightCard from './components/FlightCard'
 
-ReactDOM.render(<SignIn />
+ReactDOM.render(<CreateFlight />
   ,document.getElementById('root')
 );

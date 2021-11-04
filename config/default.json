@@ -1,4 +1,4 @@
 {
     "mongoURI":
-      "mongodb+srv://process.env.DB_USERNAME:process.env.DB_PASSWORD@flightsdb.mnfjr.mongodb.net/process.env.DB_NAME?retryWrites=true&w=majority"
+      "mongodb+srv://tatakae:erenyeager@flightsdb.mnfjr.mongodb.net/FlightsDB?retryWrites=true&w=majority"
   }

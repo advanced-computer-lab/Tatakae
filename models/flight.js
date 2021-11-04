@@ -45,7 +45,8 @@ const flightSchema = new mongoose.Schema({
   },
   totalSeats: {
     type: Number,
-    default: {$sum : [firstSeats,economySeats,businessSeats]}  
+    //changed default
+    default: 0  
   },
   economyPrice: {
     type: Number,
