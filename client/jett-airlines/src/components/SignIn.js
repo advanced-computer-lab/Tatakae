@@ -80,7 +80,7 @@ export default class SignIn extends Component {
                     />
                 </FormControl>
                 <br />
-                <Button variant="contained" href='' disabled={this.state.password==='' || this.state.username===''}>
+                <Button variant="contained" href='/home' disabled={this.state.password==='' || this.state.username===''}>
                     Log In
                 </Button>
             </div>
