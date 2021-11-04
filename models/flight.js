@@ -16,7 +16,7 @@ const flightSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  airport: {
+  airportTerminal: {
     type: String,
     required: true
   },
