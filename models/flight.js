@@ -1,45 +1,74 @@
 // models/flight.js
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const flightSchema = new mongoose.Schema({
-  From: {
+  flightNumber: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  from:{
     type: String,
     required: true
   },
-  To: {
+  to: {
     type: String,
     required: true
   },
-  FlightDate : {
+  airportTerminal: {
+    type: String,
+    required: true
+  },
+  departureDate: {
     type: Date,
     required: true
   },
-  Economy: {
+  arrivalDate : {
+      type: Date,
+      required: true
+  },
+  economySeats: {
     type: Number,
     required: true,
     default: 0 
   },
-  Business: {
+  businessSeats: {
     type: Number,
     required: true,
     default: 0 ,
-
   },
-  First: {
+  firstSeats: {
     type: Number,
     required: true,
     default: 0 
   },
-  TotalSeats: {
+  totalSeats: {
     type: Number,
-    required: true,
-    default: {$sum : [First,Economy,Business]}  
+    default: {$sum : [firstSeats,economySeats,businessSeats]}  
   },
-  price: {
+  economyPrice: {
     type: Number,
     required: true,
     default: 0
+  },
+  businessPrice: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  firstPrice: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  baggageAllowance: {             // in Kilograms
+    type: Number,
+    required: true,
+    default: 30
   }
 });
+
+flightSchema.plugin(uniqueValidator, {message: 'Flight Already exists!!'});
 
 module.exports = flight = mongoose.model('flight', flightSchema);
