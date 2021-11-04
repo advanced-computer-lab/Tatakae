@@ -9,7 +9,7 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    axios.get('http://localhost:8082/api/flights/flightgetall').then(res=>console.log(res.data))
+    axios.get('http://localhost:8082  ').then(res=>console.log(res.data))
   
   }, [flights])
 

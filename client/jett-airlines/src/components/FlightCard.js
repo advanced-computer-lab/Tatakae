@@ -30,6 +30,9 @@ export default function FlightCard(props) {
         <Button size="small" color="primary">
           Delete
         </Button>
+        <Button size="small" color="primary">
+          View Details
+        </Button>
       </CardActions>
     </Card>
         </div>
