@@ -45,7 +45,9 @@ const flightSchema = new mongoose.Schema({
   },
   totalSeats: {
     type: Number,
-    default: {$sum : [firstSeats,economySeats,businessSeats]}  
+    default: {function () {
+      return this.economySeats + this.businessSeats + this.firstSeats
+    } 
   },
   economyPrice: {
     type: Number,
