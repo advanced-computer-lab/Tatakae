@@ -60,7 +60,7 @@ export default class CreateFlight extends Component {
         axios
             .post('http://localhost:8082/api/flights/flightcreate/', data)
             .then(res => {
-                this.setState({
+                /*this.setState({
                     flightNumber: '',
                     from: '',
                     to: '',
@@ -75,7 +75,7 @@ export default class CreateFlight extends Component {
                     bPrice: '',
                     fPrice: '',
                     baggage: ''
-                })
+                })*/
                 //this.props.history.push('/');
             })
             .catch(err => {

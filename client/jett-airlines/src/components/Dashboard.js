@@ -6,12 +6,12 @@ import axios from 'axios'
 
 export default function Dashboard() {
   const [flights,setFlights] = useState([]);
-
+  const [refresh, setRefresh]= useState(false);
   useEffect(() => {
 
-    axios.get('http://localhost:8082  ').then(res=>console.log(res.data))
-  
-  }, [flights])
+    axios.get('http://localhost:8082/api/flights/flightgetall').then(res=>{setFlights(res.data)
+  console.log(res.data)})
+  }, [refresh])
 
   return (
     <div className='center'>
@@ -34,18 +34,11 @@ export default function Dashboard() {
       <br />
       <br />
       <Grid container spacing={2}>
-        <Grid item xs={4} >
-        <FlightCard />
-        </Grid>
-        <Grid item xs={4}>
-        <FlightCard />
-        </Grid>
-        <Grid item xs={4} >
-        <FlightCard />
-        </Grid>
-        <Grid item xs={4} >
-        <FlightCard />
-        </Grid>
+        {flights.map(flight=>(
+          <Grid key={flight._id} item xs={4} >
+          <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh}/>
+          </Grid>
+        ))}
       </Grid>
     </div>
   )
