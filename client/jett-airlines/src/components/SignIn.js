@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../css/SignIn.css'
 
-import { TextField, Avatar, Paper, Grid, Button, Typography } from '@mui/material';
+import { TextField, Avatar, Paper, Grid, Button, Typography, createTheme ,ThemeProvider } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,6 +13,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import bg from '../assets/travelwallpaper22.jpg'
 import logo from '../assets/Logo.png'
 
+
+const darktheme = createTheme({
+    palette: {
+        mode: 'light'
+    },
+  });
 const styles = {
     background: {
         position: 'absolute',
@@ -80,6 +86,7 @@ export default class SignIn extends Component {
     render() {
         return (
             <div style={styles.background}>
+                <ThemeProvider theme={darktheme}>
                 <Grid>
                     <img src={logo} alt='' style={styles.logoStyle} />
                     <Paper elevation={10} style={styles.paperStyle}>
@@ -143,6 +150,7 @@ export default class SignIn extends Component {
                         </Button>
                     </Paper>
                 </Grid>
+                </ThemeProvider>
             </div>
         )
     }
