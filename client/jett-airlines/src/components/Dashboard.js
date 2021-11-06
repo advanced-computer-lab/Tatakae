@@ -49,7 +49,7 @@ export default function Dashboard() {
 
   const filtering = () => {
     if (numberQuery) {
-      setFlights(flights.filter(flight => Number(flight.flightNumber) === Number(numberQuery) ))
+      setFlights(allFlights.filter(flight => Number(flight.flightNumber) === Number(numberQuery) ))
     }
     else {
       setFlights(allFlights)
@@ -60,9 +60,6 @@ export default function Dashboard() {
     axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
       if(didIGet){
         setAllFlights(res.data)
-        let x=flights
-        console.log(x)
-        setFlights(x)
       }
       else{
         setFlights(res.data)
@@ -110,7 +107,7 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         {flights.map(flight => (
           <Grid key={flight._id} item xs={4} >
-            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} flights={flights} setFlights={setFlights} filtering={filtering} />
           </Grid>
         ))}
       </Grid>
