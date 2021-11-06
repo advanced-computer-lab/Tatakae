@@ -60,12 +60,12 @@ export default class EditFlight extends Component {
 
         axios
             .patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
-            .then(res => {
+            .then(() => {
                 this.props.closeDialog()
                 this.props.setRefresh(!this.props.refresh)
                 //this.props.history.push('/');
             })
-            .catch(err => {
+            .catch(() => {
                 console.log("Error in EditFlight!");
             })
     };
@@ -213,7 +213,7 @@ export default class EditFlight extends Component {
                 <br />
                 <br />
                 <Button variant="contained" onClick={this.handleSubmit}>
-                    Edit Flight
+                    Update Flight
                 </Button>
 
             </div>

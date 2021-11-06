@@ -11,10 +11,10 @@ export default function App() {
   return (
     <div>
         <Routes>
-          <Route path="/" component={SignIn} />
-          <Route exact path='/home' component={Dashboard} />
-          <Route exact path='/Create-Flight' component={CreateFlight} />
-          <Route exact path='/wrongURL' component={NotFound} />
+          <Route path="/" element={<SignIn/>} />
+          <Route exact path='/home' element={<Dashboard/>} />
+          <Route exact path='/Create-Flight' element={<CreateFlight/>} />
+          <Route path='/wrongURL' element={<NotFound/>} />
         </Routes>
     </div>
   )
