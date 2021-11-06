@@ -14,6 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
 import FlightDetails from './FlightDetails';
+import EditFlight from './EditFlight';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,6 +25,11 @@ export default function FlightCard(props) {
 
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openDetails, setOpenDetails] = React.useState(false);
+  const [openEdit, setOpenEdit]= React.useState(false);
+
+  const handleClickOpenEdit = () => {
+    setOpenEdit(true);
+  };
 
   const handleClickOpenDelete = () => {
     setOpenDelete(true);
@@ -35,6 +41,10 @@ export default function FlightCard(props) {
 
   const handleClickCloseDetails = () => {
     setOpenDetails(false);
+  };
+
+  const handleClickCloseEdit = () => {
+    setOpenEdit(false);
   };
 
   const handleYes = () => {
@@ -63,7 +73,7 @@ export default function FlightCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button onClick={handleClickOpenEdit} size="small" color="primary">
           Edit
         </Button>
         <Button onClick = {handleClickOpenDelete} size="small" color="primary">
@@ -104,12 +114,26 @@ export default function FlightCard(props) {
       >
         <DialogTitle>{"Flight Details"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
             <FlightDetails flight={props.flight}/>
-          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClickCloseDetails}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openEdit}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClickCloseEdit}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Edit Flight"}</DialogTitle>
+        <DialogContent>
+            <EditFlight flight={props.flight} closeDialog={handleClickCloseEdit} refresh={props.refresh} setRefresh={props.setRefresh}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClickCloseEdit}>Close</Button>
         </DialogActions>
       </Dialog>
         </div>

@@ -42,7 +42,7 @@ router.post('/flightcreate/', (req, res) => {
 // @description Update flight
 // @access Public
 router.patch('/flightupdate/:id', (req, res) => {
-  const flight =  flight.findByIdAndUpdate(req.params.id, req.body)
+  flight.findByIdAndUpdate(req.params.id, req.body)
      .then(flight => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
       res.status(400).json({ error: 'Unable to update the Database' })
