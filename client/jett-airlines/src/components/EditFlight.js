@@ -58,8 +58,7 @@ export default class EditFlight extends Component {
             baggageAllowance: this.state.baggage
         };
 
-        axios
-            .patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
+        axios.patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
             .then(() => {
                 this.props.closeDialog()
                 this.props.setRefresh(!this.props.refresh)
