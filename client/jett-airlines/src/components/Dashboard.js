@@ -16,8 +16,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function Dashboard() {
+  const [allFlights, setAllFlights] = useState([]);
+  const [didIGet, setGet]=useState(false)
   const [flights, setFlights] = useState([]);
-  const [filteredFlights, setFilteredFlights] = useState([]);
+  const [filteredFlights, setFilteredFlights] = useState([...flights]);
   const [refresh, setRefresh] = useState(false);
   const [numberQuery, setNumberQuery] = useState('');
   const [deptDateQuery, setDeptDateQuery] = useState(null);
@@ -28,8 +30,6 @@ export default function Dashboard() {
 
   const handleChangeNumber = (event) => {
     setNumberQuery(Number(event.target.value) || '');
-    console.log(numberQuery)
-    filtering();
   };
 
   const handleClickOpen = () => {
@@ -42,19 +42,30 @@ export default function Dashboard() {
     }
   };
 
+  const handleChoice= ()=>{
+    filtering()
+    handleClose()
+  }
+
   const filtering = () => {
     if (numberQuery) {
-      setFilteredFlights(flights.filter(flight => Number(flight.flightNumber) === Number(numberQuery) ))
+      setFlights(allFlights.filter(flight => Number(flight.flightNumber) === Number(numberQuery) ))
     }
     else {
-      setFilteredFlights(flights)
+      setFlights(allFlights)
     }
   }
 
   useEffect(() => {
-
     axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
-      setFlights(res.data)
+      if(didIGet){
+        setAllFlights(res.data)
+      }
+      else{
+        setFlights(res.data)
+      setAllFlights(res.data)
+      setGet(true)
+      }
     })
   }, [refresh])
 
@@ -63,22 +74,23 @@ export default function Dashboard() {
       <h1>Welcome Admin</h1>
       <Button onClick={handleClickOpen}>Search Options</Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>Fill the form</DialogTitle>
+        <DialogTitle>Search from the following criteria</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
+              <InputLabel id="demo-dialog-select-label">Flight No.</InputLabel>
               <Select
                 labelId="demo-dialog-select-label"
                 id="demo-dialog-select"
                 value={numberQuery}
+                defaultValue={''}
                 onChange={handleChangeNumber}
                 input={<OutlinedInput label="Flight Number" />}
               >
-                <MenuItem value={null}>
+                <MenuItem value={''}>
                   <em>None</em>
                 </MenuItem>
-                {flights.map(flight => (
+                {allFlights.map(flight => (
                   <MenuItem key={flight.flightNumber} value={flight.flightNumber}>{flight.flightNumber}</MenuItem>
                 ))}
               </Select>
@@ -87,15 +99,15 @@ export default function Dashboard() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Ok</Button>
+          <Button onClick={handleChoice}>Search</Button>
         </DialogActions>
       </Dialog>
       <br />
       <br />
       <Grid container spacing={2}>
-        {filteredFlights.map(flight => (
+        {flights.map(flight => (
           <Grid key={flight._id} item xs={4} >
-            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} flights={flights} setFlights={setFlights} filtering={filtering} />
           </Grid>
         ))}
       </Grid>
