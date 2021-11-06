@@ -8,7 +8,7 @@ import FlightCard from './components/FlightCard'
 import {BrowserRouter} from 'react-router-dom'
 
 ReactDOM.render(<BrowserRouter>
-<Dashboard />
+<App />
 </BrowserRouter>
   ,document.getElementById('root')
 );

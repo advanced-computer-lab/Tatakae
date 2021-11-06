@@ -213,7 +213,7 @@ export default class EditFlight extends Component {
                 <br />
                 <br />
                 <Button variant="contained" onClick={this.handleSubmit}>
-                    Edit Flight
+                    Update Flight
                 </Button>
 
             </div>

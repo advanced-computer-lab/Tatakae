@@ -23,9 +23,9 @@ export default function FlightDetails(props) {
                             <br/>
                             To: {flight.to}
                             <br/>
-                            Departure Date: {flight.departureDate}
+                            Departure Date: {flight.departureDate.substring(0,10)}
                             <br/>
-                            Arrival Date: {flight.arrivalDate}
+                            Arrival Date: {flight.arrivalDate.substring(0,10)}
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">
