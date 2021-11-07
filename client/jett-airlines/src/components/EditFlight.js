@@ -79,7 +79,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='flightNumber'
                         id="flightNumber"
-                        type='number'
                         value={this.state.flightNumber}
                         onChange={this.handleChange}
                     />
@@ -138,7 +137,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='economy'
                         id="economy"
-                        type='number'
                         value={this.state.economy}
                         onChange={this.handleChange}
                     />
@@ -149,7 +147,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='business'
                         id="business"
-                        type='number'
                         value={this.state.business}
                         onChange={this.handleChange}
                     />
@@ -160,7 +157,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='first'
                         id="first"
-                        type='number'
                         value={this.state.first}
                         onChange={this.handleChange}
                     />
@@ -171,7 +167,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='ePrice'
                         id="ePrice"
-                        type='number'
                         value={this.state.ePrice}
                         onChange={this.handleChange}
                     />
@@ -182,7 +177,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='bPrice'
                         id="bPrice"
-                        type='number'
                         value={this.state.bPrice}
                         onChange={this.handleChange}
                     />
@@ -193,7 +187,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='fPrice'
                         id="fPrice"
-                        type='number'
                         value={this.state.fPrice}
                         onChange={this.handleChange}
                     />
@@ -205,7 +198,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='baggage'
                         id="baggage"
-                        type='number'
                         value={this.state.baggage}
                         onChange={this.handleChange}
                     />

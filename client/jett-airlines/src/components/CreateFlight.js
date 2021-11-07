@@ -17,9 +17,9 @@ export default class CreateFlight extends Component {
         airportTerminal: '',
         departureDate: new Date(),
         arrivalDate: new Date(),
-        economy: 0,
-        business: 0,
-        first: 0,
+        economy: '',
+        business: '',
+        first: '',
         totalSeats: 0,
         ePrice: '',
         bPrice: '',
@@ -95,7 +95,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='flightNumber'
                         id="flightNumber"
-                        type='number'
                         value={this.state.flightNumber}
                         onChange={this.handleChange}
                     />
@@ -154,7 +153,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='economy'
                         id="economy"
-                        type='number'
                         value={this.state.economy}
                         onChange={this.handleChange}
                     />
@@ -165,7 +163,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='business'
                         id="business"
-                        type='number'
                         value={this.state.business}
                         onChange={this.handleChange}
                     />
@@ -176,7 +173,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='first'
                         id="first"
-                        type='number'
                         value={this.state.first}
                         onChange={this.handleChange}
                     />
@@ -187,7 +183,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='ePrice'
                         id="ePrice"
-                        type='number'
                         value={this.state.ePrice}
                         onChange={this.handleChange}
                     />
@@ -198,7 +193,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='bPrice'
                         id="bPrice"
-                        type='number'
                         value={this.state.bPrice}
                         onChange={this.handleChange}
                     />
@@ -209,7 +203,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='fPrice'
                         id="fPrice"
-                        type='number'
                         value={this.state.fPrice}
                         onChange={this.handleChange}
                     />
@@ -221,7 +214,6 @@ export default class CreateFlight extends Component {
                     <FilledInput
                         name='baggage'
                         id="baggage"
-                        type='number'
                         value={this.state.baggage}
                         onChange={this.handleChange}
                     />

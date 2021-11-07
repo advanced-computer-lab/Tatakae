@@ -18,6 +18,8 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export default function Dashboard() {
   const [flights, setFlights] = useState([]);
@@ -27,6 +29,7 @@ export default function Dashboard() {
   const [deptDateQuery, setDeptDateQuery] = useState(null);
   const [arrDateQuery, setArrDateQuery] = useState(null);
   const [terminalQuery, setTerminalQuery] = useState('');
+  const [availabe, setAvailable] = useState(false);
 
   const [open, setOpen] = React.useState(false);
 
@@ -38,11 +41,15 @@ export default function Dashboard() {
     setTerminalQuery(event.target.value || '');
   }
 
-  const handleChangeDeptDate= (event)=>{
+  const handleChangeAvailable = (event) => {
+    setAvailable(!availabe)
+  }
+
+  const handleChangeDeptDate = (event) => {
     setDeptDateQuery(new Date(event))
   }
 
-  const handleChangeArrDate= (event)=>{
+  const handleChangeArrDate = (event) => {
     setArrDateQuery(new Date(event))
   }
 
@@ -62,20 +69,23 @@ export default function Dashboard() {
   }
 
   const filtering = () => {
-    let x=flights
+    let x = flights
     if (numberQuery) {
-      x=x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
+      x = x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
     }
     if (terminalQuery) {
-      x=x.filter(flight => flight.airportTerminal === terminalQuery)
+      x = x.filter(flight => flight.airportTerminal === terminalQuery)
     }
-    if(deptDateQuery){
-      x=x.filter(flight=> new Date(flight.departureDate).setSeconds(0,0) === new Date(deptDateQuery).setSeconds(0,0))
+    if (deptDateQuery) {
+      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
     }
-    if(arrDateQuery){
-      x=x.filter(flight=> new Date(flight.arrivalDate).setSeconds(0,0) === new Date(arrDateQuery).setSeconds(0,0))
+    if (arrDateQuery) {
+      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
     }
-      setFilteredFlights(x)
+    if(availabe){
+      x=x.filter(flight=> new Date(flight.departureDate) >= new Date())
+    }
+    setFilteredFlights(x)
   }
 
   useEffect(() => {
@@ -86,7 +96,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     filtering()
-  }, [flights])
+  }, [flights, availabe])
 
   return (
     <div className='center'>
@@ -136,22 +146,27 @@ export default function Dashboard() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DateTimePicker
-                        label="Departure Date"
-                        value={deptDateQuery}
-                        onChange={handleChangeDeptDate}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
+              <DateTimePicker
+                label="Departure Date"
+                value={deptDateQuery}
+                onChange={handleChangeDeptDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
 
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DateTimePicker
-                        label="Arrival Date"
-                        value={arrDateQuery}
-                        onChange={handleChangeArrDate}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                label="Arrival Date"
+                value={arrDateQuery}
+                onChange={handleChangeArrDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <FormControlLabel control={<Checkbox checked={availabe}
+              onChange={handleChangeAvailable}
+              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+
           </Box>
         </DialogContent>
         <DialogActions>
