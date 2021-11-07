@@ -82,7 +82,7 @@ export default class CreateFlight extends Component {
                 //this.props.history.push('/');
             })
             .catch(err => {
-                console.log("Error in CreateFlight!");
+                console.log(err.message);
             })
     };
 

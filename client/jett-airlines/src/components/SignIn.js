@@ -9,7 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
 
 export default class SignIn extends Component {
     state = {
@@ -81,7 +80,7 @@ export default class SignIn extends Component {
                     />
                 </FormControl>
                 <br />
-                <Button variant="contained" href='/home' disabled={this.state.password==='' || this.state.username===''}>
+                <Button variant="contained" href='/home' disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
                     Log In
                 </Button>
             </div>

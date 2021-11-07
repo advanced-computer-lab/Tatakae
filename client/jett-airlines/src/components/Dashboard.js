@@ -20,6 +20,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FilledInput from '@mui/material/FilledInput';
+
 
 export default function Dashboard() {
   const [flights, setFlights] = useState([]);
@@ -108,21 +110,13 @@ export default function Dashboard() {
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={numberQuery}
-                defaultValue='None'
-                onChange={handleChangeNumber}
-                input={<OutlinedInput label="Flight Number" />}
-              >
-                <MenuItem value='None'>
-                  <em>None</em>
-                </MenuItem>
-                {flights.map(flight => (
-                  <MenuItem key={flight.flightNumber} value={flight.flightNumber}>{flight.flightNumber}</MenuItem>
-                ))}
-              </Select>
+              <InputLabel>Flight Number</InputLabel>
+                    <FilledInput
+                        name='flightNumber'
+                        id="flightNumber"
+                        value={numberQuery}
+                        onChange={handleChangeNumber}
+                    />
             </FormControl>
 
             <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -133,7 +127,7 @@ export default function Dashboard() {
                 value={terminalQuery}
                 defaultValue=''
                 onChange={handleChangeTerminal}
-                input={<OutlinedInput label="Flight Number" />}
+                input={<OutlinedInput label="Terminal No." />}
               >
                 <MenuItem value=''>
                   <em>None</em>

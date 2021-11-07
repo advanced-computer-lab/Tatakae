@@ -25,9 +25,16 @@ const flightSchema = new mongoose.Schema({
     required: true
   },
   arrivalDate : {
-      type: Date,
-      required: true
+    type: Date,
+    required: true,
+    validate: function(input) {
+      /* return true only if the input is a valid date, AND is 
+      greater than or equal to the departure time */
+      return new Date(input) >= this.departureDate;
   },
+  message: input => `${input}(Arrival Date) must be greater than or equal to the departure date!`
+
+},
   economySeats: {
     type: Number,
     required: true,
