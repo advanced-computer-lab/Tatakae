@@ -18,16 +18,31 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import { Paper } from '@mui/material';
+import {Paper,Typography } from '@mui/material';
+import {makeStyles} from "@mui/styles"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import Roboto from'@fontsource/roboto/700.css';
 import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import FlightIcon from '@mui/icons-material/Flight';
 import bg from '../assets/travelwallpaper-1.png'
 import logo from '../assets/Logo.png'
 import darktab from '../assets/darkglass.png'
 
+
+const useStyles = makeStyles({
+  palette: {
+      mode: 'light'
+  },
+  typographyStyle:{
+    color: "white",
+    font: "Roboto",
+  }
+});
 export default function Dashboard() {
+  const classes = useStyles();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -67,7 +82,7 @@ export default function Dashboard() {
   const styles = {
     background: {
       position: 'absolute',
-      padding: '20',
+      padding: 'auto',
       height: '100vh',
       width: '100vw',
       backgroundImage: `url(${bg})`
@@ -75,6 +90,7 @@ export default function Dashboard() {
 
     btnstyle: {
       height: '40px',
+      width: '220px',
       margin: '-130px 0px 0px 100px',
       alignitems: 'center'
   },
@@ -88,7 +104,7 @@ export default function Dashboard() {
     dg: {
       height: '150px',
       width: '100vw',
-      margin: '0',
+      margin: '-2.5vh -1.25vw',
       
       backgroundImage: `url(${darktab})`
     },
@@ -100,10 +116,16 @@ export default function Dashboard() {
     paperStyle: {
       padding: 20,
       conetentFit: 'contain',
-      height: '100vh',
+      minHeight: '100vh',
+      maxHeight: 'auto',
       width: '90vw',
-      margin: "12% 0% 0% 3%"
-  }
+      margin: "12% 0% 0% 2.5%"
+  },
+  textStyle: {
+    margin: '5px 0 0 0',
+    Color: 'white'
+},
+
   };
 
   const handleChoice = () => {
@@ -139,17 +161,37 @@ export default function Dashboard() {
     <div style={styles.background}>
       <div  style={styles.dg} >
         
-      <img src={logo} alt='' style={styles.logoStyle} />
+      <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
+      <Grid container spacing={5} style = {{margin: '4.5vh 14vw'}}>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<HomeIcon />}
+      href='/Home'>Home</Button>
       <Button 
       color='primary'
       variant="contained"
       style={styles.btnstyle}
       startIcon={<SearchIcon />}
       onClick={handleClickOpen}>Search For Flights</Button>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<FlightIcon />}
+      href='/Create-Flight'>Create Flight</Button>
+       </Grid>
+      
       
       </div>
+
+      <Typography className={classes.typographyStyle}>
+                                Welcome Admin!
+                            </Typography>
+
      
-      <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+      <Dialog disableEscapeKeyDown  maxWidth="auto" open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -218,7 +260,7 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
-      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 4vw'}}>
+      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 3vw'}}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
