@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 
 export default function FlightDetails(props) {
     const flight=props.flight
+    
     return (
         <div>
             <Card sx={{ maxWidth: 500 }}>
@@ -23,9 +24,9 @@ export default function FlightDetails(props) {
                             <br/>
                             To: {flight.to}
                             <br/>
-                            Departure Date: {flight.departureDate.substring(0,10)}
+                            Departure Date: {new Date(flight.departureDate).toLocaleString()}
                             <br/>
-                            Arrival Date: {flight.arrivalDate.substring(0,10)}
+                            Arrival Date: {new Date(flight.arrivalDate).toLocaleString()}
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">

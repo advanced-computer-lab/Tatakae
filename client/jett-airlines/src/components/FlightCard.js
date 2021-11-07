@@ -48,12 +48,9 @@ export default function FlightCard(props) {
   };
 
   const handleYes = () => {
-      props.setFlights(props.flights.filter(flight=>flight.flightNumber!==props.flight.flightNumber))
       axios.delete(`http://localhost:8082/api/flights/flightdelete/${props.flight._id}`).then(()=>{
         setOpenDelete(false);
         props.setRefresh(!props.refresh)
-      }).catch(()=>{
-        props.setFlights([...props.flights, props.flight])
       })
   };
 
@@ -71,7 +68,7 @@ export default function FlightCard(props) {
             From {props.flight.from} To {props.flight.to}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.flight.departureDate}
+            {new Date(props.flight.departureDate).toLocaleString()}
           </Typography>
         </CardContent>
       </CardActionArea>
