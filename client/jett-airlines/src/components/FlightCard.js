@@ -59,7 +59,7 @@ export default function FlightCard(props) {
   }
     return (
         <div className='center'>
-            <Card sx={{ maxWidth: 350 }}>
+            <Card sx={{ maxWidth: 350 }} elevation={10}>
       <CardActionArea>
       <AirplaneTicketIcon color="primary" sx={{ fontSize: 50 }}/>
 

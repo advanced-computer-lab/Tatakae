@@ -5,7 +5,10 @@ import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CardMedia from '@mui/material/CardMedia';
 import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Icon from '@mui/material/Icon';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,9 +18,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import { Paper } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import SearchIcon from '@mui/icons-material/Search';
+import bg from '../assets/travelwallpaper-1.png'
+import logo from '../assets/Logo.png'
+import darktab from '../assets/darkglass.png'
 
 export default function Dashboard() {
   const [flights, setFlights] = useState([]);
@@ -56,6 +64,47 @@ export default function Dashboard() {
       setOpen(false);
     }
   };
+  const styles = {
+    background: {
+      position: 'absolute',
+      padding: '20',
+      height: '100vh',
+      width: '100vw',
+      backgroundImage: `url(${bg})`
+    }, 
+
+    btnstyle: {
+      height: '40px',
+      margin: '-130px 0px 0px 100px',
+      alignitems: 'center'
+  },
+
+    logoStyle: {
+      height: '50px',
+      margin: '50px',
+      alignitems: 'left'
+
+    },
+    dg: {
+      height: '150px',
+      width: '100vw',
+      margin: '0',
+      
+      backgroundImage: `url(${darktab})`
+    },
+    media: {
+      height: '150px',
+      width: '100vw',
+      margin: '0px auto',
+    },
+    paperStyle: {
+      padding: 20,
+      conetentFit: 'contain',
+      height: '100vh',
+      width: '90vw',
+      margin: "12% 0% 0% 3%"
+  }
+  };
 
   const handleChoice = () => {
     filtering()
@@ -87,9 +136,19 @@ export default function Dashboard() {
   }, [flights])
 
   return (
-    <div className='center'>
-      <h1>Welcome Admin</h1>
-      <Button onClick={handleClickOpen}>Search Options</Button>
+    <div style={styles.background}>
+      <div  style={styles.dg} >
+        
+      <img src={logo} alt='' style={styles.logoStyle} />
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<SearchIcon />}
+      onClick={handleClickOpen}>Search For Flights</Button>
+      
+      </div>
+     
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
@@ -159,13 +218,13 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
-      <Grid container spacing={2}>
+      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 4vw'}}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
           </Grid>
         ))}
-      </Grid>
+      </Grid></Paper>
     </div>
   )
 }
