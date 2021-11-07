@@ -68,7 +68,7 @@ export default function FlightCard(props) {
             From {props.flight.from} To {props.flight.to}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.flight.departureDate}
+            {new Date(props.flight.departureDate).toLocaleString()}
           </Typography>
         </CardContent>
       </CardActionArea>

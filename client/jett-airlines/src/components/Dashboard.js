@@ -22,7 +22,6 @@ import {Paper,Typography } from '@mui/material';
 import {makeStyles} from "@mui/styles"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 import Roboto from'@fontsource/roboto/700.css';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -30,6 +29,10 @@ import FlightIcon from '@mui/icons-material/Flight';
 import bg from '../assets/travelwallpaper-1.png'
 import logo from '../assets/Logo.png'
 import darktab from '../assets/darkglass.png'
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 
 
 const useStyles = makeStyles({
@@ -47,9 +50,10 @@ export default function Dashboard() {
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [numberQuery, setNumberQuery] = useState('');
-  const [deptDateQuery, setDeptDateQuery] = useState('');
-  const [arrDateQuery, setArrDateQuery] = useState('');
+  const [deptDateQuery, setDeptDateQuery] = useState(null);
+  const [arrDateQuery, setArrDateQuery] = useState(null);
   const [terminalQuery, setTerminalQuery] = useState('');
+  const [availabe, setAvailable] = useState(false);
 
   const [open, setOpen] = React.useState(false);
 
@@ -61,13 +65,16 @@ export default function Dashboard() {
     setTerminalQuery(event.target.value || '');
   }
 
-  const handleChangeDeptDate= (event)=>{
-    console.log(event.toLocaleDateString())
-    setDeptDateQuery(event.toLocaleDateString())
+  const handleChangeAvailable = (event) => {
+    setAvailable(!availabe)
   }
 
-  const handleChangeArrDate= (event)=>{
-    setArrDateQuery(new Date(event.toLocaleDateString()).toLocaleDateString())
+  const handleChangeDeptDate = (event) => {
+    setDeptDateQuery(new Date(event))
+  }
+
+  const handleChangeArrDate = (event) => {
+    setArrDateQuery(new Date(event))
   }
 
   const handleClickOpen = () => {
@@ -134,17 +141,23 @@ export default function Dashboard() {
   }
 
   const filtering = () => {
-    let x=flights
+    let x = flights
     if (numberQuery) {
-      x=x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
+      x = x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
     }
     if (terminalQuery) {
-      x=x.filter(flight => flight.airportTerminal === terminalQuery)
+      x = x.filter(flight => flight.airportTerminal === terminalQuery)
     }
-    if(deptDateQuery){
-      x=x.filter(flight=> flight.departureDate.substring(0,10) === deptDateQuery)
+    if (deptDateQuery) {
+      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
     }
-      setFilteredFlights(x)
+    if (arrDateQuery) {
+      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
+    }
+    if(availabe){
+      x=x.filter(flight=> new Date(flight.departureDate) >= new Date())
+    }
+    setFilteredFlights(x)
   }
 
   useEffect(() => {
@@ -155,7 +168,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     filtering()
-  }, [flights])
+  }, [flights, availabe])
 
   return (
     <div style={styles.background}>
@@ -235,22 +248,27 @@ export default function Dashboard() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Departure Date"
-                        value={deptDateQuery}
-                        onChange={handleChangeDeptDate}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
+              <DateTimePicker
+                label="Departure Date"
+                value={deptDateQuery}
+                onChange={handleChangeDeptDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
 
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Arrival Date"
-                        value={arrDateQuery}
-                        onChange={handleChangeArrDate}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                label="Arrival Date"
+                value={arrDateQuery}
+                onChange={handleChangeArrDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <FormControlLabel control={<Checkbox checked={availabe}
+              onChange={handleChangeAvailable}
+              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+
           </Box>
         </DialogContent>
         <DialogActions>

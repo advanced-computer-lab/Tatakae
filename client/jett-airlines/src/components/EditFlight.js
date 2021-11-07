@@ -7,7 +7,7 @@ import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 
 export default class EditFlight extends Component {
 
@@ -29,11 +29,11 @@ export default class EditFlight extends Component {
     }
 
     handleDeptDateChange= e=>{
-        this.setState({departureDate: new Date(e.toLocaleDateString())})
+        this.setState({departureDate: new Date(e)})
     }
 
     handleArrDateChange= e=>{
-        this.setState({arrivalDate: new Date(e.toLocaleDateString())})
+        this.setState({arrivalDate: new Date(e)})
     }
 
     handleChange = e => {
@@ -51,7 +51,7 @@ export default class EditFlight extends Component {
             economySeats: this.state.economy,
             businessSeats: this.state.business,
             firstSeats: this.state.first,
-            totalSeats: this.state.economy+this.state.business+this.state.first,
+            totalSeats: Number(this.state.economy)+Number(this.state.business)+Number(this.state.first),
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
             firstPrice: this.state.fPrice,
@@ -79,7 +79,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='flightNumber'
                         id="flightNumber"
-                        type='number'
                         value={this.state.flightNumber}
                         onChange={this.handleChange}
                     />
@@ -116,7 +115,7 @@ export default class EditFlight extends Component {
                 </FormControl>
 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
+                    <DateTimePicker
                         label="Departure Date"
                         value={this.state.departureDate}
                         onChange={this.handleDeptDateChange}
@@ -125,7 +124,7 @@ export default class EditFlight extends Component {
                 </LocalizationProvider>
 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
+                    <DateTimePicker
                         label="Arrival Date"
                         value={this.state.arrivalDate}
                         onChange={this.handleArrDateChange}
@@ -138,7 +137,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='economy'
                         id="economy"
-                        type='number'
                         value={this.state.economy}
                         onChange={this.handleChange}
                     />
@@ -149,7 +147,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='business'
                         id="business"
-                        type='number'
                         value={this.state.business}
                         onChange={this.handleChange}
                     />
@@ -160,7 +157,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='first'
                         id="first"
-                        type='number'
                         value={this.state.first}
                         onChange={this.handleChange}
                     />
@@ -171,7 +167,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='ePrice'
                         id="ePrice"
-                        type='number'
                         value={this.state.ePrice}
                         onChange={this.handleChange}
                     />
@@ -182,7 +177,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='bPrice'
                         id="bPrice"
-                        type='number'
                         value={this.state.bPrice}
                         onChange={this.handleChange}
                     />
@@ -193,7 +187,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='fPrice'
                         id="fPrice"
-                        type='number'
                         value={this.state.fPrice}
                         onChange={this.handleChange}
                     />
@@ -205,7 +198,6 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='baggage'
                         id="baggage"
-                        type='number'
                         value={this.state.baggage}
                         onChange={this.handleChange}
                     />
