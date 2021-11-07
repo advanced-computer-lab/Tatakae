@@ -15,15 +15,36 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import {Paper,Typography ,createTheme ,ThemeProvider } from '@mui/material';
+import {makeStyles} from "@mui/styles"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import FlightIcon from '@mui/icons-material/Flight';
+import bg from '../assets/travelwallpaper-1.png'
+import logo from '../assets/Logo.png'
+import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FilledInput from '@mui/material/FilledInput';
 
 
+const darktheme = createTheme({
+  palette: {
+      mode: 'dark'
+  },
+});
+const useStyles = makeStyles({
+  typographyStyle:{
+    color: "white",
+    font: "Roboto",
+  }
+});
+
 export default function Dashboard() {
+  const classes = useStyles();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -36,7 +57,7 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
 
   const handleChangeNumber = (event) => {
-    setNumberQuery(Number(event.target.value) || '');
+    setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
   const handleChangeTerminal = (event) => {
@@ -63,6 +84,62 @@ export default function Dashboard() {
     if (reason !== 'backdropClick') {
       setOpen(false);
     }
+  };
+  const styles = {
+    background: {
+      position: 'absolute',
+      padding: 'auto',
+      height: '100vh',
+      width: '100vw',
+      backgroundImage: `url(${bg})`
+    }, 
+
+    btnstyle: {
+      height: '40px',
+      width: '220px',
+      margin: '-130px 0px 0px 20px',
+      alignitems: 'center'
+  },
+
+    logoStyle: {
+      height: '50px',
+      margin: '50px',
+      alignitems: 'left'
+
+    },
+    dg: {
+      height: '150px',
+      width: '100vw',
+      margin: '-2.5vh -1.25vw',
+      
+      backgroundImage: `url(${darktab})`
+    },
+    media: {
+      height: '150px',
+      width: '100vw',
+      margin: '0px auto',
+    },
+    paperStyle: {
+      padding: 20,
+      conetentFit: 'contain',
+      minHeight: '100vh',
+      maxHeight: 'auto',
+      width: '90vw',
+      margin: "0% 0% 0% 2.5%"
+  },
+  textStyle: {
+    margin: '5px 0 0 0',
+    Color: 'white'
+  },
+  checkboxContainer: {
+    textAlign:'right',
+    height: '200px' ,
+    margin: "0% 5% 0% 2.5%",
+  },
+  checkboxStyle: {
+    margin: "12% 2% 0% 0%",
+    color: 'white'
+  },
   };
 
   const handleChoice = () => {
@@ -101,24 +178,54 @@ export default function Dashboard() {
   }, [flights, availabe])
 
   return (
-    <div className='center'>
-      <h1>Welcome Admin</h1>
-      <Button onClick={handleClickOpen}>Search Options</Button>
-      <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+    <div style={styles.background}>
+      <div  style={styles.dg} >
+        
+      <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
+      <Grid container spacing={5} style = {{margin: '4.75vh 18vw'}}>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<HomeIcon />}
+      href='/Home'>Home</Button>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<SearchIcon />}
+      onClick={handleClickOpen}>Search For Flights</Button>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<FlightIcon />}
+      href='/Create-Flight'>Create Flight</Button>
+       </Grid>
+      
+      
+      </div>
+
+      <Typography margin= {'0vh 4vw'} className={classes.typographyStyle}>
+                                Welcome Admin!
+                            </Typography>
+
+     
+      <Dialog disableEscapeKeyDown  open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap'}}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
+            <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
               <InputLabel>Flight Number</InputLabel>
-                    <FilledInput
+                    <OutlinedInput
                         name='flightNumber'
-                        id="flightNumber"
+                        id="flightNumberfield"
                         value={numberQuery}
+                        type = "text"
                         onChange={handleChangeNumber}
                     />
             </FormControl>
-
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
               <Select
@@ -156,11 +263,7 @@ export default function Dashboard() {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-
-            <FormControlLabel control={<Checkbox checked={availabe}
-              onChange={handleChangeAvailable}
-              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
-
+            
           </Box>
         </DialogContent>
         <DialogActions>
@@ -170,13 +273,20 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
-      <Grid container spacing={2}>
+      <div style= {styles.checkboxContainer} >
+        <ThemeProvider theme={darktheme}>
+      <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
+              onChange={handleChangeAvailable}
+              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+     </ThemeProvider>
+      </div>
+      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 0vw'}}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
           </Grid>
         ))}
-      </Grid>
+      </Grid></Paper>
     </div>
   )
 }
