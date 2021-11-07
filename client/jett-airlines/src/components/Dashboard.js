@@ -17,15 +17,15 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 
 export default function Dashboard() {
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [numberQuery, setNumberQuery] = useState('');
-  const [deptDateQuery, setDeptDateQuery] = useState('');
-  const [arrDateQuery, setArrDateQuery] = useState('');
+  const [deptDateQuery, setDeptDateQuery] = useState(null);
+  const [arrDateQuery, setArrDateQuery] = useState(null);
   const [terminalQuery, setTerminalQuery] = useState('');
 
   const [open, setOpen] = React.useState(false);
@@ -39,12 +39,11 @@ export default function Dashboard() {
   }
 
   const handleChangeDeptDate= (event)=>{
-    console.log(event.toLocaleDateString())
-    setDeptDateQuery(event.toLocaleDateString())
+    setDeptDateQuery(new Date(event))
   }
 
   const handleChangeArrDate= (event)=>{
-    setArrDateQuery(new Date(event.toLocaleDateString()).toLocaleDateString())
+    setArrDateQuery(new Date(event))
   }
 
   const handleClickOpen = () => {
@@ -71,7 +70,10 @@ export default function Dashboard() {
       x=x.filter(flight => flight.airportTerminal === terminalQuery)
     }
     if(deptDateQuery){
-      x=x.filter(flight=> flight.departureDate.substring(0,10) === deptDateQuery)
+      x=x.filter(flight=> new Date(flight.departureDate).setSeconds(0,0) === new Date(deptDateQuery).setSeconds(0,0))
+    }
+    if(arrDateQuery){
+      x=x.filter(flight=> new Date(flight.arrivalDate).setSeconds(0,0) === new Date(arrDateQuery).setSeconds(0,0))
     }
       setFilteredFlights(x)
   }
@@ -134,7 +136,7 @@ export default function Dashboard() {
             </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
+                    <DateTimePicker
                         label="Departure Date"
                         value={deptDateQuery}
                         onChange={handleChangeDeptDate}
@@ -143,7 +145,7 @@ export default function Dashboard() {
                 </LocalizationProvider>
 
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
+                    <DateTimePicker
                         label="Arrival Date"
                         value={arrDateQuery}
                         onChange={handleChangeArrDate}
