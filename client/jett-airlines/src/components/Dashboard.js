@@ -5,7 +5,10 @@ import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CardMedia from '@mui/material/CardMedia';
 import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Icon from '@mui/material/Icon';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,13 +18,34 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import {Paper,Typography } from '@mui/material';
+import {makeStyles} from "@mui/styles"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Roboto from'@fontsource/roboto/700.css';
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import FlightIcon from '@mui/icons-material/Flight';
+import bg from '../assets/travelwallpaper-1.png'
+import logo from '../assets/Logo.png'
+import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+
+
+const useStyles = makeStyles({
+  palette: {
+      mode: 'light'
+  },
+  typographyStyle:{
+    color: "white",
+    font: "Roboto",
+  }
+});
 export default function Dashboard() {
+  const classes = useStyles();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -62,6 +86,54 @@ export default function Dashboard() {
       setOpen(false);
     }
   };
+  const styles = {
+    background: {
+      position: 'absolute',
+      padding: 'auto',
+      height: '100vh',
+      width: '100vw',
+      backgroundImage: `url(${bg})`
+    }, 
+
+    btnstyle: {
+      height: '40px',
+      width: '220px',
+      margin: '-130px 0px 0px 100px',
+      alignitems: 'center'
+  },
+
+    logoStyle: {
+      height: '50px',
+      margin: '50px',
+      alignitems: 'left'
+
+    },
+    dg: {
+      height: '150px',
+      width: '100vw',
+      margin: '-2.5vh -1.25vw',
+      
+      backgroundImage: `url(${darktab})`
+    },
+    media: {
+      height: '150px',
+      width: '100vw',
+      margin: '0px auto',
+    },
+    paperStyle: {
+      padding: 20,
+      conetentFit: 'contain',
+      minHeight: '100vh',
+      maxHeight: 'auto',
+      width: '90vw',
+      margin: "12% 0% 0% 2.5%"
+  },
+  textStyle: {
+    margin: '5px 0 0 0',
+    Color: 'white'
+},
+
+  };
 
   const handleChoice = () => {
     filtering()
@@ -99,10 +171,40 @@ export default function Dashboard() {
   }, [flights, availabe])
 
   return (
-    <div className='center'>
-      <h1>Welcome Admin</h1>
-      <Button onClick={handleClickOpen}>Search Options</Button>
-      <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+    <div style={styles.background}>
+      <div  style={styles.dg} >
+        
+      <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
+      <Grid container spacing={5} style = {{margin: '4.5vh 14vw'}}>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<HomeIcon />}
+      href='/Home'>Home</Button>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<SearchIcon />}
+      onClick={handleClickOpen}>Search For Flights</Button>
+      <Button 
+      color='primary'
+      variant="contained"
+      style={styles.btnstyle}
+      startIcon={<FlightIcon />}
+      href='/Create-Flight'>Create Flight</Button>
+       </Grid>
+      
+      
+      </div>
+
+      <Typography className={classes.typographyStyle}>
+                                Welcome Admin!
+                            </Typography>
+
+     
+      <Dialog disableEscapeKeyDown  maxWidth="auto" open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -176,13 +278,13 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
-      <Grid container spacing={2}>
+      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 3vw'}}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
           </Grid>
         ))}
-      </Grid>
+      </Grid></Paper>
     </div>
   )
 }
