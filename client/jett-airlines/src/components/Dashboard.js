@@ -5,10 +5,7 @@ import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
 import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
-import Icon from '@mui/material/Icon';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -18,11 +15,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import {Paper,Typography } from '@mui/material';
+import {Paper,Typography ,createTheme ,ThemeProvider } from '@mui/material';
 import {makeStyles} from "@mui/styles"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import Roboto from'@fontsource/roboto/700.css';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import FlightIcon from '@mui/icons-material/Flight';
@@ -32,18 +28,21 @@ import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FilledInput from '@mui/material/FilledInput';
 
 
-
-const useStyles = makeStyles({
+const darktheme = createTheme({
   palette: {
-      mode: 'light'
+      mode: 'dark'
   },
+});
+const useStyles = makeStyles({
   typographyStyle:{
     color: "white",
     font: "Roboto",
   }
 });
+
 export default function Dashboard() {
   const classes = useStyles();
   const [flights, setFlights] = useState([]);
@@ -58,7 +57,7 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
 
   const handleChangeNumber = (event) => {
-    setNumberQuery(Number(event.target.value) || '');
+    setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
   const handleChangeTerminal = (event) => {
@@ -98,7 +97,7 @@ export default function Dashboard() {
     btnstyle: {
       height: '40px',
       width: '220px',
-      margin: '-130px 0px 0px 100px',
+      margin: '-130px 0px 0px 20px',
       alignitems: 'center'
   },
 
@@ -126,13 +125,21 @@ export default function Dashboard() {
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
-      margin: "12% 0% 0% 2.5%"
+      margin: "0% 0% 0% 2.5%"
   },
   textStyle: {
     margin: '5px 0 0 0',
     Color: 'white'
-},
-
+  },
+  checkboxContainer: {
+    textAlign:'right',
+    height: '200px' ,
+    margin: "0% 5% 0% 2.5%",
+  },
+  checkboxStyle: {
+    margin: "12% 2% 0% 0%",
+    color: 'white'
+  },
   };
 
   const handleChoice = () => {
@@ -175,7 +182,7 @@ export default function Dashboard() {
       <div  style={styles.dg} >
         
       <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
-      <Grid container spacing={5} style = {{margin: '4.5vh 14vw'}}>
+      <Grid container spacing={5} style = {{margin: '4.75vh 18vw'}}>
       <Button 
       color='primary'
       variant="contained"
@@ -199,34 +206,26 @@ export default function Dashboard() {
       
       </div>
 
-      <Typography className={classes.typographyStyle}>
+      <Typography margin= {'0vh 4vw'} className={classes.typographyStyle}>
                                 Welcome Admin!
                             </Typography>
 
      
-      <Dialog disableEscapeKeyDown  maxWidth="auto" open={open} onClose={handleClose} >
+      <Dialog disableEscapeKeyDown  open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap'}}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={numberQuery}
-                defaultValue='None'
-                onChange={handleChangeNumber}
-                input={<OutlinedInput label="Flight Number" />}
-              >
-                <MenuItem value='None'>
-                  <em>None</em>
-                </MenuItem>
-                {flights.map(flight => (
-                  <MenuItem key={flight.flightNumber} value={flight.flightNumber}>{flight.flightNumber}</MenuItem>
-                ))}
-              </Select>
+            <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
+              <InputLabel>Flight Number</InputLabel>
+                    <OutlinedInput
+                        name='flightNumber'
+                        id="flightNumberfield"
+                        value={numberQuery}
+                        type = "text"
+                        onChange={handleChangeNumber}
+                    />
             </FormControl>
-
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
               <Select
@@ -264,11 +263,7 @@ export default function Dashboard() {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-
-            <FormControlLabel control={<Checkbox checked={availabe}
-              onChange={handleChangeAvailable}
-              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
-
+            
           </Box>
         </DialogContent>
         <DialogActions>
@@ -278,7 +273,14 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
-      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 3vw'}}>
+      <div style= {styles.checkboxContainer} >
+        <ThemeProvider theme={darktheme}>
+      <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
+              onChange={handleChangeAvailable}
+              inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+     </ThemeProvider>
+      </div>
+      <Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style = {{margin: ' 0vh 0vw'}}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />

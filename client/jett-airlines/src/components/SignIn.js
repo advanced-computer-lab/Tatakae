@@ -145,7 +145,7 @@ export default class SignIn extends Component {
                             style={styles.btnstyle}
                             fullWidth
                             href='/home'
-                            disabled={this.state.password === '' || this.state.username === ''}>
+                            disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
                             Sign in
                         </Button>
                     </Paper>
