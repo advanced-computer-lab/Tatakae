@@ -14,15 +14,17 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 export default function Dashboard() {
-  const [allFlights, setAllFlights] = useState([]);
-  const [didIGet, setGet]=useState(false)
   const [flights, setFlights] = useState([]);
-  const [filteredFlights, setFilteredFlights] = useState([...flights]);
+  const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [numberQuery, setNumberQuery] = useState('');
-  const [deptDateQuery, setDeptDateQuery] = useState(null);
+  const [deptDateQuery, setDeptDateQuery] = useState('');
   const [arrDateQuery, setArrDateQuery] = useState('');
   const [terminalQuery, setTerminalQuery] = useState('');
 
@@ -31,6 +33,19 @@ export default function Dashboard() {
   const handleChangeNumber = (event) => {
     setNumberQuery(Number(event.target.value) || '');
   };
+
+  const handleChangeTerminal = (event) => {
+    setTerminalQuery(event.target.value || '');
+  }
+
+  const handleChangeDeptDate= (event)=>{
+    console.log(event.toLocaleDateString())
+    setDeptDateQuery(event.toLocaleDateString())
+  }
+
+  const handleChangeArrDate= (event)=>{
+    setArrDateQuery(new Date(event.toLocaleDateString()).toLocaleDateString())
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,59 +57,99 @@ export default function Dashboard() {
     }
   };
 
-  const handleChoice= ()=>{
+  const handleChoice = () => {
     filtering()
     handleClose()
   }
 
   const filtering = () => {
+    let x=flights
     if (numberQuery) {
-      setFlights(allFlights.filter(flight => Number(flight.flightNumber) === Number(numberQuery) ))
+      x=x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
     }
-    else {
-      setFlights(allFlights)
+    if (terminalQuery) {
+      x=x.filter(flight => flight.airportTerminal === terminalQuery)
     }
+    if(deptDateQuery){
+      x=x.filter(flight=> flight.departureDate.substring(0,10) === deptDateQuery)
+    }
+      setFilteredFlights(x)
   }
 
   useEffect(() => {
     axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
-      if(didIGet){
-        setAllFlights(res.data)
-      }
-      else{
-        setFlights(res.data)
-      setAllFlights(res.data)
-      setGet(true)
-      }
+      setFlights(res.data)
     })
   }, [refresh])
+
+  useEffect(() => {
+    filtering()
+  }, [flights])
 
   return (
     <div className='center'>
       <h1>Welcome Admin</h1>
       <Button onClick={handleClickOpen}>Search Options</Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>Search from the following criteria</DialogTitle>
+        <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Flight No.</InputLabel>
+              <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
               <Select
                 labelId="demo-dialog-select-label"
                 id="demo-dialog-select"
                 value={numberQuery}
-                defaultValue={''}
+                defaultValue='None'
                 onChange={handleChangeNumber}
                 input={<OutlinedInput label="Flight Number" />}
               >
-                <MenuItem value={''}>
+                <MenuItem value='None'>
                   <em>None</em>
                 </MenuItem>
-                {allFlights.map(flight => (
+                {flights.map(flight => (
                   <MenuItem key={flight.flightNumber} value={flight.flightNumber}>{flight.flightNumber}</MenuItem>
                 ))}
               </Select>
             </FormControl>
+
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={terminalQuery}
+                defaultValue=''
+                onChange={handleChangeTerminal}
+                input={<OutlinedInput label="Flight Number" />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {flights.map(item => item.airportTerminal)
+                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Departure Date"
+                        value={deptDateQuery}
+                        onChange={handleChangeDeptDate}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
+
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        label="Arrival Date"
+                        value={arrDateQuery}
+                        onChange={handleChangeArrDate}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -105,9 +160,9 @@ export default function Dashboard() {
       <br />
       <br />
       <Grid container spacing={2}>
-        {flights.map(flight => (
+        {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
-            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} flights={flights} setFlights={setFlights} filtering={filtering} />
+            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
           </Grid>
         ))}
       </Grid>
