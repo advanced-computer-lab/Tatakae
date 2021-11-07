@@ -42,7 +42,7 @@ export default class CreateFlight extends Component {
 
     handleSubmit = e => {
         const data = {
-            flightNumber: this.state.flightNumber,
+            flightNumber: (this.state.flightNumber).toUpperCase(),
             from: this.state.from,
             to: this.state.to,
             airportTerminal: this.state.airportTerminal,

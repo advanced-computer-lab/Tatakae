@@ -28,7 +28,6 @@ import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FilledInput from '@mui/material/FilledInput';
 
 
 const darktheme = createTheme({
@@ -150,7 +149,7 @@ export default function Dashboard() {
   const filtering = () => {
     let x = flights
     if (numberQuery) {
-      x = x.filter(flight => Number(flight.flightNumber) === Number(numberQuery))
+      x = x.filter(flight => flight.flightNumber === numberQuery)
     }
     if (terminalQuery) {
       x = x.filter(flight => flight.airportTerminal === terminalQuery)
