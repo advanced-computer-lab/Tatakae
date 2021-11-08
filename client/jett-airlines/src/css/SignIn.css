@@ -1,0 +1,83 @@
+*{ margin: 0;}
+/*
+img.travelwallpaper2-1 {
+    width: 1920px;
+    height: 1080px;
+    padding: 181px 0 0;
+    object-fit: contain;
+    background-image: url("../assets/travelwallpaper2-1.jpg");
+    position:absolute;
+    background-repeat: no-repeat;
+  }
+.dialog{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-column: 2/2;
+    grid-row: 2/2;  
+}
+
+.logo{
+    width: 836px;
+  height: 207px;
+  margin: 0 542px 152px;
+  object-fit: contain;
+  position: relative;
+}
+
+.text-fields{
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.h{
+    color: blueviolet !important;
+}*/
+/*
+.main{
+    display: grid;
+    text-align: center;
+    align-items: center;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    
+
+}
+
+.background {
+    position: absolute;
+    background-image: url("../assets/SignInBackground.jpg");
+    width: 100%;
+    height: 100%;
+    
+}
+
+.dialog-container{
+    position: relative;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    grid-column: 2/2;
+    grid-row: 2/2;  
+}
+
+.dialog{
+    margin: 0px 300px 0px 300px;
+    display: flex;
+    flex-direction: column;
+}
+input{
+    border-radius: 5px;
+    opacity: 50%;
+}
+
+.welcome-text{
+    position: relative;
+    grid-area: 1 / 2 / 1 / 2 ;
+}
+*/
