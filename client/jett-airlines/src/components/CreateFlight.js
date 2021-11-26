@@ -226,6 +226,11 @@ export default class CreateFlight extends Component {
                 <Button variant="contained" onClick={this.handleSubmit}>
                     Create Flight
                 </Button>
+                <br/>
+                <br/>
+                <Button variant="contained" href='/home'>
+                    Back to Home
+                </Button>
 
             </div>
         )
