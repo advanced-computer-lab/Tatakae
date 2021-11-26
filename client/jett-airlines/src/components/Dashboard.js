@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import FlightCard from './FlightCard'
+import FlightCard from './FlightCard';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import Box from '@mui/material/Box';
@@ -15,8 +15,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import {Paper,Typography ,createTheme ,ThemeProvider } from '@mui/material';
-import {makeStyles} from "@mui/styles"
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import createTheme from '@mui/material/styles/createTheme';
+import makeStyles from '@mui/styles/makeStyles';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import SearchIcon from '@mui/icons-material/Search';
@@ -28,15 +31,20 @@ import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 
 
-const darktheme = createTheme({
+import NavBar from './NavBar';
+import { minHeight } from '../../../../../../../../../../mnt/DATA/Documents/Workspaces/vscode-workspace/Tatakae/client/jett-airlines/node_modules/@mui/system';
+
+const theme = createTheme({
   palette: {
-      mode: 'dark'
+    mode: 'dark'
   },
 });
 const useStyles = makeStyles({
-  typographyStyle:{
+  typographyStyle: {
     color: "white",
     font: "Roboto",
   }
@@ -86,12 +94,145 @@ export default function Dashboard() {
   };
   const styles = {
     background: {
-      position: 'absolute',
-      padding: 'auto',
-      height: '100vh',
+      backgroundColor: '#2f8edf',
       width: '100vw',
-      backgroundImage: `url(${bg})`
-    }, 
+      minHeight: '100vh',
+    },
+    appBarStyle: {
+      backgroundColor: '#fff',
+      //height: '200px'
+    },
+    buttonStyle: {
+      //color: 'black'
+    }
+  };
+
+  const handleChoice = () => {
+    filtering()
+    handleClose()
+  }
+
+  const filtering = () => {
+    let x = flights
+    if (numberQuery) {
+      x = x.filter(flight => flight.flightNumber === numberQuery)
+    }
+    if (terminalQuery) {
+      x = x.filter(flight => flight.airportTerminal === terminalQuery)
+    }
+    if (deptDateQuery) {
+      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
+    }
+    if (arrDateQuery) {
+      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
+    }
+    if (availabe) {
+      x = x.filter(flight => new Date(flight.departureDate) >= new Date())
+    }
+    setFilteredFlights(x)
+  }
+
+  useEffect(() => {
+    axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
+      setFlights(res.data)
+    })
+  }, [refresh])
+
+  useEffect(() => {
+    filtering()
+  }, [flights, availabe])
+
+  return (
+    <div style={styles.background}>
+      <Grid container direction='column' sx={{ minHeight: '100vh' }}>
+        <NavBar />
+        <Box sx={{ height: 200, mt: '' }}>
+          <Button
+            color='primary'
+            variant="contained"
+            style={styles.btnstyle}
+            startIcon={<SearchIcon />}
+            onClick={handleClickOpen}>Search For Flights</Button>
+
+          <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
+            <DialogTitle>Search the following criteria</DialogTitle>
+            <DialogContent>
+              <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
+                  <InputLabel>Flight Number</InputLabel>
+                  <OutlinedInput
+                    name='flightNumber'
+                    id="flightNumberfield"
+                    value={numberQuery}
+                    type="text"
+                    onChange={handleChangeNumber}
+                  />
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
+                  <Select
+                    labelId="demo-dialog-select-label"
+                    id="demo-dialog-select"
+                    value={terminalQuery}
+                    defaultValue=''
+                    onChange={handleChangeTerminal}
+                    input={<OutlinedInput label="Terminal No." />}
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    {flights.map(item => item.airportTerminal)
+                      .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                        <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    label="Departure Date"
+                    value={deptDateQuery}
+                    onChange={handleChangeDeptDate}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    label="Arrival Date"
+                    value={arrDateQuery}
+                    onChange={handleChangeArrDate}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={handleChoice}>Search</Button>
+            </DialogActions>
+          </Dialog>
+
+        </Box>
+        <Paper elevation={10} sx={{ flexGrow: 3, borderRadius: '50px 50px 0px 0px' }}>
+
+          <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+            {filteredFlights.map(flight => (
+              <Grid key={flight._id} item xs={4} >
+                <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Grid>
+    </div>
+  )
+}
+
+/*
+
 
     btnstyle: {
       height: '40px',
@@ -110,7 +251,7 @@ export default function Dashboard() {
       height: '150px',
       width: '100vw',
       margin: '-2.5vh -1.25vw',
-      
+
       backgroundImage: `url(${darktab})`
     },
     media: {
@@ -139,77 +280,43 @@ export default function Dashboard() {
     margin: "12% 2% 0% 0%",
     color: 'white'
   },
-  };
 
-  const handleChoice = () => {
-    filtering()
-    handleClose()
-  }
+*/
 
-  const filtering = () => {
-    let x = flights
-    if (numberQuery) {
-      x = x.filter(flight => flight.flightNumber === numberQuery)
-    }
-    if (terminalQuery) {
-      x = x.filter(flight => flight.airportTerminal === terminalQuery)
-    }
-    if (deptDateQuery) {
-      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
-    }
-    if (arrDateQuery) {
-      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
-    }
-    if(availabe){
-      x=x.filter(flight=> new Date(flight.departureDate) >= new Date())
-    }
-    setFilteredFlights(x)
-  }
+/*
 
-  useEffect(() => {
-    axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
-      setFlights(res.data)
-    })
-  }, [refresh])
+ <div  style={styles.dg} >
 
-  useEffect(() => {
-    filtering()
-  }, [flights, availabe])
-
-  return (
-    <div style={styles.background}>
-      <div  style={styles.dg} >
-        
       <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
       <Grid container spacing={5} style = {{margin: '4.75vh 18vw'}}>
-      <Button 
+      <Button
       color='primary'
       variant="contained"
       style={styles.btnstyle}
       startIcon={<HomeIcon />}
       href='/Home'>Home</Button>
-      <Button 
+      <Button
       color='primary'
       variant="contained"
       style={styles.btnstyle}
       startIcon={<SearchIcon />}
       onClick={handleClickOpen}>Search For Flights</Button>
-      <Button 
+      <Button
       color='primary'
       variant="contained"
       style={styles.btnstyle}
       startIcon={<FlightIcon />}
       href='/Create-Flight'>Create Flight</Button>
        </Grid>
-      
-      
+
+
       </div>
 
       <Typography margin= {'0vh 4vw'} className={classes.typographyStyle}>
                                 Welcome Admin!
                             </Typography>
 
-     
+
       <Dialog disableEscapeKeyDown  open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
@@ -262,7 +369,7 @@ export default function Dashboard() {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-            
+
           </Box>
         </DialogContent>
         <DialogActions>
@@ -286,6 +393,5 @@ export default function Dashboard() {
           </Grid>
         ))}
       </Grid></Paper>
-    </div>
-  )
-}
+
+*/

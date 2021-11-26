@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
 import '../css/SignIn.css'
 
-import { TextField, Avatar, Paper, Grid, Button, Typography, createTheme ,ThemeProvider } from '@mui/material';
+//mui imports
+import TextField from '@mui/material/TextField';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import createTheme from '@mui/material/styles/createTheme';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,16 +17,17 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-
+//file imports
 import bg from '../assets/travelwallpaper22.jpg'
 import logo from '../assets/Logo.png'
 
 
-const darktheme = createTheme({
+const theme = createTheme({
     palette: {
         mode: 'light'
     },
-  });
+});
+
 const styles = {
     background: {
         position: 'absolute',
@@ -52,14 +61,13 @@ const styles = {
     }
 
 };
+
 export default class SignIn extends Component {
     state = {
         username: '',
         password: '',
         showPassword: false,
     }
-
-
 
     handleChange = (event) => {
         this.setState(() => ({
@@ -86,70 +94,70 @@ export default class SignIn extends Component {
     render() {
         return (
             <div style={styles.background}>
-                <ThemeProvider theme={darktheme}>
-                <Grid>
-                    <img src={logo} alt='' style={styles.logoStyle} />
-                    <Paper elevation={10} style={styles.paperStyle}>
-                        <Grid align='center'>
-                            <Avatar style={styles.avatarStyle}><LockOutlinedIcon /></Avatar>
+                <ThemeProvider theme={theme}>
+                    <Grid>
+                        <img src={logo} alt='' style={styles.logoStyle} />
+                        <Paper elevation={10} style={styles.paperStyle}>
+                            <Grid align='center'>
+                                <Avatar style={styles.avatarStyle}><LockOutlinedIcon /></Avatar>
 
-                            <Typography style={styles.textStyle}>
-                                <h2>Sign In</h2>
-                            </Typography>
+                                <Typography style={styles.textStyle}>
+                                    <h2>Sign In</h2>
+                                </Typography>
 
-                        </Grid>
-                        <TextField
-                            style={styles.fieldStyle}
-                            label='Username'
-                            placeholder='Enter username' f
-                            fullWidth
-                            required
-                            value={this.state.username}
-                            onChange={this.handleUsernameChange}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                        <TextField
-                            id="passField"
-                            style={styles.fieldStyle}
-                            label='Password'
-                            placeholder='Enter password'
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            fullWidth
-                            required
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={this.handleClickShowPassword}
-                                            onMouseDown={this.handleMouseDownPassword}
-                                        >
-                                            {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                        <Button
-                            type='submit'
-                            color='primary'
-                            variant="contained"
-                            style={styles.btnstyle}
-                            fullWidth
-                            href='/home'
-                            disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
-                            Sign in
-                        </Button>
-                    </Paper>
-                </Grid>
+                            </Grid>
+                            <TextField
+                                style={styles.fieldStyle}
+                                label='Username'
+                                placeholder='Enter username'
+                                fullWidth
+                                required
+                                value={this.state.username}
+                                onChange={this.handleUsernameChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                id="passField"
+                                style={styles.fieldStyle}
+                                label='Password'
+                                placeholder='Enter password'
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                fullWidth
+                                required
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <Button
+                                type='submit'
+                                color='primary'
+                                variant="contained"
+                                style={styles.btnstyle}
+                                fullWidth
+                                href='/home'
+                                disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
+                                Sign in
+                            </Button>
+                        </Paper>
+                    </Grid>
                 </ThemeProvider>
             </div>
         )

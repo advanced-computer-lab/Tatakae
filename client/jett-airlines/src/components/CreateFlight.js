@@ -9,6 +9,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
+import NavBar from './NavBar';
+
 export default class CreateFlight extends Component {
     state = {
         flightNumber: '',
@@ -27,12 +29,12 @@ export default class CreateFlight extends Component {
         baggage: ''
     }
 
-    handleDeptDateChange= e=>{
-        this.setState({departureDate: new Date(e)})
+    handleDeptDateChange = e => {
+        this.setState({ departureDate: new Date(e) })
     }
 
-    handleArrDateChange= e=>{
-        this.setState({arrivalDate: new Date(e)})
+    handleArrDateChange = e => {
+        this.setState({ arrivalDate: new Date(e) })
         console.log(this.state.arrivalDate)
     }
 
@@ -51,7 +53,7 @@ export default class CreateFlight extends Component {
             economySeats: this.state.economy,
             businessSeats: this.state.business,
             firstSeats: this.state.first,
-            totalSeats: Number(this.state.economy)+Number(this.state.business)+Number(this.state.first),
+            totalSeats: Number(this.state.economy) + Number(this.state.business) + Number(this.state.first),
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
             firstPrice: this.state.fPrice,
@@ -89,6 +91,7 @@ export default class CreateFlight extends Component {
     render() {
         return (
             <div className='center'>
+                <NavBar />
                 <h1>Create a flight</h1>
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>Flight Number</InputLabel>
