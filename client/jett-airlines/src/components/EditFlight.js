@@ -9,22 +9,23 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
-export default class CreateFlight extends Component {
+export default class EditFlight extends Component {
+
     state = {
-        flightNumber: '',
-        from: '',
-        to: '',
-        airportTerminal: '',
-        departureDate: new Date(),
-        arrivalDate: new Date(),
-        economy: '',
-        business: '',
-        first: '',
-        totalSeats: 0,
-        ePrice: '',
-        bPrice: '',
-        fPrice: '',
-        baggage: ''
+        flightNumber: this.props.flight.flightNumber,
+        from: this.props.flight.from,
+        to: this.props.flight.to,
+        airportTerminal: this.props.flight.airportTerminal,
+        departureDate: this.props.flight.departureDate,
+        arrivalDate: this.props.flight.arrivalDate,
+        economy: this.props.flight.economySeats,
+        business: this.props.flight.businessSeats,
+        first: this.props.flight.firstSeats,
+        totalSeats: this.props.flight.totalSeats,
+        ePrice: this.props.flight.economyPrice,
+        bPrice: this.props.flight.businessPrice,
+        fPrice: this.props.flight.firstPrice,
+        baggage: this.props.flight.baggageAllowance,
     }
 
     handleDeptDateChange= e=>{
@@ -33,7 +34,6 @@ export default class CreateFlight extends Component {
 
     handleArrDateChange= e=>{
         this.setState({arrivalDate: new Date(e)})
-        console.log(this.state.arrivalDate)
     }
 
     handleChange = e => {
@@ -42,7 +42,7 @@ export default class CreateFlight extends Component {
 
     handleSubmit = e => {
         const data = {
-            flightNumber: (this.state.flightNumber).toUpperCase(),
+            flightNumber: this.state.flightNumber,
             from: this.state.from,
             to: this.state.to,
             airportTerminal: this.state.airportTerminal,
@@ -58,38 +58,22 @@ export default class CreateFlight extends Component {
             baggageAllowance: this.state.baggage
         };
 
-        console.log(data.arrivalDate);
-
         axios
-            .post('http://localhost:8082/api/flights/flightcreate/', data)
-            .then(res => {
-                this.setState({
-                    flightNumber: '',
-                    from: '',
-                    to: '',
-                    airportTerminal: '',
-                    departureDate: '',
-                    arrivalDate: '',
-                    economy: '',
-                    business: '',
-                    first: '',
-                    totalSeats: '',
-                    ePrice: '',
-                    bPrice: '',
-                    fPrice: '',
-                    baggage: ''
-                })
+            .patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
+            .then(() => {
+                this.props.closeDialog()
+                this.props.setRefresh(!this.props.refresh)
                 //this.props.history.push('/');
             })
-            .catch(err => {
-                console.log(err.message);
+            .catch(() => {
+                console.log("Error in EditFlight!");
             })
     };
 
     render() {
         return (
             <div className='center'>
-                <h1>Create a flight</h1>
+                <h1>Edit a Flight</h1>
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>Flight Number</InputLabel>
                     <FilledInput
@@ -221,12 +205,7 @@ export default class CreateFlight extends Component {
                 <br />
                 <br />
                 <Button variant="contained" onClick={this.handleSubmit}>
-                    Create Flight
-                </Button>
-                <br/>
-                <br/>
-                <Button variant="contained" href='/home'>
-                    Back to Home
+                    Update Flight
                 </Button>
 
             </div>
