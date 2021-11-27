@@ -12,6 +12,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import bg from '../assets/travelwallpaper22.jpg'
 import logo from '../assets/Logo.png'
+import axios from 'axios';
 
 
 const darktheme = createTheme({
@@ -54,12 +55,28 @@ const styles = {
 };
 export default class SignIn extends Component {
     state = {
-        username: '',
+        email: '',
         password: '',
         showPassword: false,
+        path:'/home'
     }
 
+    handleSubmit=(event)=>{
+        event.preventDefault()
 
+        const data={
+            email: this.state.email,
+            password: this.state.password
+        }
+
+        axios.post('http://localhost:8082/api/users/login/', data)
+        .then(res=>res.data.result.administrator? this.setState(() => ({
+            path: '/home'
+        })) : this.setState(() => ({
+            path: '/userHome'
+        })))
+        .catch(err=>console.log(err.message))
+    }
 
     handleChange = (event) => {
         this.setState(() => ({
@@ -69,7 +86,7 @@ export default class SignIn extends Component {
 
     handleUsernameChange = (event) => {
         this.setState(() => ({
-            username: event.target.value
+            email: event.target.value
         }))
     };
 
@@ -100,11 +117,11 @@ export default class SignIn extends Component {
                         </Grid>
                         <TextField
                             style={styles.fieldStyle}
-                            label='Username'
-                            placeholder='Enter username' f
+                            label='Email'
+                            placeholder='Enter Email' f
                             fullWidth
                             required
-                            value={this.state.username}
+                            value={this.state.email}
                             onChange={this.handleUsernameChange}
                             InputProps={{
                                 endAdornment: (
@@ -144,8 +161,8 @@ export default class SignIn extends Component {
                             variant="contained"
                             style={styles.btnstyle}
                             fullWidth
-                            href='/home'
-                            disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
+                            href={this.state.path}
+                            onClick={this.handleSubmit}>
                             Sign in
                         </Button>
                     </Paper>
@@ -155,86 +172,3 @@ export default class SignIn extends Component {
         )
     }
 }
-
-/*
-
-<div className="text-fields">
-                <FormControl sx={{ m: 1 }}variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-username"
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-
-                <br />
-
-                <FormControl sx={{ m: 1  }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
-
-                    className="h"
-                        id="outlined-adornment-password"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-                <br />
-                </div>
-                <Button variant="contained" href='/home' disabled={this.state.password==='' || this.state.username===''}>
-                    Log In
-                </Button>
-
-
-*/
-
-
-/*
-
-<ThemeProvider theme={theme}>
-                    <TextField variant="standard">
-
-                    </TextField>
-                </ThemeProvider>
-
-
-                <FormControl sx={{ m: 3 }} className="password" >
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
-                        dark
-                        id="outlined-adornment-password"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-*/

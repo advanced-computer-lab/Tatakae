@@ -2,8 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //Token secret
 const secret = process.env.TOKEN_SECRET;
@@ -45,11 +45,11 @@ router.delete('/userdelete/:id', (req, res) => {
     .catch(err => res.status(404).json({ error: 'No such a user' }));
 });
 
-router.post("/login", (req,res) => {
+router.post("/login", async (req,res) => {
   const { email, password } = req.body;
 
   try {
-    const signInUser = await user.findOne({ email });
+    const signInUser = await user.findOne({ "email":email });
     if (!signInUser) return res.status(404).json({ message: "User doesn't exist" });
 
     const isPassword = await bcrypt.compare(password, signInUser.password);
@@ -57,16 +57,16 @@ router.post("/login", (req,res) => {
 
     const token = jwt.sign({ id: signInUser._id , admin: signInUser.administrator }, secret, { expiresIn: "2h" });
 
-    res.status(200).json({ result: signInUser, token });
+    res.status(200).json({ signInUser, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
   }
 });
 
-router.post("/signup", (req,res) => { 
+router.post("/signUp/", async (req,res) => { 
   const {firstName, lastName , password, administrator, homeAddress,countryCode,telephoneNumber,email,passportNumber } = req.body;
   try {
-    const signUpUser = await user.findOne({ email });
+    const signUpUser = await user.findOne({ "email":email });
     if (signUpUser) return res.status(400).json({ message: "User already exists" });
 
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -74,7 +74,7 @@ router.post("/signup", (req,res) => {
 
     const token = jwt.sign( {id: newUser._id , admin:newUser.administrator }, secret, { expiresIn: "1h" } );
 
-    res.status(201).json({ result, token });
+    res.status(201).json({ newUser, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './App.css'
+import '../App.css'
 import FlightCard from './FlightCard'
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
@@ -22,9 +22,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import FlightIcon from '@mui/icons-material/Flight';
-import bg from '../assets/travelwallpaper-1.png'
-import logo from '../assets/Logo.png'
-import darktab from '../assets/darkglass.png'
+import bg from '../../assets/travelwallpaper-1.png'
+import logo from '../../assets/Logo.png'
+import darktab from '../../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -180,7 +180,7 @@ export default function Dashboard() {
     <div style={styles.background}>
       <div  style={styles.dg} >
         
-      <img src={logo} alt='' style={styles.logoStyle} onclick=""/>
+      <img src={logo} alt='' style={styles.logoStyle}/>
       <Grid container spacing={5} style = {{margin: '4.75vh 18vw'}}>
       <Button 
       color='primary'

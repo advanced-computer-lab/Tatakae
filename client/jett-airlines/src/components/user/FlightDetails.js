@@ -8,7 +8,9 @@ import Typography from '@mui/material/Typography';
 
 export default function FlightDetails(props) {
     const flight=props.flight
-    
+    var diffMs = (new Date(flight.arrivalDate) - new Date(flight.departureDate));
+    var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     return (
         <div>
             <Card sx={{ maxWidth: 500 }}>
@@ -38,11 +40,7 @@ export default function FlightDetails(props) {
                             <br/>
                             Total Number Seats: {flight.totalSeats}
                             <br/>
-                            Price of Economy: {flight.economyPrice}
-                            <br/>
-                            Price of Business: {flight.businessPrice}
-                            <br/>
-                            Price of First Class: {flight.firstPrice}
+                            Trip Duration: {diffHrs} Hours {diffMins} Minutes
                             <br/>
                             Baggage Allowance: {flight.baggageAllowance}
                         </Typography>
