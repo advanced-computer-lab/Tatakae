@@ -38,7 +38,7 @@ router.post('/flightcreate/', (req, res) => {
   req.body.economySeats = economylist ;
   req.body.businessSeats = businesslist;
   req.body.firstSeats = firstlist;
-
+  req.body.availableSeats = req.body.totalSeats;
   flight.create(req.body)
 
     .then(flight => res.json({ msg: 'flight added successfully' }))
@@ -53,6 +53,55 @@ router.patch('/flightupdate/:id', (req, res) => {
       res.status(400).json({ error: 'Unable to update the Database' })
      );
 });
+
+router.patch('/flightbookseats/',async (req,res)=>{
+const{flightId,economySeats,firstSeats,businessSeats} = req.body
+let f = await flight.findById(flightId)
+
+for (var i = 0 ; i < economySeats.length ; i++){
+  var j = economySeats[i];
+  f.economySeats[j] = true;
+}
+for (var i = 0 ; i < businessSeats.length ; i++){
+  var j = businessSeats[i];
+  f.businessSeats[j] = true;
+}
+for (var i = 0 ; i < firstSeats.length ; i++){
+  var j = firstSeats[i];
+  f.firstSeats[j] = true;
+}
+f.availableSeats -= (economySeats.length+businessSeats.length+firstSeats.length);
+flight.findByIdAndUpdate(flightId, f)
+     .then(f => res.json({ msg: 'Updated successfully' }))
+     .catch(err =>
+      res.status(400).json({ error: 'Unable to update the Database' })
+     );
+
+})
+router.patch('/flightcancelseats/',async (req,res)=>{
+  const{flightId,economySeats,firstSeats,businessSeats} = req.body
+let f = await flight.findById(flightId)
+
+for (var i = 0 ; i < economySeats.length ; i++){
+  var j = economySeats[i];
+  f.economySeats[j] = false;
+}
+for (var i = 0 ; i < businessSeats.length ; i++){
+  var j = businessSeats[i];
+  f.businessSeats[j] = false;
+}
+for (var i = 0 ; i < firstSeats.length ; i++){
+  var j = firstSeats[i];
+  f.firstSeats[j] = false;
+}
+f.availableSeats += (economySeats.length+businessSeats.length+firstSeats.length);
+flight.findByIdAndUpdate(flightId, f)
+     .then(f => res.json({ msg: 'Updated successfully' }))
+     .catch(err =>
+      res.status(400).json({ error: 'Unable to update the Database' })
+     );
+
+  })
 
 // @route GET api/flights/:id
 // @description Delete flight by id
