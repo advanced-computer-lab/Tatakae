@@ -25,6 +25,7 @@ router.get('/getUserTickets/',verify, (req, res) => {
 
   const {userId , admin} = req 
   if (admin) return res.status(401).send("Unauthorized Action")
+
   ticket.find({user : userId})
     .then(ticket => res.json(ticket))
     .catch(err => res.status(404).json({ noticketfound: 'No ticket found' }));
@@ -48,7 +49,7 @@ router.post('/ticketcreate/',verify,async (req, res) => {
   }
   req.body.ticketNumber = ticketNum + '' 
   req.body.totalPrice = totalPrice 
-  req.body.user = userId 
+  req.body.user = userId
   await ticket.create(req.body)
     .then(ticket => res.json({ msg: 'ticket added successfully' }))
     .catch(err => res.status(400).json({ error: err }));

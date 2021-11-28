@@ -100,7 +100,7 @@ const flightSchema = new mongoose.Schema({
     required: true,
     default: 30
   },
-  firstBaggage: {             // in Kilograms
+  firstBaggage:{             // in Kilograms
     type: Number,
     required: true,
     default: 30
