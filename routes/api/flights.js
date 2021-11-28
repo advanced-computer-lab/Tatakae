@@ -24,7 +24,7 @@ router.get('/flightget/:id', (req, res) => {
 router.post('/flightcreate/', verify ,(req, res) => {
   const {userId , admin} = req 
   if (!admin)
-  res.status(401).send("Unauthorized Action")
+  return res.status(401).send("Unauthorized Action")
 
   const {economySeats,firstSeats,businessSeats} = req.body
   economylist = []
@@ -53,7 +53,7 @@ router.post('/flightcreate/', verify ,(req, res) => {
 router.patch('/flightupdate/:id',verify, (req, res) => {
   const {userId , admin} = req 
   if (admin)
-  res.status(401).send("Unauthorized Action")
+  return res.status(401).send("Unauthorized Action")
 
   flight.findByIdAndUpdate(req.params.id, req.body)
      .then(flight => res.json({ msg: 'Updated successfully' }))

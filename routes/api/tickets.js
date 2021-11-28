@@ -24,7 +24,7 @@ router.get('/ticketget/:id', (req, res) => {
 router.get('/getUserTickets/',verify, (req, res) => {
 
   const {userId , admin} = req 
-  if (admin) res.status(401).send("Unauthorized Action")
+  if (admin) return res.status(401).send("Unauthorized Action")
   ticket.find({user : userId})
     .then(ticket => res.json(ticket))
     .catch(err => res.status(404).json({ noticketfound: 'No ticket found' }));
@@ -33,9 +33,9 @@ router.get('/getUserTickets/',verify, (req, res) => {
 
 
 router.post('/ticketcreate/',verify,async (req, res) => {
-  
+
   const {userId , admin} = req 
-  if (admin) res.status(401).send("Unauthorized Action")
+  if (admin) return res.status(401).send("Unauthorized Action")
 
   const {economyPrice,businessPrice,firstPrice,economySeats,businessSeats,firstSeats} = req.body;
   const totalPrice = economyPrice*economySeats.length + businessPrice*businessSeats.length + firstPrice*firstSeats.length
