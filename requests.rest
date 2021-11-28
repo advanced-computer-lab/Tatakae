@@ -1,0 +1,21 @@
+POST  http://localhost:8082/api/tickets/ticketcreate HTTP/1.1
+Content-Type: application/json
+
+{
+    "user" : "61a29edd20d156ec7fcb263e" ,
+    "flight" : "6189647834e01d23aa6f5c31" ,
+    "from" : "LAX",
+    "to" : "JFK" ,
+    "airport" : "1",
+    "departureDate" :"2022-01-12T16:00:02.000+00:00",
+    "arrivalDate": "2022-01-12T18:00:02.000+00:00",
+    "economySeats":[1,5,3],
+    "firstSeats":[1,5,3],
+    "businessSeats":[1,5,3],
+    "economyPrice":25,
+    "firstPrice":100,
+    "businessPrice":50
+}
+
+###
+GET http://localhost:8082/api/flights/flightgetall
