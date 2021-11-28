@@ -22,6 +22,22 @@ router.get('/flightget/:id', (req, res) => {
 });
 
 router.post('/flightcreate/', (req, res) => {
+  const {economySeats,firstSeats,businessSeats} = req.body
+  economylist = []
+  for (var i = 0 ; i < economySeats ; i ++){
+    economylist.push(false);
+  }
+  businesslist = []
+  for (var i = 0 ; i < businessSeats ; i ++){
+    businesslist.push(false);
+  }
+  firstlist = []
+  for (var i = 0 ; i < firstSeats ; i ++){
+    firstlist.push(false);
+  }
+  req.body.economySeats = economylist ;
+  req.body.businessSeats = businesslist;
+  req.body.firstSeats = firstlist;
 
   flight.create(req.body)
 
