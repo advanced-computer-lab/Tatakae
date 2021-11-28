@@ -9,7 +9,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import * as THREE from "three";
-import GLOBE from "vanta/dist/vanta.globe.min.js";
+import CLOUDS from "vanta/dist/vanta.clouds.min.js";
 
 export default class CreateFlight extends Component {
     constructor() {
@@ -17,19 +17,14 @@ export default class CreateFlight extends Component {
         this.vantaRef = React.createRef();
     }
     componentDidMount() {
-        this.vantaEffect = GLOBE({
+        this.vantaEffect = CLOUDS({
             el: this.vantaRef.current,
             THREE: THREE,
             mouseControls: true,
             touchControls: true,
             gyroControls: false,
             minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x1383e3,
-            color2: 0x0,
-            backgroundColor: 0xffffff
+            minWidth: 200.00
         });
     }
     componentWillUnmount() {
