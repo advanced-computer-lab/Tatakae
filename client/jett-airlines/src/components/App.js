@@ -5,7 +5,7 @@ import Dashboard from './admin/Dashboard'
 import CreateFlight from './admin/CreateFlight'
 import NotFound from './NotFound';
 import MainPage from './MainPage';
-import Seats from './user/Seats'
+import Plane from './user/Plane'
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
           <Route exact path='/home' element={<Dashboard/>} />
           <Route exact path='/Create-Flight' element={<CreateFlight/>} />
           <Route path='/wrongURL' element={<NotFound/>} />
-          <Route path='/Seats' element={<Seats/>} />
+          <Route path='/plane' element={<Plane/>} />
         </Routes>
     </div>
   )

@@ -1,5 +1,5 @@
 import { Grid, Box} from '@mui/material';
-import { style, width } from '../../../../../../../../../../../mnt/DATA/Documents/Workspaces/vscode-workspace/Tatakae/client/jett-airlines/node_modules/@mui/system';
+import Seat from './Seat'
 
 let economySeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(false)]
 
@@ -9,9 +9,13 @@ let firstSeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), B
 
 const styles = {
     bSeatStyle: {
-        backgroundColor: "blue",
-        width: "6em"
-    },
+        backgroundColor: "#444451",
+        height: "2em",
+        width: "2em",
+        margin: "1em",
+        borderTopLeftRadius: "10px",
+        borderTopRightRadius: "10px"
+        },
     fSeatStyle: {
         backgroundColor: "purple"
     },
@@ -23,21 +27,27 @@ const styles = {
     }
 }
 
-export default function Seats(props) {
+export default function Plane(props) {
 
     return (
         <Grid container columns="2" wrap="wrap" >
-            {businessSeats.map( available => {
-                if(available)
-                    return (<Box style={styles.bSeatStyle}>
-                        num
-                    </Box>)
-                 return (<Box style={styles.oSeatStyle}>
-                    num
-                </Box>)
-            })}
+            {businessSeats.map( (available, seatNumber) => (
+                <Seat available={available} type="b" seatNumber={seatNumber}/>
+            ))}
 
-            {firstSeats.map( available => {
+            {firstSeats.map( (available, seatNumber) => (
+                <Seat available={available} type="f" seatNumber={seatNumber}/>
+            ))}
+            {economySeats.map( (available, seatNumber) => (
+                <Seat available={available} type="e" seatNumber={seatNumber}/>
+            ))}
+        </Grid>
+    )
+}
+
+/*
+
+{firstSeats.map( available => {
                 if(available)
                     return (<Box style={styles.fSeatStyle}>
                         num
@@ -57,7 +67,4 @@ export default function Seats(props) {
                 </Box>)
             })}
 
-
-        </Grid>
-    )
-}
+*/
