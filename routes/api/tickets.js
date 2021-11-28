@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const verify = require('../../middleware/verifyTokenUser')
 
 // Load ticket model
 const ticket = require('../../models/ticket');
@@ -20,8 +21,22 @@ router.get('/ticketget/:id', (req, res) => {
     .catch(err => res.status(404).json({ noticketfound: 'No ticket found' }));
 });
 
+router.get('/getUserTickets/',verify, (req, res) => {
 
-router.post('/ticketcreate/', async (req, res) => {
+  const {userId , admin} = req 
+  if (admin) res.status(401).send("Unauthorized Action")
+  ticket.find({user : userId})
+    .then(ticket => res.json(ticket))
+    .catch(err => res.status(404).json({ noticketfound: 'No ticket found' }));
+});
+
+
+
+router.post('/ticketcreate/',verify,async (req, res) => {
+  
+  const {userId , admin} = req 
+  if (admin) res.status(401).send("Unauthorized Action")
+
   const {economyPrice,businessPrice,firstPrice,economySeats,businessSeats,firstSeats} = req.body;
   const totalPrice = economyPrice*economySeats.length + businessPrice*businessSeats.length + firstPrice*firstSeats.length
   let ticketNum 
@@ -33,6 +48,7 @@ router.post('/ticketcreate/', async (req, res) => {
   }
   req.body.ticketNumber = ticketNum + '' 
   req.body.totalPrice = totalPrice 
+  req.body.user = userId 
   await ticket.create(req.body)
     .then(ticket => res.json({ msg: 'ticket added successfully' }))
     .catch(err => res.status(400).json({ error: err }));

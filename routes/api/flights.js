@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-
+const verify = require('../../middleware/verifyTokenUser')
 // Load flight model
 const flight = require('../../models/flight');
 
@@ -21,7 +21,11 @@ router.get('/flightget/:id', (req, res) => {
     .catch(err => res.status(404).json({ noflightfound: 'No flight found' }));
 });
 
-router.post('/flightcreate/', (req, res) => {
+router.post('/flightcreate/', verify ,(req, res) => {
+  const {userId , admin} = req 
+  if (!admin)
+  res.status(401).send("Unauthorized Action")
+
   const {economySeats,firstSeats,businessSeats} = req.body
   economylist = []
   for (var i = 0 ; i < economySeats ; i ++){
@@ -46,7 +50,11 @@ router.post('/flightcreate/', (req, res) => {
 });
 
 
-router.patch('/flightupdate/:id', (req, res) => {
+router.patch('/flightupdate/:id',verify, (req, res) => {
+  const {userId , admin} = req 
+  if (admin)
+  res.status(401).send("Unauthorized Action")
+
   flight.findByIdAndUpdate(req.params.id, req.body)
      .then(flight => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
@@ -54,7 +62,8 @@ router.patch('/flightupdate/:id', (req, res) => {
      );
 });
 
-router.patch('/flightbookseats/',async (req,res)=>{
+router.patch('/flightbookseats/',verify,async (req,res)=>{
+
 const{flightId,economySeats,firstSeats,businessSeats} = req.body
 let f = await flight.findById(flightId)
 
@@ -78,7 +87,7 @@ flight.findByIdAndUpdate(flightId, f)
      );
 
 })
-router.patch('/flightcancelseats/',async (req,res)=>{
+router.patch('/flightcancelseats/',verify,async (req,res)=>{
   const{flightId,economySeats,firstSeats,businessSeats} = req.body
 let f = await flight.findById(flightId)
 
@@ -103,10 +112,13 @@ flight.findByIdAndUpdate(flightId, f)
 
   })
 
-// @route GET api/flights/:id
-// @description Delete flight by id
-// @access Public
-router.delete('/flightdelete/:id', (req, res) => {
+
+router.delete('/flightdelete/:id',verify, (req, res) => {
+
+  const {userId , admin} = req 
+  if (admin)
+  res.status(401).send("Unauthorized Action")
+
   flight.findByIdAndRemove(req.params.id, req.body)
     .then(flight => res.json({ mgs: 'flight entry deleted successfully' }))
     .catch(err => res.status(404).json({ error: 'No such a flight' }));
