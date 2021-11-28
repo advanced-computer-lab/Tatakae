@@ -21,6 +21,7 @@ router.get('/flightget/:id', (req, res) => {
     .catch(err => res.status(404).json({ noflightfound: 'No flight found' }));
 });
 
+
 router.post('/flightcreate/', verify ,(req, res) => {
   const {userId , admin} = req 
   if (!admin)

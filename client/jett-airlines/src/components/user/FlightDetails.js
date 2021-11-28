@@ -32,11 +32,11 @@ export default function FlightDetails(props) {
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">
-                            Economy Seats: {flight.economySeats}
+                            Economy Seats: {[].concat(flight.economySeats).length}
                             <br/>
-                            Business Seats: {flight.businessSeats}
+                            Business Seats: {[].concat(flight.businessSeats).length}
                             <br/>
-                            First Class Seats: {flight.firstSeats}
+                            First Class Seats: {[].concat(flight.firstSeats).length}
                             <br/>
                             Total Number Seats: {flight.totalSeats}
                             <br/>

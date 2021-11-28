@@ -80,7 +80,7 @@ export default function MainPage() {
   };
 
   const handleChoice = () => {
-    filtering()
+    setRefresh(!refresh);
     handleClose()
   }
 
@@ -114,7 +114,7 @@ export default function MainPage() {
 
   useEffect(() => {
     filtering()
-  }, [terminalQuery])
+  }, [refresh])
 
   const styles = {
     background: {
@@ -280,7 +280,7 @@ export default function MainPage() {
       {!mainView && (<Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
-            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            <FlightCard flight={flight} />
           </Grid>
         ))}
       </Grid></Paper>)}
