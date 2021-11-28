@@ -54,7 +54,26 @@ const flightSchema = new mongoose.Schema({
     type: Number,
     //changed default
     default: 0
-  
+  },
+  availableEconomySeats: {
+    type: Number,
+    required : false,
+    default: 0
+  },
+  availableBusinessSeats: {
+    type: Number,
+    required : false,
+    default: 0
+  },
+  availableFirstSeats: {
+    type: Number,
+    required : false,
+    default: 0
+  },
+  availableTotalSeats: {
+    type: Number,
+    required : false,
+    default: 0
   },
   economyPrice: {
     type: Number,
@@ -71,7 +90,17 @@ const flightSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  baggageAllowance: {             // in Kilograms
+  economybaggage: {             // in Kilograms
+    type: Number,
+    required: true,
+    default: 30
+  },
+  businessbaggage: {             // in Kilograms
+    type: Number,
+    required: true,
+    default: 30
+  },
+  firstbaggage: {             // in Kilograms
     type: Number,
     required: true,
     default: 30
