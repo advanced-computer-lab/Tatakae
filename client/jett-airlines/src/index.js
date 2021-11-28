@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import Dashboard from './components/user/Dashboard';
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom';
+import CreateFlight from './components/admin/CreateFlight';
 
 ReactDOM.render(<BrowserRouter>
 <App />

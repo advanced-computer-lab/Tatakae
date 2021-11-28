@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 export default function FlightDetails(props) {
     const flight=props.flight
-    console.log(flight.economySeats)
     return (
         <div>
             <Card sx={{ maxWidth: 500 }}>
