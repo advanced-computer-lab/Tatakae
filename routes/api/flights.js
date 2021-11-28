@@ -42,9 +42,12 @@ router.post('/flightcreate/', verify ,(req, res) => {
   req.body.economySeats = economylist ;
   req.body.businessSeats = businesslist;
   req.body.firstSeats = firstlist;
-  req.body.availableSeats = req.body.totalSeats;
-  flight.create(req.body)
+  req.body.availableTotalSeats = req.body.totalSeats;
+  req.body.availableEconomySeats = economySeats ;
+  req.body.availableFirstSeats = firstSeats ;
+  req.body.availableBusinessSeats = businessSeats ;
 
+  flight.create(req.body)
     .then(flight => res.json({ msg: 'flight added successfully' }))
     .catch(err => res.status(400).json({ error: 'Unable to add this flight' }));
 });
@@ -71,15 +74,20 @@ for (var i = 0 ; i < economySeats.length ; i++){
   var j = economySeats[i];
   f.economySeats[j] = true;
 }
+f.availableEconomySeats -= economySeats.length ;
 for (var i = 0 ; i < businessSeats.length ; i++){
   var j = businessSeats[i];
   f.businessSeats[j] = true;
 }
+f.availableBusinessSeats -= businessSeats.length ;
+
 for (var i = 0 ; i < firstSeats.length ; i++){
   var j = firstSeats[i];
   f.firstSeats[j] = true;
 }
-f.availableSeats -= (economySeats.length+businessSeats.length+firstSeats.length);
+f.availableFirstSeats -= firstSeats.length ;
+
+f.availableTotalSeats -= (economySeats.length+businessSeats.length+firstSeats.length);
 flight.findByIdAndUpdate(flightId, f)
      .then(f => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
@@ -95,15 +103,21 @@ for (var i = 0 ; i < economySeats.length ; i++){
   var j = economySeats[i];
   f.economySeats[j] = false;
 }
+f.availableEconomySeats += economySeats.length ;
+
 for (var i = 0 ; i < businessSeats.length ; i++){
   var j = businessSeats[i];
   f.businessSeats[j] = false;
 }
+f.availableBusinessSeats += businessSeats.length ;
+
 for (var i = 0 ; i < firstSeats.length ; i++){
   var j = firstSeats[i];
   f.firstSeats[j] = false;
 }
-f.availableSeats += (economySeats.length+businessSeats.length+firstSeats.length);
+f.availableFirstSeats += firstSeats.length ;
+
+f.availableTotalSeats += (economySeats.length+businessSeats.length+firstSeats.length);
 flight.findByIdAndUpdate(flightId, f)
      .then(f => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
@@ -117,7 +131,7 @@ router.delete('/flightdelete/:id',verify, (req, res) => {
 
   const {userId , admin} = req 
   if (admin)
-  res.status(401).send("Unauthorized Action")
+  return res.status(401).send("Unauthorized Action")
 
   flight.findByIdAndRemove(req.params.id, req.body)
     .then(flight => res.json({ mgs: 'flight entry deleted successfully' }))
