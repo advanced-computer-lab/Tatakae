@@ -4,16 +4,16 @@ import SignIn from './SignIn'
 import Dashboard from './admin/Dashboard'
 import CreateFlight from './admin/CreateFlight'
 import NotFound from './NotFound';
-import UserDashboard from './user/Dashboard'
+import MainPage from './MainPage';
 
 export default function App() {
   return (
     <div>
         <Routes>
-          <Route path="/" element={<SignIn/>} />
+          <Route path="/" element={<MainPage/>} />
+          <Route path="/logIn" element={<SignIn/>} />
           <Route exact path='/home' element={<Dashboard/>} />
           <Route exact path='/Create-Flight' element={<CreateFlight/>} />
-          <Route exact path='/userHome' element={<UserDashboard/>} />
           <Route path='/wrongURL' element={<NotFound/>} />
         </Routes>
     </div>

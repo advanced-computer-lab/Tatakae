@@ -33,7 +33,6 @@ export default class CreateFlight extends Component {
 
     handleArrDateChange= e=>{
         this.setState({arrivalDate: new Date(e)})
-        console.log(this.state.arrivalDate)
     }
 
     handleChange = e => {
@@ -57,8 +56,6 @@ export default class CreateFlight extends Component {
             firstPrice: this.state.fPrice,
             baggageAllowance: this.state.baggage
         };
-
-        console.log(data.arrivalDate);
 
         axios
             .post('http://localhost:8082/api/flights/flightcreate/', data)

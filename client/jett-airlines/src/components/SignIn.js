@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../css/SignIn.css'
+import { Navigate } from 'react-router-dom'
 
 import { TextField, Avatar, Paper, Grid, Button, Typography, createTheme ,ThemeProvider } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,7 +14,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import bg from '../assets/travelwallpaper22.jpg'
 import logo from '../assets/Logo.png'
 import axios from 'axios';
-
 
 const darktheme = createTheme({
     palette: {
@@ -58,7 +58,7 @@ export default class SignIn extends Component {
         email: '',
         password: '',
         showPassword: false,
-        path:'/home'
+        home:false
     }
 
     handleSubmit=(event)=>{
@@ -70,11 +70,14 @@ export default class SignIn extends Component {
         }
 
         axios.post('http://localhost:8082/api/users/login/', data)
-        .then(res=>res.data.result.administrator? this.setState(() => ({
-            path: '/home'
-        })) : this.setState(() => ({
-            path: '/userHome'
-        })))
+        .then(res=>{
+            sessionStorage.setItem('token', res.data.token)
+            sessionStorage.setItem('signedUser', JSON.stringify(res.data.signInUser))
+            //console.log(JSON.parse(sessionStorage.getItem('signedUser')))
+            this.setState(()=>({
+                home:true
+            }))
+        })
         .catch(err=>console.log(err.message))
     }
 
@@ -111,14 +114,14 @@ export default class SignIn extends Component {
                             <Avatar style={styles.avatarStyle}><LockOutlinedIcon /></Avatar>
 
                             <Typography style={styles.textStyle}>
-                                <h2>Sign In</h2>
+                                Sign In
                             </Typography>
 
                         </Grid>
                         <TextField
                             style={styles.fieldStyle}
                             label='Email'
-                            placeholder='Enter Email' f
+                            placeholder='Enter Email'
                             fullWidth
                             required
                             value={this.state.email}
@@ -161,10 +164,13 @@ export default class SignIn extends Component {
                             variant="contained"
                             style={styles.btnstyle}
                             fullWidth
-                            href={this.state.path}
                             onClick={this.handleSubmit}>
                             Sign in
                         </Button>
+                        <Button>
+                            
+                        </Button>
+                        {this.state.home && (<Navigate to='/home'/>)}
                     </Paper>
                 </Grid>
                 </ThemeProvider>

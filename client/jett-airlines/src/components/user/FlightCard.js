@@ -23,6 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function FlightCard(props) {
 
   const [openDetails, setOpenDetails] = React.useState(false);
+  const [openLogIn, setOpenLogIn] = React.useState(false);
 
   const handleClickOpenDetails = () => {
     setOpenDetails(true);
@@ -31,6 +32,12 @@ export default function FlightCard(props) {
   const handleClickCloseDetails = () => {
     setOpenDetails(false);
   };
+
+  const handleReserveClick=()=>{
+    if(JSON.parse(sessionStorage.getItem('signedUser'))){
+      //hakamel
+    }
+  }
 
     return (
         <div className='center'>
@@ -66,13 +73,12 @@ export default function FlightCard(props) {
             <FlightDetails flight={props.flight}/>
         </DialogContent>
         <DialogActions>
+        <Button onClick={handleReserveClick} size="small" color="primary">
+          Reserve
+        </Button>
           <Button onClick={handleClickCloseDetails}>Close</Button>
         </DialogActions>
       </Dialog>
         </div>
-
-
-        
-
     );
 }
