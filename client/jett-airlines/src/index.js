@@ -5,7 +5,7 @@ import {BrowserRouter} from 'react-router-dom';
 import CreateFlight from './components/admin/CreateFlight';
 
 ReactDOM.render(<BrowserRouter>
-<CreateFlight />
+<App />
 </BrowserRouter>
   ,document.getElementById('root')
 );
