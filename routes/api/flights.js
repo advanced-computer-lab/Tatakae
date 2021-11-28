@@ -22,7 +22,9 @@ router.get('/flightget/:id', (req, res) => {
 });
 
 router.post('/flightcreate/', (req, res) => {
+
   flight.create(req.body)
+
     .then(flight => res.json({ msg: 'flight added successfully' }))
     .catch(err => res.status(400).json({ error: 'Unable to add this flight' }));
 });

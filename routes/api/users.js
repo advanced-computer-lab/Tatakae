@@ -85,4 +85,11 @@ router.post("/signUp/", async (req,res) => {
 });
 
 
+router.delete('/logout', (req, res) => {
+
+  // refreshTokens = refreshTokens.filter(token => token !== req.body.token)
+  // res.sendStatus(204)
+})
+
+
 module.exports = router;

@@ -1,20 +1,21 @@
 // models/ticket.js
+//import { ObjectId } from 'mongoose';
+
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-import { ObjectId } from 'mongoose';
 
 const ticketSchema = new mongoose.Schema({
   ticketNumber: {
-    type: String,
+    type: String,       // not needed from user handled in backend
     unique: true,
     required: true
   },
   user:{
-    type: ObjectId,
+    type: mongoose.ObjectId,
     required: true
   },
   flight:{
-    type: ObjectId,
+    type: mongoose.ObjectId,
     required: true
   },
   from:{
@@ -70,7 +71,7 @@ const ticketSchema = new mongoose.Schema({
   totalPrice: {            
     type: Number,
     required: true,
-    default:  {$sum : [firstPrice*{$size:firstSeats},economyPrice*{$size:economySeats},businessPrice*{$size:businessSeats}]}  
+    default:  0  
   }
 });
 

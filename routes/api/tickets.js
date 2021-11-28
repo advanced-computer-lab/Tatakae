@@ -22,7 +22,6 @@ router.get('/ticketget/:id', (req, res) => {
 
 
 router.post('/ticketcreate/', async (req, res) => {
-
   const {economyPrice,businessPrice,firstPrice,economySeats,businessSeats,firstSeats} = req.body;
   const totalPrice = economyPrice*economySeats.length + businessPrice*businessSeats.length + firstPrice*firstSeats.length
   let ticketNum 
