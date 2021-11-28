@@ -48,6 +48,7 @@ export default function MainPage() {
   const [arrDateQuery, setArrDateQuery] = useState(null);
   const [terminalQuery, setTerminalQuery] = useState('');
   const [passengerQuery, setPassengerQuery] = useState('');
+  const [cabinQuery, setCabinQuery] = useState('');
   const [mainView, setMainView] = useState(true);
 
   const [open, setOpen] = React.useState(false);
@@ -58,6 +59,10 @@ export default function MainPage() {
 
   const handleChangeTerminal = (event) => {
     setTerminalQuery(event.target.value || '');
+  }
+
+  const handleChangeCabin = (event)=>{
+    setCabinQuery(event.target.value || '');
   }
 
   const handleChangeDeptDate = (event) => {
@@ -80,7 +85,7 @@ export default function MainPage() {
   };
 
   const handleChoice = () => {
-    filtering()
+    setRefresh(!refresh);
     handleClose()
   }
 
@@ -96,6 +101,17 @@ export default function MainPage() {
     // }
     if (terminalQuery) {
       x = x.filter(flight => flight.airportTerminal === terminalQuery)
+    }
+    if(cabinQuery){
+      if(cabinQuery==='Economy'){
+        x.filter(flight=>flight.availableEconomySeats>0);
+      }
+      if(cabinQuery==='Business'){
+        x.filter(flight=>flight.availableBusinessSeats>0);
+      }
+      if(cabinQuery==='First'){
+        x.filter(flight=>flight.availableFirstSeats>0);
+      }
     }
     if (deptDateQuery) {
       x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
@@ -114,7 +130,7 @@ export default function MainPage() {
 
   useEffect(() => {
     filtering()
-  }, [terminalQuery])
+  }, [refresh])
 
   const styles = {
     background: {
@@ -246,6 +262,25 @@ export default function MainPage() {
               </Select>
             </FormControl>
 
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Cabin Class</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={cabinQuery}
+                defaultValue=''
+                onChange={handleChangeCabin}
+                input={<OutlinedInput label="Cabin Class" />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value='Economy'>Economy</MenuItem>
+                <MenuItem value='Business'>Business</MenuItem>
+                <MenuItem value='First'>First</MenuItem>
+              </Select>
+            </FormControl>
+
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
                 label="Departure Date"
@@ -280,7 +315,7 @@ export default function MainPage() {
       {!mainView && (<Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
-            <FlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            <FlightCard flight={flight} />
           </Grid>
         ))}
       </Grid></Paper>)}
