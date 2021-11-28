@@ -56,7 +56,7 @@ router.post("/login", async (req,res) => {
     if (!isPassword) return res.status(400).json({ message: "Wrong Password" });
 
     const token = jwt.sign({ id: signInUser._id , admin: signInUser.administrator }, secret, { expiresIn: "2h" });
-
+    //remove signInUser if not needed
     res.status(200).json({ signInUser, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });

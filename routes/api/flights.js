@@ -23,7 +23,7 @@ router.get('/flightget/:id', (req, res) => {
 
 
 router.post('/flightcreate/', verify ,(req, res) => {
-  const {userId , admin} = req 
+  const {userId , admin} = req
   if (!admin)
   return res.status(401).send("Unauthorized Action")
 
@@ -47,6 +47,7 @@ router.post('/flightcreate/', verify ,(req, res) => {
   req.body.availableEconomySeats = economySeats ;
   req.body.availableFirstSeats = firstSeats ;
   req.body.availableBusinessSeats = businessSeats ;
+  delete req.body.token;
 
   flight.create(req.body)
     .then(flight => res.json({ msg: 'flight added successfully' }))
@@ -56,7 +57,7 @@ router.post('/flightcreate/', verify ,(req, res) => {
 
 router.patch('/flightupdate/:id',verify, (req, res) => {
   const {userId , admin} = req 
-  if (admin)
+  if (!admin)
   return res.status(401).send("Unauthorized Action")
 
   flight.findByIdAndUpdate(req.params.id, req.body)

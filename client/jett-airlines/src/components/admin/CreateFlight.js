@@ -54,7 +54,8 @@ export default class CreateFlight extends Component {
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
             firstPrice: this.state.fPrice,
-            baggageAllowance: this.state.baggage
+            baggageAllowance: this.state.baggage,
+            token: sessionStorage.getItem('token')
         };
 
         axios
@@ -79,7 +80,7 @@ export default class CreateFlight extends Component {
                 //this.props.history.push('/');
             })
             .catch(err => {
-                console.log(err.message);
+                console.log(err);
             })
     };
 
