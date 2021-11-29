@@ -64,11 +64,33 @@ router.patch('/ticketupdate/:id', (req, res) => {
      );
 });
 
-
-router.delete('/ticketdelete/:id', (req, res) => {
+router.delete('/deleteticketforuser/:id', (req, res) => {
   ticket.findByIdAndRemove(req.params.id, req.body)
     .then(ticket => res.json({ mgs: 'ticket entry deleted successfully' }))
     .catch(err => res.status(404).json({ error: 'No such a ticket' }));
+});
+
+router.delete('/ticketsdeleteforflight/',verify,async (req, res) => {
+  const {userId , admin} = req 
+  if (!admin)
+  return res.status(401).send("Unauthorized Action")
+
+  const {flight} = req.body
+  const tickets = await ticket.find({"flight" : flight})
+
+    if (tickets){
+    let emails = [];
+    for (var i = 0 ; i< tickets.length ; i++){
+      t = tickets[i];
+      emails.push({email: t.email , ticketNumber: t.ticketNumber , price: t.totalPrice })
+    }
+    await ticket.deleteMany({"flight" : flight})   
+     // send emails
+     res.json(emails)
+  }
+  else {
+    res.json([])
+  }
 });
 
 module.exports = router;
