@@ -103,7 +103,7 @@ export default function FlightCard(props) {
         
           <Alert severity="error" variant="filled"
             action={
-              <Button onClick={redirectSignIn} color="inherit" size="small">
+              <Button onClick={redirectSignIn} color="inherit" size="small" variant="outlined">
                 Sign In
               </Button>
             }
