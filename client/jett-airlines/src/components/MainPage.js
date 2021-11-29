@@ -54,7 +54,7 @@ export default function MainPage() {
   const [open, setOpen] = React.useState(false);
 
   const handleChangePassenger = (event) => {
-    setPassengerQuery((event.target.value).toUpperCase() || '');
+    setPassengerQuery((event.target.value) || '');
   };
 
   const handleChangeTerminal = (event) => {
@@ -62,7 +62,7 @@ export default function MainPage() {
   }
 
   const handleChangeCabin = (event)=>{
-    setCabinQuery(event.target.value || '');
+    setCabinQuery(event.target.value);
   }
 
   const handleChangeDeptDate = (event) => {
@@ -96,22 +96,20 @@ export default function MainPage() {
   const filtering = () => {
     let x = flights
     x = x.filter(flight => new Date(flight.departureDate) >= new Date())
-    //if (passengerQuery) {
-    // x = x.filter(flight => flight.flightNumber === numberQuery)
-    // }
+
     if (terminalQuery) {
       x = x.filter(flight => flight.airportTerminal === terminalQuery)
     }
     if(cabinQuery){
-      if(cabinQuery==='Economy'){
-        x.filter(flight=>flight.availableEconomySeats>0);
+      switch(cabinQuery){
+        case 'Economy': x=x.filter(flight=>flight.availableEconomySeats>0);break;
+        case 'Business': x=x.filter(flight=>Number(flight.availableBusinessSeats)>0);break;
+        case 'First': x=x.filter(flight=>flight.availableFirstSeats>0);break;
+       default: break;
       }
-      if(cabinQuery==='Business'){
-        x.filter(flight=>flight.availableBusinessSeats>0);
-      }
-      if(cabinQuery==='First'){
-        x.filter(flight=>flight.availableFirstSeats>0);
-      }
+    }
+    if(passengerQuery){
+      x=x.filter(flight=> flight.availableTotalSeats>=passengerQuery)
     }
     if (deptDateQuery) {
       x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))

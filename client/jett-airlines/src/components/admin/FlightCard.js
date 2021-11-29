@@ -48,7 +48,7 @@ export default function FlightCard(props) {
   };
 
   const handleYes = () => {
-      axios.delete(`http://localhost:8082/api/flights/flightdelete/${props.flight._id}`).then(()=>{
+      axios.delete(`http://localhost:8082/api/flights/flightdelete/${props.flight._id}`, { data: { token: sessionStorage.getItem('token') } }).then(()=>{
         setOpenDelete(false);
         props.setRefresh(!props.refresh)
       })

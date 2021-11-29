@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 
 const verify = async(req , res , next) =>{
-
     const {token} = req.body
     if (!token)
     return res.status(403).send("A token is required for authentication");
