@@ -1,11 +1,13 @@
 import { Grid, Box} from '@mui/material';
 import Seat from './Seat'
 
-let economySeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(false)]
+let economySeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(false), Boolean(true)]
 
-let businessSeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true)]
+let businessSeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(true), Boolean(true)]
 
-let firstSeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(false)]
+let firstSeats = [Boolean(true), Boolean(false), Boolean(true), Boolean(true), Boolean(false), Boolean(false)]
+
+let seatWidth = 3;
 
 const styles = {
     bSeatStyle: {
@@ -29,42 +31,29 @@ const styles = {
 
 export default function Plane(props) {
 
-    return (
-        <Grid container columns="2" wrap="wrap" >
-            {businessSeats.map( (available, seatNumber) => (
-                <Seat available={available} type="b" seatNumber={seatNumber}/>
-            ))}
+    const getWidth = (seatNumber) => {
+        if(seatNumber === 2)
+            return 3;
+        return 1;
+    }
 
+    return (
+        <Grid container columns="8" wrap="wrap" sx={{maxWidth: "50%"}}>
+            {businessSeats.map( (available, seatNumber) => (
+                <Grid item xs={getWidth(seatNumber)}>
+                <Seat available={available} type="b" seatNumber={seatNumber}/>
+                </Grid>
+            ))}
             {firstSeats.map( (available, seatNumber) => (
-                <Seat available={available} type="f" seatNumber={seatNumber}/>
+                <Grid item xs={getWidth(seatNumber)}>
+                <Seat available={available} type="b" seatNumber={seatNumber}/>
+                </Grid>
             ))}
             {economySeats.map( (available, seatNumber) => (
-                <Seat available={available} type="e" seatNumber={seatNumber}/>
+                <Grid item xs={getWidth(seatNumber)}>
+                <Seat available={available} type="b" seatNumber={seatNumber}/>
+                </Grid>
             ))}
         </Grid>
     )
 }
-
-/*
-
-{firstSeats.map( available => {
-                if(available)
-                    return (<Box style={styles.fSeatStyle}>
-                        num
-                    </Box>)
-                 return (<Box style={styles.oSeatStyle}>
-                    num
-                </Box>)
-            })}
-
-            {economySeats.map( available => {
-                if(available)
-                    return (<Box style={styles.eSeatStyle}>
-                        num
-                    </Box>)
-                 return (<Box style={styles.oSeatStyle}>
-                    num
-                </Box>)
-            })}
-
-*/

@@ -15,7 +15,7 @@ export default function Seat(props) {
         seatColor = { backgroundColor: "grey" }
 
     return (
-        <Box style={seatColor} sx={{textAlign: "center", borderRadius: "1em 1em 0em 0em", width: "3em",height: "3em"}}>
+        <Box style={seatColor} sx={{textAlign: "center", borderRadius: "1em 1em 0em 0em"}}>
             {props.seatNumber}
         </Box>
     )
