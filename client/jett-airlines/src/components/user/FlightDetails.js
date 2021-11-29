@@ -32,17 +32,27 @@ export default function FlightDetails(props) {
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">
-                            Available Economy Seats: {flight.availableEconomySeats}
+                            Available First Class Seats: {flight.availableFirstSeats}
+                            <br/>
+                            Price of First Class: {flight.firstPrice}
+                            <br/>
+                            First Class Baggage Allowance: {flight.firstBaggage}
                             <br/>
                             Available Business Seats: {flight.availableBusinessSeats}
                             <br/>
-                            Available First Class Seats: {flight.availableFirstSeats}
+                            Price of Business: {flight.businessPrice}
                             <br/>
-                            Total of Available Seats: {flight.availableTotalSeats}
+                            Business Class Baggage Allowance: {flight.businessBaggage} 
+                            <br/>
+                            Available Economy Seats: {flight.availableEconomySeats}
+                            <br/>
+                            Price of Economy: {flight.economyPrice}
+                            <br/>
+                            Economy Class Baggage Allowance: {flight.economyBaggage}
+                            <br/>
+                            Available Seats: {flight.availableTotalSeats}
                             <br/>
                             Trip Duration: {diffHrs} Hours {diffMins} Minutes
-                            <br/>
-                            Baggage Allowance: {flight.baggageAllowance}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
