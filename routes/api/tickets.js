@@ -34,12 +34,9 @@ router.get('/getUserTickets/',verify, (req, res) => {
 
 
 router.post('/ticketcreate/',verify,async (req, res) => {
-
   const {userId , admin} = req 
   if (admin) return res.status(401).send("Unauthorized Action")
-
-  const {economyPrice,businessPrice,firstPrice,economySeats,businessSeats,firstSeats} = req.body;
-  const totalPrice = economyPrice*economySeats.length + businessPrice*businessSeats.length + firstPrice*firstSeats.length
+  
   let ticketNum 
    while (true){
     ticketNum = Math.floor((Math.random()*1000000)+90000000)
@@ -48,7 +45,6 @@ router.post('/ticketcreate/',verify,async (req, res) => {
       break;
   }
   req.body.ticketNumber = ticketNum + '' 
-  req.body.totalPrice = totalPrice 
   req.body.user = userId
   await ticket.create(req.body)
     .then(ticket => res.json({ msg: 'ticket added successfully' }))

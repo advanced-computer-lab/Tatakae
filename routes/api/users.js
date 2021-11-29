@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const verify = require('../../middleware/verifyTokenUser');
+
 
 //Token secret
 const secret = process.env.TOKEN_SECRET;
@@ -19,20 +21,25 @@ router.get('/usergetall', (req, res) => {
 });
 
 
-router.get('/userget/:id', (req, res) => {
-  user.findById(req.params.id)
+router.get('/userget/',verify,(req, res) => {
+  const {userId , admin} = req 
+  user.findById(userId)
     .then(user => res.json(user))
     .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
 
-router.post('/usercreate/', (req, res) => {
+router.post('/usercreate/',(req, res) => {
   user.create(req.body)
     .then(user => res.json({ msg: 'user added successfully' }))
     .catch(err => res.status(400).json({ error: 'Unable to add this user' }));
 });
 
-router.patch('/userupdate/:id', (req, res) => {
-  const user =  user.findByIdAndUpdate(req.params.id, req.body)
+router.patch('/userupdate/',verify,(req, res) => {
+  const {userId , admin} = req 
+  const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+  req.body.password = encryptedPassword
+
+  const user =  user.findByIdAndUpdate(userId, req.body)
      .then(user => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
       res.status(400).json({ error: 'Unable to update the Database' })

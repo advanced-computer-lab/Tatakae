@@ -69,27 +69,47 @@ router.patch('/flightupdate/:id',verify, (req, res) => {
 
 router.patch('/flightbookseats/',verify,async (req,res)=>{
 
-const{flightId,economySeats,firstSeats,businessSeats} = req.body
+const{flightId,economySeatsAdults,firstSeatsAdults,businessSeatsAdults,economySeatsChildren,firstSeatsChildren,businessSeatsChildren} = req.body
 let f = await flight.findById(flightId)
 
-for (var i = 0 ; i < economySeats.length ; i++){
-  var j = economySeats[i];
+for (var i = 0 ; i < economySeatsAdults.length ; i++){
+  var j = economySeatsAdults[i];
   f.economySeats[j] = true;
 }
-f.availableEconomySeats -= economySeats.length ;
-for (var i = 0 ; i < businessSeats.length ; i++){
-  var j = businessSeats[i];
+f.availableEconomySeats -= economySeatsAdults.length ;
+for (var i = 0 ; i < businessSeatsAdults.length ; i++){
+  var j = businessSeatsAdults[i];
   f.businessSeats[j] = true;
 }
-f.availableBusinessSeats -= businessSeats.length ;
+f.availableBusinessSeats -= businessSeatsAdults.length ;
 
-for (var i = 0 ; i < firstSeats.length ; i++){
-  var j = firstSeats[i];
+for (var i = 0 ; i < firstSeatsAdults.length ; i++){
+  var j = firstSeatsAdults[i];
   f.firstSeats[j] = true;
 }
-f.availableFirstSeats -= firstSeats.length ;
+f.availableFirstSeats -= firstSeatsAdults.length ;
 
-f.availableTotalSeats -= (economySeats.length+businessSeats.length+firstSeats.length);
+
+for (var i = 0 ; i < economySeatsChildren.length ; i++){
+  var j = economySeatsChildren[i];
+  f.economySeats[j] = true;
+}
+f.availableEconomySeats -= economySeatsChildren.length ;
+for (var i = 0 ; i < businessSeatsChildren.length ; i++){
+  var j = businessSeatsChildren[i];
+  f.businessSeats[j] = true;
+}
+f.availableBusinessSeats -= businessSeatsChildren.length ;
+
+for (var i = 0 ; i < firstSeatsChildren.length ; i++){
+  var j = firstSeatsChildren[i];
+  f.firstSeats[j] = true;
+}
+f.availableFirstSeats -= firstSeatsChildren.length ;
+
+
+
+f.availableTotalSeats -= (economySeatsAdults.length+businessSeatsAdults.length+firstSeatsAdults.length+economySeatsChildren.length+businessSeatsChildren.length+firstSeatsChildren.length);
 flight.findByIdAndUpdate(flightId, f)
      .then(f => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
@@ -99,30 +119,48 @@ flight.findByIdAndUpdate(flightId, f)
 })
 router.patch('/flightcancelseats/',verify,async (req,res)=>{
 
-
-const{flightId,economySeats,firstSeats,businessSeats} = req.body
-let f = await flight.findById(flightId)
-
-for (var i = 0 ; i < economySeats.length ; i++){
-  var j = economySeats[i];
-  f.economySeats[j] = false;
-}
-f.availableEconomySeats += economySeats.length ;
-
-for (var i = 0 ; i < businessSeats.length ; i++){
-  var j = businessSeats[i];
-  f.businessSeats[j] = false;
-}
-f.availableBusinessSeats += businessSeats.length ;
-
-for (var i = 0 ; i < firstSeats.length ; i++){
-  var j = firstSeats[i];
-  f.firstSeats[j] = false;
-}
-f.availableFirstSeats += firstSeats.length ;
-
-f.availableTotalSeats += (economySeats.length+businessSeats.length+firstSeats.length);
-flight.findByIdAndUpdate(flightId, f)
+  const{flightId,economySeatsAdults,firstSeatsAdults,businessSeatsAdults,economySeatsChildren,firstSeatsChildren,businessSeatsChildren} = req.body
+  let f = await flight.findById(flightId)
+  
+  for (var i = 0 ; i < economySeatsAdults.length ; i++){
+    var j = economySeatsAdults[i];
+    f.economySeats[j] = false;
+  }
+  f.availableEconomySeats += economySeatsAdults.length ;
+  for (var i = 0 ; i < businessSeatsAdults.length ; i++){
+    var j = businessSeatsAdults[i];
+    f.businessSeats[j] = false;
+  }
+  f.availableBusinessSeats += businessSeatsAdults.length ;
+  
+  for (var i = 0 ; i < firstSeatsAdults.length ; i++){
+    var j = firstSeatsAdults[i];
+    f.firstSeats[j] = false;
+  }
+  f.availableFirstSeats += firstSeatsAdults.length ;
+  
+  
+  for (var i = 0 ; i < economySeatsChildren.length ; i++){
+    var j = economySeatsChildren[i];
+    f.economySeats[j] = false;
+  }
+  f.availableEconomySeats += economySeatsChildren.length ;
+  for (var i = 0 ; i < businessSeatsChildren.length ; i++){
+    var j = businessSeatsChildren[i];
+    f.businessSeats[j] = false;
+  }
+  f.availableBusinessSeats += businessSeatsChildren.length ;
+  
+  for (var i = 0 ; i < firstSeatsChildren.length ; i++){
+    var j = firstSeatsChildren[i];
+    f.firstSeats[j] = false;
+  }
+  f.availableFirstSeats += firstSeatsChildren.length ;
+  
+  
+  
+  f.availableTotalSeats += (economySeatsAdults.length+businessSeatsAdults.length+firstSeatsAdults.length+economySeatsChildren.length+businessSeatsChildren.length+firstSeatsChildren.length);
+  flight.findByIdAndUpdate(flightId, f)
      .then(f => res.json({ msg: 'Updated successfully' }))
      .catch(err =>
       res.status(400).json({ error: 'Unable to update the Database' })
