@@ -14,6 +14,10 @@ const ticketSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: true
   },
+  email:{
+    type: String,
+    required: true
+  },
   flight:{
     type: mongoose.ObjectId,
     required: true
