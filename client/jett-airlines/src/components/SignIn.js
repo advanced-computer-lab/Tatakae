@@ -72,8 +72,7 @@ export default class SignIn extends Component {
         axios.post('http://localhost:8082/api/users/login/', data)
         .then(res=>{
             sessionStorage.setItem('token', res.data.token)
-            sessionStorage.setItem('signedUser', JSON.stringify(res.data.signInUser))
-            //console.log(JSON.parse(sessionStorage.getItem('signedUser')))
+            sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
             this.setState(()=>({
                 home:true
             }))

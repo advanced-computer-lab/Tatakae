@@ -56,8 +56,12 @@ router.post("/login", async (req,res) => {
     if (!isPassword) return res.status(400).json({ message: "Wrong Password" });
 
     const token = jwt.sign({ id: signInUser._id , admin: signInUser.administrator }, secret, { expiresIn: "2h" });
-    //remove signInUser if not needed
-    res.status(200).json({ signInUser, token });
+    const userIn ={ firstName: signInUser.firstName ,
+      lastName: signInUser.lastName ,
+      email: signInUser.email,
+      admin: signInUser.administrator
+    }
+    res.status(200).json({ userIn, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -73,8 +77,12 @@ router.post("/signUp/", async (req,res) => {
     const newUser = await user.create({ firstName: firstName ,lastName: lastName,email: email, password: encryptedPassword,administrator:administrator,homeAddress:homeAddress,countryCode:countryCode,telephoneNumber:telephoneNumber,passportNumber:passportNumber });
 
     const token = jwt.sign( {id: newUser._id , admin:newUser.administrator }, secret, { expiresIn: "1h" } );
-
-    res.status(201).json({ newUser, token });
+    const userIn ={ firstName: newUser.firstName ,
+      lastName: newUser.lastName ,
+      email: newUser.email,
+      admin: newUser.administrator
+    }
+    res.status(201).json({ userIn, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     

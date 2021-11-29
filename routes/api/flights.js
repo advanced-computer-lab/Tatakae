@@ -47,7 +47,6 @@ router.post('/flightcreate/', verify ,(req, res) => {
   req.body.availableEconomySeats = economySeats ;
   req.body.availableFirstSeats = firstSeats ;
   req.body.availableBusinessSeats = businessSeats ;
-  delete req.body.token;
 
   flight.create(req.body)
     .then(flight => res.json({ msg: 'flight added successfully' }))
@@ -59,6 +58,7 @@ router.patch('/flightupdate/:id',verify, (req, res) => {
   const {userId , admin} = req 
   if (!admin)
   return res.status(401).send("Unauthorized Action")
+
 
   flight.findByIdAndUpdate(req.params.id, req.body)
      .then(flight => res.json({ msg: 'Updated successfully' }))
@@ -98,7 +98,9 @@ flight.findByIdAndUpdate(flightId, f)
 
 })
 router.patch('/flightcancelseats/',verify,async (req,res)=>{
-  const{flightId,economySeats,firstSeats,businessSeats} = req.body
+
+
+const{flightId,economySeats,firstSeats,businessSeats} = req.body
 let f = await flight.findById(flightId)
 
 for (var i = 0 ; i < economySeats.length ; i++){
