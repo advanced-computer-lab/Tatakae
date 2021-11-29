@@ -115,7 +115,7 @@ export default class CreateFlight extends Component {
     render() {
         return (
             <div id="wrapper">
-                <div class='background' ref={this.vantaRef}>
+                <div className='background' ref={this.vantaRef}>
                     <div id="form" className='center'>
                         <br />
                         <br />

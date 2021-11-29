@@ -134,7 +134,7 @@ flight.findByIdAndUpdate(flightId, f)
 router.delete('/flightdelete/:id',verify, (req, res) => {
 
   const {userId , admin} = req 
-  if (admin)
+  if (!admin)
   return res.status(401).send("Unauthorized Action")
 
   flight.findByIdAndRemove(req.params.id, req.body)

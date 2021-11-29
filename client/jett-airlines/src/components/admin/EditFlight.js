@@ -55,7 +55,8 @@ export default class EditFlight extends Component {
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
             firstPrice: this.state.fPrice,
-            baggageAllowance: this.state.baggage
+            baggageAllowance: this.state.baggage,
+            token: sessionStorage.getItem('token')
         };
 
         axios
