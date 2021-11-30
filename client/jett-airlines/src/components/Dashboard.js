@@ -275,7 +275,8 @@ export default function Dashboard() {
             variant="contained"
             style={styles.btnstyle}
             startIcon={<HomeIcon />}
-            href='/Home'>Home</Button>
+            href='/home'>Home</Button>
+            
           <Button
             color='primary'
             variant="contained"

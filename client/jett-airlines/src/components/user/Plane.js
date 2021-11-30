@@ -11,45 +11,9 @@ import {
 import Seat from "./Seat";
 import "../../css/Plane.css";
 import { useEffect } from "react";
-
-let economySeats = [
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-];
-
-let businessSeats = [
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-  Boolean(true),
-  Boolean(true),
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-];
-
-let firstSeats = [
-  Boolean(true),
-  Boolean(false),
-  Boolean(true),
-  Boolean(true),
-  Boolean(false),
-  Boolean(false),
-  Boolean(false),
-  Boolean(true),
-];
-
-let businessPrice = 3000;
-
-let firstPrice = 2000;
-
-let economyPrice = 1000;
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const colors = {
   availableColor: "green",
@@ -59,11 +23,16 @@ const colors = {
 
 export default function Plane(props) {
   //const [selectedCount, setSelectedCount] = React.useState(0);
+  const { id } = useParams();
+
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [childSelected, setChildSelected] = React.useState(false);
   const [BusinessSelected, setBusinessSelected] = React.useState([]);
   const [firstSelected, setFirstSelected] = React.useState([]);
   const [economySelected, setEconomySelected] = React.useState([]);
+  const [flight, setFlight] = React.useState({});
+  const [notFound, setNotFound] = React.useState(false);
+
   let code = 65;
 
   const splitArray = (seatArray) => {
@@ -82,10 +51,18 @@ export default function Plane(props) {
     }
   };
 
+  useEffect(() => {
+    axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res=>{
+      setFlight(res.data);
+    }).catch(err=>{
+      setNotFound(true)
+    })
+  }, [])
+
   useEffect(
-    () => {},
+    () => { },
     [BusinessSelected],
-    [economySeats],
+    [flight.economySeats],
     [firstSelected],
     //[selectedCount],
     [totalPrice],
@@ -94,6 +71,7 @@ export default function Plane(props) {
 
   return (
     <Grid>
+      {notFound && <Navigate to='/wrongURL'/>}
       <Grid class="plane-container">
         <List class="showcase">
           <ListItem>
@@ -133,13 +111,14 @@ export default function Plane(props) {
 
         <Grid class="container">
           Business
-          {splitArray(businessSeats).map((row, rowNumber) => (
-            <Grid class="row">
+          {splitArray([].concat(flight.businessSeats)).map((row, rowNumber) => (
+            <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
+                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={businessPrice}
+                  price={flight.businessPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
@@ -156,20 +135,21 @@ export default function Plane(props) {
             </Grid>
           ))}
           First
-          {splitArray(firstSeats).map((row, rowNumber) => (
-            <Grid class="row">
+          {splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
+            <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
+                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={firstPrice}
+                  price={flight.firstPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
                   colors={colors}
                   seatNumber={
                     String.fromCharCode(code + seatNumber) +
-                    (1 + rowNumber + splitArray(businessSeats).length)
+                    (1 + rowNumber + splitArray([].concat(flight.businessSeats)).length)
                   }
                   //selectedCount={selectedCount}
                   //setSelectedCount={setSelectedCount}
@@ -180,13 +160,14 @@ export default function Plane(props) {
             </Grid>
           ))}
           Economy
-          {splitArray(economySeats).map((row, rowNumber) => (
-            <Grid class="row">
+          {splitArray([].concat(flight.economySeats)).map((row, rowNumber) => (
+            <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
+                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={economyPrice}
+                  price={flight.economyPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
@@ -195,8 +176,8 @@ export default function Plane(props) {
                     String.fromCharCode(code + seatNumber) +
                     (1 +
                       rowNumber +
-                      splitArray(businessSeats).length +
-                      splitArray(firstSeats).length)
+                      splitArray([].concat(flight.businessSeats)).length +
+                      splitArray([].concat(flight.firstSeats)).length)
                   }
                   selected={economySelected}
                   setSelected={setEconomySelected}
@@ -215,6 +196,7 @@ export default function Plane(props) {
           </p>
         </Grid>
       </Grid>
+      {notFound && (<Navigate to='/randomURL'/>)}
     </Grid>
   );
 }
