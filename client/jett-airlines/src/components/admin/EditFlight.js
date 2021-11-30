@@ -25,7 +25,9 @@ export default class EditFlight extends Component {
         ePrice: this.props.flight.economyPrice,
         bPrice: this.props.flight.businessPrice,
         fPrice: this.props.flight.firstPrice,
-        baggage: this.props.flight.baggageAllowance,
+        fBaggage: this.props.flight.firstBaggage,
+        bBaggage: this.props.flight.businessBaggage,
+        eBaggage: this.props.flight.economyBaggage
     }
 
     handleDeptDateChange= e=>{
@@ -55,9 +57,11 @@ export default class EditFlight extends Component {
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
             firstPrice: this.state.fPrice,
-            baggageAllowance: this.state.baggage
+            firstBaggage: this.state.fBaggage,
+            businessBaggage: this.state.bBaggage,
+            economyBaggage: this.state.eBaggage,
+            token: sessionStorage.getItem('token')
         };
-
         axios
             .patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
             .then(() => {
@@ -73,13 +77,21 @@ export default class EditFlight extends Component {
     render() {
         return (
             <div className='center'>
-                <h1>Edit a Flight</h1>
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>Flight Number</InputLabel>
                     <FilledInput
                         name='flightNumber'
                         id="flightNumber"
                         value={this.state.flightNumber}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>Airport Terminal</InputLabel>
+                    <FilledInput
+                        name='airportTerminal'
+                        id="airportTerminal"
+                        value={this.state.airportTerminal}
                         onChange={this.handleChange}
                     />
                 </FormControl>
@@ -93,7 +105,6 @@ export default class EditFlight extends Component {
                         onChange={this.handleChange}
                     />
                 </FormControl>
-
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>To</InputLabel>
                     <FilledInput
@@ -104,16 +115,8 @@ export default class EditFlight extends Component {
                     />
                 </FormControl>
                 <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Airport Terminal</InputLabel>
-                    <FilledInput
-                        name='airportTerminal'
-                        id="airportTerminal"
-                        value={this.state.airportTerminal}
-                        onChange={this.handleChange}
-                    />
-                </FormControl>
-
+                <br />
+                <br />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DateTimePicker
                         label="Departure Date"
@@ -132,46 +135,54 @@ export default class EditFlight extends Component {
                     />
                 </LocalizationProvider>
                 <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Economy Seats</InputLabel>
-                    <FilledInput
-                        name='economy'
-                        id="economy"
-                        value={this.state.economy}
-                        onChange={this.handleChange}
-                    />
-                </FormControl>
-
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Business Seats</InputLabel>
-                    <FilledInput
-                        name='business'
-                        id="business"
-                        value={this.state.business}
-                        onChange={this.handleChange}
-                    />
-                </FormControl>
-
+                <br />
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>First Class Seats</InputLabel>
                     <FilledInput
                         name='first'
                         id="first"
-                        value={this.state.first}
+                        value={[].concat(this.state.first).length}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>First Class Price</InputLabel>
+                    <FilledInput
+                        name='fPrice'
+                        id="fPrice"
+                        value={this.state.fPrice}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>First Baggage Allowance</InputLabel>
+                    <FilledInput
+                        name='fBaggage'
+                        id="fBaggage"
+                        value={this.state.fBaggage}
                         onChange={this.handleChange}
                     />
                 </FormControl>
                 <br />
                 <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Economy Price</InputLabel>
+                    <InputLabel>Business Seats</InputLabel>
                     <FilledInput
-                        name='ePrice'
-                        id="ePrice"
-                        value={this.state.ePrice}
+                        name='business'
+                        id="business"
+                        value={[].concat(this.state.business).length}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>Economy Seats</InputLabel>
+                    <FilledInput
+                        name='economy'
+                        id="economy"
+                        value={[].concat(this.state.economy).length}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+            
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>Business Price</InputLabel>
                     <FilledInput
@@ -183,22 +194,30 @@ export default class EditFlight extends Component {
                 </FormControl>
 
                 <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>First Class Price</InputLabel>
+                    <InputLabel>Economy Price</InputLabel>
                     <FilledInput
-                        name='fPrice'
-                        id="fPrice"
-                        value={this.state.fPrice}
+                        name='ePrice'
+                        id="ePrice"
+                        value={this.state.ePrice}
                         onChange={this.handleChange}
                     />
                 </FormControl>
                 <br />
-
                 <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Baggage Count</InputLabel>
+                    <InputLabel>Business Baggage Allowance</InputLabel>
                     <FilledInput
-                        name='baggage'
-                        id="baggage"
-                        value={this.state.baggage}
+                        name='bBaggage'
+                        id="bBaggage"
+                        value={this.state.bBaggage}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>Economy Baggage Allowance</InputLabel>
+                    <FilledInput
+                        name='eBaggage'
+                        id="eBaggage"
+                        value={this.state.eBaggage}
                         onChange={this.handleChange}
                     />
                 </FormControl>

@@ -15,6 +15,8 @@ import Slide from '@mui/material/Slide';
 import axios from 'axios';
 import FlightDetails from './FlightDetails';
 import EditFlight from './EditFlight';
+import emailjs from 'emailjs-com';
+emailjs.init(process.env.EMAIL_USER_ID);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -48,10 +50,26 @@ export default function FlightCard(props) {
   };
 
   const handleYes = () => {
-      axios.delete(`http://localhost:8082/api/flights/flightdelete/${props.flight._id}`).then(()=>{
+      axios.delete(`http://localhost:8082/api/flights/flightdelete/${props.flight._id}`, { data: { token: sessionStorage.getItem('token') } }).then(()=>{
         setOpenDelete(false);
         props.setRefresh(!props.refresh)
       })
+
+      axios.delete('http://localhost:8082/api/tickets//ticketsdeleteforflight', { data: { token: sessionStorage.getItem('token') , flight:props.flight._id } }).then( res=> {
+      for (var i = 0 ; i <res.length ; i ++){
+        let variables = {ticketNumber: res[i].ticketNumber ,totalPrice: res[i].totalPrice ,email: res[i].email}
+      emailjs.send(
+        process.env.EMAIL_SERVICE_ID,process.env.EMAIL_TEMPLATE_ID,
+        variables
+        ).then(res => {
+          console.log('Email successfully sent!')
+        })
+        // Handle errors here however you like, or use a React error boundary
+        .catch(err => console.error('Oh well, you failed. Here some thoughts on the error that occured:', err))
+      }
+      })// end of then
+      
+
   };
 
   const handleNo=()=>{

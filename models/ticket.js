@@ -14,6 +14,10 @@ const ticketSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: true
   },
+  email:{
+    type: String,
+    required: true
+  },
   flight:{
     type: mongoose.ObjectId,
     required: true
@@ -26,7 +30,11 @@ const ticketSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  airport: {
+  departureTerminal: {
+    type: String,
+    required: true
+  },
+  arrivalTerminal: {
     type: String,
     required: true
   },
@@ -38,36 +46,37 @@ const ticketSchema = new mongoose.Schema({
       type: Date,
       required: true
   },
-  economySeats: {
+  economySeatsAdults: {
     type: [Number],
     required: true,
     default: [0] 
   },
-  businessSeats: {
+  businessSeatsAdults: {
     type: [Number],
     required: true,
     default: [0] 
   },
-  firstSeats: {
+  firstSeatsAdults: {
     type: [Number],
     required: true,
     default: [0] 
   },
-  economyPrice: {
-    type: Number,
+  economySeatsChildren: {
+    type: [Number],
     required: true,
-    default: 0
+    default: [0] 
   },
-  businessPrice: {
-    type: Number,
+  businessSeatsChildren: {
+    type: [Number],
     required: true,
-    default: 0
+    default: [0] 
   },
-  firstPrice: {
-    type: Number,
+  firstSeatsChildren: {
+    type: [Number],
     required: true,
-    default: 0
+    default: [0] 
   },
+
   totalPrice: {            
     type: Number,
     required: true,

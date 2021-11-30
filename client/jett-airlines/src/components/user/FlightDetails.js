@@ -8,9 +8,9 @@ import Typography from '@mui/material/Typography';
 
 export default function FlightDetails(props) {
     const flight=props.flight
-    var diffMs = (new Date(flight.arrivalDate) - new Date(flight.departureDate));
-    var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+    const diffMs = (new Date(flight.arrivalDate) - new Date(flight.departureDate));
+    const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     return (
         <div>
             <Card sx={{ maxWidth: 500 }}>
@@ -32,17 +32,27 @@ export default function FlightDetails(props) {
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">
-                            Economy Seats: {[].concat(flight.economySeats).length}
+                            Available First Class Seats: {flight.availableFirstSeats}
                             <br/>
-                            Business Seats: {[].concat(flight.businessSeats).length}
+                            Price of First Class: {flight.firstPrice}
                             <br/>
-                            First Class Seats: {[].concat(flight.firstSeats).length}
+                            First Class Baggage Allowance: {flight.firstBaggage}
                             <br/>
-                            Total Number Seats: {flight.totalSeats}
+                            Available Business Seats: {flight.availableBusinessSeats}
+                            <br/>
+                            Price of Business: {flight.businessPrice}
+                            <br/>
+                            Business Class Baggage Allowance: {flight.businessBaggage} 
+                            <br/>
+                            Available Economy Seats: {flight.availableEconomySeats}
+                            <br/>
+                            Price of Economy: {flight.economyPrice}
+                            <br/>
+                            Economy Class Baggage Allowance: {flight.economyBaggage}
+                            <br/>
+                            Available Seats: {flight.availableTotalSeats}
                             <br/>
                             Trip Duration: {diffHrs} Hours {diffMins} Minutes
-                            <br/>
-                            Baggage Allowance: {flight.baggageAllowance}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

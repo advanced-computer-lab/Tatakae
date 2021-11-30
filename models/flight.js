@@ -16,7 +16,11 @@ const flightSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  airportTerminal: {
+  departureTerminal: {
+    type: String,
+    required: true
+  },
+  arrivalTerminal: {
     type: String,
     required: true
   },
@@ -90,17 +94,17 @@ const flightSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  economybaggage: {             // in Kilograms
+  economyBaggage: {             // in Kilograms
     type: Number,
     required: true,
     default: 30
   },
-  businessbaggage: {             // in Kilograms
+  businessBaggage: {             // in Kilograms
     type: Number,
     required: true,
     default: 30
   },
-  firstbaggage: {             // in Kilograms
+  firstBaggage:{             // in Kilograms
     type: Number,
     required: true,
     default: 30
