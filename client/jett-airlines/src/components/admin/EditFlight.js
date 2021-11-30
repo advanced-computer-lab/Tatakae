@@ -15,12 +15,13 @@ export default class EditFlight extends Component {
         flightNumber: this.props.flight.flightNumber,
         from: this.props.flight.from,
         to: this.props.flight.to,
-        airportTerminal: this.props.flight.airportTerminal,
+        departureTerminal: this.props.flight.departureTerminal,
+        arrivalTerminal: this.props.flight.arrivalTerminal,
         departureDate: this.props.flight.departureDate,
         arrivalDate: this.props.flight.arrivalDate,
-        economy: this.props.flight.economySeats,
-        business: this.props.flight.businessSeats,
-        first: this.props.flight.firstSeats,
+        economy: [].concat(this.props.flight.economySeats).length,
+        business: [].concat(this.props.flight.businessSeats).length,
+        first: [].concat(this.props.flight.firstSeats).length,
         totalSeats: this.props.flight.totalSeats,
         ePrice: this.props.flight.economyPrice,
         bPrice: this.props.flight.businessPrice,
@@ -47,12 +48,14 @@ export default class EditFlight extends Component {
             flightNumber: this.state.flightNumber,
             from: this.state.from,
             to: this.state.to,
-            airportTerminal: this.state.airportTerminal,
+            departureTerminal: this.state.departureTerminal,
+            arrivalTerminal: this.state.arrivalTerminal,
             departureDate: this.state.departureDate,
             arrivalDate: this.state.arrivalDate,
             economySeats: this.state.economy,
             businessSeats: this.state.business,
             firstSeats: this.state.first,
+            changeFlag: (this.props.flight.availableTotalSeats !== this.props.flight.totalSeats),
             totalSeats: Number(this.state.economy)+Number(this.state.business)+Number(this.state.first),
             economyPrice: this.state.ePrice,
             businessPrice: this.state.bPrice,
@@ -62,8 +65,7 @@ export default class EditFlight extends Component {
             economyBaggage: this.state.eBaggage,
             token: sessionStorage.getItem('token')
         };
-        axios
-            .patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
+        axios.patch(`http://localhost:8082/api/flights/flightupdate/${this.props.flight._id}`, data)
             .then(() => {
                 this.props.closeDialog()
                 this.props.setRefresh(!this.props.refresh)
@@ -77,6 +79,7 @@ export default class EditFlight extends Component {
     render() {
         return (
             <div className='center'>
+                <br />
                 <FormControl sx={{ m: 1 }} variant="filled">
                     <InputLabel>Flight Number</InputLabel>
                     <FilledInput
@@ -86,12 +89,22 @@ export default class EditFlight extends Component {
                         onChange={this.handleChange}
                     />
                 </FormControl>
+                <br />
                 <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Airport Terminal</InputLabel>
+                    <InputLabel>Departure Terminal</InputLabel>
                     <FilledInput
-                        name='airportTerminal'
-                        id="airportTerminal"
-                        value={this.state.airportTerminal}
+                        name='departureTerminal'
+                        id="departureTerminal"
+                        value={this.state.departureTerminal}
+                        onChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="filled">
+                    <InputLabel>Arrival Terminal</InputLabel>
+                    <FilledInput
+                        name='arrivalTerminal'
+                        id="arrivalTerminal"
+                        value={this.state.arrivalTerminal}
                         onChange={this.handleChange}
                     />
                 </FormControl>
@@ -141,8 +154,9 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='first'
                         id="first"
-                        value={[].concat(this.state.first).length}
+                        value={this.state.first}
                         onChange={this.handleChange}
+                        disabled = {(this.props.flight.availableTotalSeats !== this.props.flight.totalSeats)}
                     />
                 </FormControl>
                 <FormControl sx={{ m: 1 }} variant="filled">
@@ -169,8 +183,9 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='business'
                         id="business"
-                        value={[].concat(this.state.business).length}
+                        value={this.state.business}
                         onChange={this.handleChange}
+                        disabled = {(this.props.flight.availableTotalSeats !== this.props.flight.totalSeats)}
                     />
                 </FormControl>
                 <FormControl sx={{ m: 1 }} variant="filled">
@@ -178,8 +193,9 @@ export default class EditFlight extends Component {
                     <FilledInput
                         name='economy'
                         id="economy"
-                        value={[].concat(this.state.economy).length}
+                        value={this.state.economy}
                         onChange={this.handleChange}
+                        disabled = {(this.props.flight.availableTotalSeats !== this.props.flight.totalSeats)}
                     />
                 </FormControl>
             

@@ -42,17 +42,17 @@ const flightSchema = new mongoose.Schema({
   economySeats: {
     type: [Boolean],
     required: true,
-    default: [false]
+    default: []
   },
   businessSeats: {
     type: [Boolean],
     required: true,
-    default: [false] 
+    default: [] 
   },
   firstSeats: {
     type: [Boolean],
     required: true,
-    default: [false]
+    default: []
   },
   totalSeats: {
     type: Number,
