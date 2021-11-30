@@ -5,6 +5,7 @@ import Dashboard from './Dashboard'
 import CreateFlight from './admin/CreateFlight'
 import NotFound from './NotFound';
 import MainPage from './MainPage';
+import Plane from './user/Plane'
 import EditProfile from './user/EditProfile';
 
 export default function App() {
