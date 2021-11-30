@@ -27,14 +27,14 @@ router.get('/userget/',verify,(req, res) => {
     .then(user => res.json(user))
     .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
-
+ 
 router.post('/usercreate/',(req, res) => {
   user.create(req.body)
     .then(user => res.json({ msg: 'user added successfully' }))
     .catch(err => res.status(400).json({ error: 'Unable to add this user' }));
 });
 
-router.patch('/userupdate/',verify,(req, res) => {
+router.patch('/userupdate/',verify,async(req, res) => {
   const {userId , admin} = req 
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
   req.body.password = encryptedPassword
