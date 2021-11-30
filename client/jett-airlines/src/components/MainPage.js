@@ -220,11 +220,6 @@ export default function MainPage() {
 
       </div>
 
-      <Typography margin={'0vh 4vw'} className={classes.typographyStyle}>
-        Welcome Guest
-      </Typography>
-
-
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
@@ -240,6 +235,7 @@ export default function MainPage() {
                 onChange={handleChangePassenger}
               />
             </FormControl>
+            
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
               <Select
