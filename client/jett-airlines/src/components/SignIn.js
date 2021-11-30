@@ -166,7 +166,6 @@ export default class SignIn extends Component {
                                 }}
                             />
                             <br/>
-                            <br/>
                             {this.state.errorPop && (<Alert severity="error">Email or Password are incorrect. Please try again.</Alert>)}
 
                             <Button
