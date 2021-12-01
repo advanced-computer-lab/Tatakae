@@ -381,7 +381,7 @@ export default function Dashboard() {
           :
            filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+              <UserFlightCard flight={flight} />
             </Grid>
           ))}
           
