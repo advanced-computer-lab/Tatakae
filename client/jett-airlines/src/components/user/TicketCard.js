@@ -9,7 +9,7 @@ export default function TicketCard(props) {
 
 
     return (
-        <div>
+       <div class="main"> <div class="body">
             <div class="flight-card">
                 <div class="flight-card-header">
                     <div class="flight-logo">
@@ -60,6 +60,7 @@ export default function TicketCard(props) {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }
