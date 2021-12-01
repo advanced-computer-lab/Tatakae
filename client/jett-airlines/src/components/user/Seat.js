@@ -47,8 +47,8 @@ export default function Seat(props) {
           props.setSelected((prevArray) => [
             ...prevArray,
             {
-              SeatIndex: props.seatIndex,
-              SeatNumber: props.seatNumber,
+              seatIndex: props.seatIndex,
+              seatNumber: props.seatNumber,
               isChild: true,
               price: 0.5 * props.price,
             },
@@ -75,7 +75,7 @@ export default function Seat(props) {
 
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
-      {props.seatNumber}
+      {props.seatNumber} 
     </Box>
   );
 }

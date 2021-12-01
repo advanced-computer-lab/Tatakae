@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const colors = {
   availableColor: "green",
@@ -21,13 +22,14 @@ const colors = {
   occupiedColor: "grey",
 };
 
+const user= JSON.parse(sessionStorage.getItem('signedUser'));
+
 export default function Plane(props) {
-  //const [selectedCount, setSelectedCount] = React.useState(0);
   const { id } = useParams();
 
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [childSelected, setChildSelected] = React.useState(false);
-  const [BusinessSelected, setBusinessSelected] = React.useState([]);
+  const [businessSelected, setBusinessSelected] = React.useState([]);
   const [firstSelected, setFirstSelected] = React.useState([]);
   const [economySelected, setEconomySelected] = React.useState([]);
   const [flight, setFlight] = React.useState({});
@@ -51,17 +53,33 @@ export default function Plane(props) {
     }
   };
 
+  const handleConfirm = () => {
+    const economySeatsAdults= economySelected.filter(e=> e.isChild===false).map(e=>e.seatIndex)
+    const businessSeatsAdults= businessSelected.filter(e=> e.isChild===false).map(e=>e.seatIndex)
+    const firstSeatsAdults= firstSelected.filter(e=> e.isChild===false).map(e=>e.seatIndex)
+
+    const economySeatsChildren= economySelected.filter(e=> e.isChild===true).map(e=>e.seatIndex)
+    const businessSeatsChildren= businessSelected.filter(e=> e.isChild===true).map(e=>e.seatIndex)
+    const firstSeatsChildren= firstSelected.filter(e=> e.isChild===true).map(e=>e.seatIndex)
+
+    const deptTicket={
+
+    }
+
+    const data={}
+  }
+
   useEffect(() => {
-    axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res=>{
+    axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res => {
       setFlight(res.data);
-    }).catch(err=>{
+    }).catch(err => {
       setNotFound(true)
     })
   }, [])
 
   useEffect(
     () => { },
-    [BusinessSelected],
+    [businessSelected],
     [flight.economySeats],
     [firstSelected],
     //[selectedCount],
@@ -71,7 +89,7 @@ export default function Plane(props) {
 
   return (
     <Grid>
-      {notFound && <Navigate to='/wrongURL'/>}
+      {notFound && <Navigate to='/wrongURL' />}
       <Grid class="plane-container">
         <List class="showcase">
           <ListItem>
@@ -128,7 +146,7 @@ export default function Plane(props) {
                   }
                   //selectedCount={selectedCount}
                   //setSelectedCount={setSelectedCount}
-                  selected={BusinessSelected}
+                  selected={businessSelected}
                   setSelected={setBusinessSelected}
                 />
               ))}
@@ -188,15 +206,23 @@ export default function Plane(props) {
           <p class="text">
             You have selected{" "}
             <span>
-              {BusinessSelected.length +
+              {businessSelected.length +
                 firstSelected.length +
                 economySelected.length}
             </span>{" "}
             seats for the total price of <span id="total">${totalPrice}</span>
           </p>
+          <Button
+            type='submit'
+            color='primary'
+            variant="contained"
+            onClick={handleConfirm}>
+            Confirm Reservation
+          </Button>
         </Grid>
       </Grid>
-      {notFound && (<Navigate to='/randomURL'/>)}
+      {notFound && (<Navigate to='/randomURL' />)}
+
     </Grid>
   );
 }
