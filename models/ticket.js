@@ -10,16 +10,6 @@ const ticketSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
-  isReturn: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  returnTicketId: {
-    type: mongoose.ObjectId,
-    required: false,
-    default: null
-  },
   user:{
     type: mongoose.ObjectId,
     required: true
