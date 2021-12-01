@@ -21,21 +21,27 @@ const reservationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  departureTicket:{
-    type: mongoose.ObjectId,
+  email:{
+    type: String,
     required: true
   },
+  departureTicket:{
+    type: Object,
+    required: false
+  },
   returnTicket:{
-    type: mongoose.ObjectId,
-    required: true
+    type: Object,
+    required: false,
+    default: null 
   },
   departureFlight:{
     type: mongoose.ObjectId,
-    required: true
+    required: false
   },
   returnFlight:{
     type: mongoose.ObjectId,
-    required: true
+    required: false ,
+    default: null 
   }
 
 });

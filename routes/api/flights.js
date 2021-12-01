@@ -54,6 +54,24 @@ router.post('/flightcreate/', verify, (req, res) => {
 });
 
 
+router.get('/getdeparture0retrun',verify, async (req,res)=>{
+const {departureTicket,returnTicket} = req.body
+
+if (departureTicket){
+const flights =  await flight.find({$and:[{"to":departureTicket.from},{"from":departureTicket.to},{"departureDate":  { $gt : departureTicket.arrivalDate} } ]})
+res.json(flights)
+}
+
+if (returnTicket){
+  const flights =  await flight.find({$and:[{"to":returnTicket.from},{"from":returnTicket.to},{"arrivalDate":  { $lt : returnTicket.departureDate} } ]})
+  res.json(flights)
+  }
+
+
+});
+
+
+
 router.patch('/flightupdate/:id', verify, (req, res) => {
   const { userId, admin } = req
   if (!admin)
@@ -202,5 +220,7 @@ router.delete('/flightdelete/:id', verify, (req, res) => {
     .then(flight => res.json({ mgs: 'flight entry deleted successfully' }))
     .catch(err => res.status(404).json({ error: 'No such a flight' }));
 });
+
+
 
 module.exports = router;
