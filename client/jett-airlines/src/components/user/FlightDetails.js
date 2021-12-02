@@ -5,6 +5,7 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import EventIcon from "@mui/icons-material/Event";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import {
   Card,
   CardMedia,
@@ -24,6 +25,7 @@ import {
 } from "@mui/material";
 import { TabPanel, TabList } from "@mui/lab";
 import world from "../../assets/world.png";
+import plane from '../../assets/plane.jpg'
 
 export default function FlightDetails(props) {
   const flight = props.flight;
@@ -31,17 +33,28 @@ export default function FlightDetails(props) {
   const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
   const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
 
-  const [tab, setTab] = React.useState("Business");
+  const [tab, setTab] = React.useState("First");
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
   return (
-    <Grid style={{ height: "500px", width: "400px" }} fullWidth container>
-      <Grid align="center" style={{ backgroundImage: `url(${world})`,width: "400px", alignItems:'center'}}  item fullWidth container>
-        <Grid  item style={{ fontSize: "3em"}} xs>
+    <Grid style={{ height: "600px", width: "450px"}} fullWidth container>
+      <Grid
+        align="center"
+        style={{
+          backgroundImage: `url(${plane})`,
+          width: "450px",
+          height: "170px",
+          alignItems: "center",
+        }}
+        item
+        fullWidth
+        container
+      >
+        <Grid item style={{ fontSize: "3em"}} xs>
           {flight.from}
         </Grid>
-        <Grid style={{ fontSize: "3em" }} item xs={6}>
+        <Grid style={{ fontSize: "3em" }} item xs={3}>
           <FlightIcon style={{ transform: "scale(1.5)  rotate(90deg)" }} />
         </Grid>
         <Grid style={{ fontSize: "3em" }} item xs>
@@ -51,8 +64,8 @@ export default function FlightDetails(props) {
       <List
         sx={{
           width: "100%",
-          paddingTop:'0',
-          paddingBottom:'0'
+          paddingTop: "0",
+          paddingBottom: "0",
         }}
       >
         <Divider />
@@ -61,36 +74,71 @@ export default function FlightDetails(props) {
             <FlightTakeoffIcon style={{ transform: "scale(1.2)" }} />
           </ListItemAvatar>
           <Grid container>
-            <Grid item align="left" xs={12}>
-              <Typography
-                sx={{ mt: 0.5 }}
-                color="text.secondary"
-                display="block"
-                variant="caption"
-              >
-                from
-              </Typography>
+            <Grid container item xs={3}>
+              <Grid item align="left" xs={12}>
+                <Typography
+                  sx={{ mt: 0.5 }}
+                  color="text.secondary"
+                  display="block"
+                  variant="caption"
+                >
+                  from
+                </Typography>
+              </Grid>
+              <Grid>{flight.from}</Grid>
             </Grid>
-            <Grid>{flight.from}</Grid>
+            <Grid item xs>
+              <Grid container>
+                <Grid item align="left" xs={12}>
+                  <Typography
+                    sx={{ mt: 0.5 }}
+                    color="text.secondary"
+                    display="block"
+                    variant="caption"
+                  >
+                    Departure Terminal
+                  </Typography>
+                </Grid>
+                <Grid>{flight.departureTerminal}</Grid>
+              </Grid>
+            </Grid>
           </Grid>
+          
         </ListItem>
         <Divider />
         <ListItem>
           <ListItemAvatar>
-            <FlightLandIcon style={{ transform: "scale(1.2)" }} />
+            <FlightTakeoffIcon style={{ transform: "scale(1.2)" }} />
           </ListItemAvatar>
           <Grid container>
-            <Grid item align="left" xs={12}>
-              <Typography
-                sx={{ mt: 0.5 }}
-                color="text.secondary"
-                display="block"
-                variant="caption"
-              >
-                to
-              </Typography>
+            <Grid container item xs={3}>
+              <Grid item align="left" xs={12}>
+                <Typography
+                  sx={{ mt: 0.5 }}
+                  color="text.secondary"
+                  display="block"
+                  variant="caption"
+                >
+                  to
+                </Typography>
+              </Grid>
+              <Grid>{flight.to}</Grid>
             </Grid>
-            <Grid>{flight.to}</Grid>
+            <Grid item xs>
+              <Grid container>
+                <Grid item align="left" xs={12}>
+                  <Typography
+                    sx={{ mt: 0.5 }}
+                    color="text.secondary"
+                    display="block"
+                    variant="caption"
+                  >
+                    Arrival Terminal
+                  </Typography>
+                </Grid>
+                <Grid>{flight.arrivalTerminal}</Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </ListItem>
         <Divider />
@@ -107,7 +155,7 @@ export default function FlightDetails(props) {
                   display="block"
                   variant="caption"
                 >
-                  Departure
+                  Departure Date
                 </Typography>
               </Grid>
               <Grid>{new Date(flight.departureDate).toLocaleString()}</Grid>
@@ -121,7 +169,7 @@ export default function FlightDetails(props) {
                     display="block"
                     variant="caption"
                   >
-                    Return
+                    Arrival Date
                   </Typography>
                 </Grid>
                 <Grid>{new Date(flight.arrivalDate).toLocaleString()}</Grid>
@@ -139,14 +187,67 @@ export default function FlightDetails(props) {
             onChange={handleChange}
             aria-label="nav tabs example"
           >
-            <Tab value="Business" label="Business" />
             <Tab value="First" label="First" />
+            <Tab value="Business" label="Business" />
             <Tab value="Economy" label="Economy" />
           </Tabs>
         </ListItem>
+        
         <ListItem>
-        {tab==="Business"? <div>lksgfsgrnjlkfdhjlgsnjk</div>:<div> djflsdjdgoijgsjlksgfsgrnjlkfdhjlgsnjk</div>
-        }
+          <ListItemAvatar>
+            <SupervisorAccountIcon style={{ transform: "scale(1.2)" }}/>
+          </ListItemAvatar>
+          <Grid container>
+            <Grid item align="left" xs={12}>
+              <Typography
+                sx={{ mt: 0.5 }}
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                Available {tab} Class Seats
+              </Typography>
+            </Grid>
+            <Grid>
+              {tab==="First"?<p>{flight.availableFirstSeats}</p>:<p>{tab==="Business"?<p>{flight.availableBusinessSeats}</p>:<p>{flight.availableEconomySeats}</p>}</p>}
+            </Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
+        <ListItem>
+        <ListItemAvatar>
+          <AttachMoneyIcon style={{ transform: "scale(1.2)" }}/>
+        </ListItemAvatar>
+        <Grid container>
+            <Grid container item xs={6}>
+              <Grid item align="left" xs={12}>
+                <Typography
+                  sx={{ mt: 0.5 }}
+                  color="text.secondary"
+                  display="block"
+                  variant="caption"
+                >
+                  Adult Seat price
+                </Typography>
+              </Grid>
+              <Grid>{tab==="First"?<p>${flight.firstPrice}</p>:<p>{tab==="Business"?<p>${flight.businessPrice}</p>:<p>${flight.economyPrice}</p>}</p>}</Grid>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container>
+                <Grid item align="left" xs={12}>
+                  <Typography
+                    sx={{ mt: 0.5 }}
+                    color="text.secondary"
+                    display="block"
+                    variant="caption"
+                  >
+                    Child Seat price
+                  </Typography>
+                </Grid>
+                <Grid>{tab==="First"?<p>${0.5*flight.firstPrice}</p>:<p>{tab==="Business"?<p>${0.5*flight.businessPrice}</p>:<p>${0.5*flight.economyPrice}</p>}</p>}</Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </ListItem>
       </List>
     </Grid>
@@ -155,6 +256,17 @@ export default function FlightDetails(props) {
 
 /*
 
+       {tab==="Business"?
+            <p> {flight.availableBusinessSeats}</p>
+            :
+            {tab==="First"?<p> {flight.availableFirstSeats}</p>
+            :
+            <p> {flight.availableEconomySeats}</p>
+      }
+      }
+
+
+{tab==="Business"? :{tab==="First"?:}}
 
 
 <TabsUnstyled defaultValue={0}>

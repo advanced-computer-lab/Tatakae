@@ -39,8 +39,8 @@ export default function Plane(props) {
 
   const splitArray = (seatArray) => {
     var rows = [];
-    for (var i = 0; i < seatArray.length; i += 8) {
-      rows.push(seatArray.slice(i, i + 8));
+    for (var i = 0; i < seatArray.length; i += 6) {
+      rows.push(seatArray.slice(i, i + 6));
     }
     return rows;
   };
@@ -133,8 +133,8 @@ export default function Plane(props) {
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.businessPrice}
                   totalPrice={totalPrice}
@@ -157,8 +157,8 @@ export default function Plane(props) {
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.firstPrice}
                   totalPrice={totalPrice}
@@ -182,8 +182,8 @@ export default function Plane(props) {
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.economyPrice}
                   totalPrice={totalPrice}
