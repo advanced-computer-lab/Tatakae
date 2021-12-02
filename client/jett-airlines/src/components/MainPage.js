@@ -260,7 +260,8 @@ export default function MainPage() {
       
       <Grid  style={{align:"center", height: "200px", width: "71%",backgroundColor:'#02122c',padding:"20px",display:"flex"}}  container>
       <ThemeProvider theme={darktheme}>
-            <Grid item container style={{alignItems:'center'}}><FormControl sx={{ m: 1, minWidth: 100 }}>
+            <Grid item container style={{alignItems:'center'}}>
+              <FormControl sx={{ m: 1, minWidth: 100 }}>
               <InputLabel variant="outlined" id="demo-dialog-select-label">Passenger Seats</InputLabel>
               <OutlinedInput
               
