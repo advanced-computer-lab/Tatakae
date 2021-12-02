@@ -17,7 +17,9 @@ export default function FlightDetails(props) {
                     <Typography gutterBottom variant="h5" sx={{ fontStyle: 'oblique' }}>
                             Flight Number: {flight.flightNumber}
                             <br/>
-                            Terminal: {flight.airportTerminal}
+                            Departure Terminal: {flight.departureTerminal}
+                            <br/>
+                            Arrival Terminal: {flight.arrivalTerminal}
                             <br/>
                             From: {flight.from}                         
                             <br/>

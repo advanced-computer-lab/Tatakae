@@ -1,5 +1,5 @@
 // routes/api/tickets.js
-
+// NOT USED ANYMORE
 const express = require('express');
 const router = express.Router();
 const verify = require('../../middleware/verifyTokenUser')
@@ -64,6 +64,9 @@ router.delete('/deleteticketforuser/:id', (req, res) => {
   ticket.findByIdAndRemove(req.params.id, req.body)
     .then(ticket => res.json({ mgs: 'ticket entry deleted successfully' }))
     .catch(err => res.status(404).json({ error: 'No such a ticket' }));
+
+
+    
 });
 
 router.delete('/ticketsdeleteforflight/',verify,async (req, res) => {
@@ -88,5 +91,8 @@ router.delete('/ticketsdeleteforflight/',verify,async (req, res) => {
     res.json([])
   }
 });
+
+
+
 
 module.exports = router;
