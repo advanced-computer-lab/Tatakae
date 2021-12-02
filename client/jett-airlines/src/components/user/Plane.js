@@ -7,6 +7,7 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
+  Paper
 } from "@mui/material";
 import Seat from "./Seat";
 import "../../css/Plane.css";
@@ -126,8 +127,9 @@ export default function Plane(props) {
             <FormControlLabel value="child" control={<Radio />} label="Child" />
           </RadioGroup>
         </FormControl>
-
+        
         <Grid class="container">
+        <Paper elevation={10} style={{width: "300px"}}> 
           Business
           {splitArray([].concat(flight.businessSeats)).map((row, rowNumber) => (
             <Grid key={rowNumber} class="row">
@@ -203,6 +205,7 @@ export default function Plane(props) {
               ))}
             </Grid>
           ))}
+          </Paper>
           <p class="text">
             You have selected{" "}
             <span>
@@ -222,7 +225,6 @@ export default function Plane(props) {
         </Grid>
       </Grid>
       {notFound && (<Navigate to='/randomURL' />)}
-
     </Grid>
   );
 }

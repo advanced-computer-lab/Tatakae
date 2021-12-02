@@ -51,13 +51,13 @@ export default function FlightDetails(props) {
         fullWidth
         container
       >
-        <Grid item style={{ fontSize: "3em"}} xs>
+        <Grid item style={{ fontSize: "3em",color: "white"}} xs>
           {flight.from}
         </Grid>
         <Grid style={{ fontSize: "3em" }} item xs={3}>
-          <FlightIcon style={{ transform: "scale(1.5)  rotate(90deg)" }} />
+          <FlightIcon style={{ transform: "scale(1.5)  rotate(90deg)" ,color: "white"}} />
         </Grid>
-        <Grid style={{ fontSize: "3em" }} item xs>
+        <Grid style={{ fontSize: "3em" ,color: "white"}} item xs>
           {flight.to}
         </Grid>
       </Grid>
@@ -108,7 +108,7 @@ export default function FlightDetails(props) {
         <Divider />
         <ListItem>
           <ListItemAvatar>
-            <FlightTakeoffIcon style={{ transform: "scale(1.2)" }} />
+            <FlightLandIcon style={{ transform: "scale(1.2)" }} />
           </ListItemAvatar>
           <Grid container>
             <Grid container item xs={3}>
