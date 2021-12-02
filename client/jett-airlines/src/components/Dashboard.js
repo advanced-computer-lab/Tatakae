@@ -255,15 +255,15 @@ export default function Dashboard() {
       </Select>
     </FormControl>)
 
-    const availableFlightsCheckbox=(
-      <div style={styles.checkboxContainer} >
-        <ThemeProvider theme={darktheme}>
-          <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
-            onChange={handleChangeAvailable}
-            inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
-        </ThemeProvider>
-      </div>
-    )
+  const availableFlightsCheckbox = (
+    <div style={styles.checkboxContainer} >
+      <ThemeProvider theme={darktheme}>
+        <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
+          onChange={handleChangeAvailable}
+          inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+      </ThemeProvider>
+    </div>
+  )
 
   return (
     <div style={styles.background}>
@@ -276,7 +276,7 @@ export default function Dashboard() {
             style={styles.btnstyle}
             startIcon={<HomeIcon />}
             href='/home'>Home</Button>
-            
+
           <Button
             color='primary'
             variant="contained"
@@ -284,19 +284,19 @@ export default function Dashboard() {
             startIcon={<SearchIcon />}
             onClick={handleClickOpen}>Search For Flights</Button>
 
-          {user.admin? (<Button
+          {user.admin ? (<Button
             color='primary'
             variant="contained"
             style={styles.btnstyle}
             startIcon={<FlightIcon />}
             href='/CreateFlight'>Create Flight</Button>)
-          :
-          (<Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<EditIcon />}
-            href='/EditProfile'>Edit Profile</Button>)}
+            :
+            (<Button
+              color='primary'
+              variant="contained"
+              style={styles.btnstyle}
+              startIcon={<EditIcon />}
+              href='/EditProfile'>Edit Profile</Button>)}
 
           <Button
             color='primary'
@@ -311,6 +311,7 @@ export default function Dashboard() {
       <Typography margin={'0vh 4vw'} className={classes.typographyStyle}>
         Welcome {user.firstName} {user.lastName}
       </Typography>
+      
 
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
@@ -373,18 +374,18 @@ export default function Dashboard() {
 
       <Paper elevation={20} style={styles.paperStyle}>
         <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
-          {user.admin? filteredFlights.map(flight => (
+          {user.admin ? filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
               <AdminFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
           ))
-          :
-           filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))}
-          
+            :
+            filteredFlights.map(flight => (
+              <Grid key={flight._id} item xs={4} >
+                <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+              </Grid>
+            ))}
+
         </Grid>
       </Paper>
       {logOut && (<Navigate to='/logIn' />)}

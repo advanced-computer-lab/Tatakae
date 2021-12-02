@@ -23,7 +23,7 @@ import {
   Tabs,
 } from "@mui/material";
 import { TabPanel, TabList } from "@mui/lab";
-import world from "../../assets/world.jpg";
+import world from "../../assets/world.png";
 
 export default function FlightDetails(props) {
   const flight = props.flight;
@@ -36,9 +36,9 @@ export default function FlightDetails(props) {
     setTab(newValue);
   };
   return (
-    <Grid style={{ height: "450px", width: "400px" }} fullWidth container>
-      <Grid align="center" style={{ backgroundImage: `url(${world})`}}  item fullWidth container>
-        <Grid item style={{ fontSize: "3em" }} xs>
+    <Grid style={{ height: "500px", width: "400px" }} fullWidth container>
+      <Grid align="center" style={{ backgroundImage: `url(${world})`,width: "400px", alignItems:'center'}}  item fullWidth container>
+        <Grid  item style={{ fontSize: "3em"}} xs>
           {flight.from}
         </Grid>
         <Grid style={{ fontSize: "3em" }} item xs={6}>
@@ -51,6 +51,8 @@ export default function FlightDetails(props) {
       <List
         sx={{
           width: "100%",
+          paddingTop:'0',
+          paddingBottom:'0'
         }}
       >
         <Divider />
