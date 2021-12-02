@@ -76,19 +76,21 @@ export default function FlightCard(props) {
         </CardActions>
       </Card>
 
-      <Dialog
+      <Dialog style={{
+    }}
         open={openDetails}
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClickCloseDetails}
         aria-describedby="alert-dialog-slide-description"
       >
-        <div style={{backgroundColor:"#4287f5"}}>
+        {/*<div style={{backgroundColor:"#4287f5"}}>
         <DialogTitle ><Typography style={{color: "#ffffff"}}>
         Flight Details
       </Typography></DialogTitle></div>
-        <DialogContent>
-          <FlightDetails flight={props.flight} />
+  */}
+        <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0'}}>
+          <FlightDetails  flight={props.flight} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleReserveClick} size="small" color="primary">

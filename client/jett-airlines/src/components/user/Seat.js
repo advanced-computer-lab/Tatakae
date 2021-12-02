@@ -75,7 +75,7 @@ export default function Seat(props) {
 
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
-      {props.seatNumber} 
+      <span style={{color: "white", margin: "auto"}}>{props.seatNumber}</span>
     </Box>
   );
 }

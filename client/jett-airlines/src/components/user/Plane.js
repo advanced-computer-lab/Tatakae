@@ -7,6 +7,7 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
+  Paper
 } from "@mui/material";
 import Seat from "./Seat";
 import "../../css/Plane.css";
@@ -39,8 +40,8 @@ export default function Plane(props) {
 
   const splitArray = (seatArray) => {
     var rows = [];
-    for (var i = 0; i < seatArray.length; i += 8) {
-      rows.push(seatArray.slice(i, i + 8));
+    for (var i = 0; i < seatArray.length; i += 6) {
+      rows.push(seatArray.slice(i, i + 6));
     }
     return rows;
   };
@@ -126,15 +127,16 @@ export default function Plane(props) {
             <FormControlLabel value="child" control={<Radio />} label="Child" />
           </RadioGroup>
         </FormControl>
-
+        
         <Grid class="container">
+        <Paper elevation={10} style={{width: "300px"}}> 
           Business
           {splitArray([].concat(flight.businessSeats)).map((row, rowNumber) => (
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.businessPrice}
                   totalPrice={totalPrice}
@@ -157,8 +159,8 @@ export default function Plane(props) {
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.firstPrice}
                   totalPrice={totalPrice}
@@ -182,8 +184,8 @@ export default function Plane(props) {
             <Grid key={rowNumber} class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
-                  seatIndex={seatNumber + 8 * rowNumber}
+                  key={seatNumber + 6 * rowNumber}
+                  seatIndex={seatNumber + 6 * rowNumber}
                   isChild={childSelected}
                   price={flight.economyPrice}
                   totalPrice={totalPrice}
@@ -203,6 +205,7 @@ export default function Plane(props) {
               ))}
             </Grid>
           ))}
+          </Paper>
           <p class="text">
             You have selected{" "}
             <span>
@@ -222,7 +225,6 @@ export default function Plane(props) {
         </Grid>
       </Grid>
       {notFound && (<Navigate to='/randomURL' />)}
-
     </Grid>
   );
 }
