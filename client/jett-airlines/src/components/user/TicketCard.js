@@ -47,7 +47,7 @@ export default function TicketCard(props) {
                     <div class="flight-details-row">
                         <div class="flight-operator">
                             <span class="title">OPERATOR</span>
-                            <span class="detail">Jett Airlines</span>
+                            <span class="detail">Jetblue Airways</span>
                         </div>
                         <div class="flight-number">
                             <span class="title">FLIGHT</span>
