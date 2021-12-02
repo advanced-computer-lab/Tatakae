@@ -1,23 +1,199 @@
-import React from 'react'
-import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
-import {Card, CardMedia, CardActionArea, Typography} from '@mui/material';
+import React from "react";
+import FlightIcon from "@mui/icons-material/Flight";
+import FlightLandIcon from "@mui/icons-material/FlightLand";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import EventIcon from "@mui/icons-material/Event";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import {
+  Card,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  Paper,
+  Grid,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  BeachAccessIcon,
+  ListItemText,
+  Tab,
+  Tabs,
+} from "@mui/material";
+import { TabPanel, TabList } from "@mui/lab";
+import world from "../../assets/world.jpg";
 
 export default function FlightDetails(props) {
-    const flight=props.flight
-    const diffMs = (new Date(flight.arrivalDate) - new Date(flight.departureDate));
-    const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
-    const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
-    return (
-            <Card >
-                <CardMedia image="../../assets/world.jpg" >
+  const flight = props.flight;
+  const diffMs = new Date(flight.arrivalDate) - new Date(flight.departureDate);
+  const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+  const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
 
-                </CardMedia>
-            </Card>
-    )
+  const [tab, setTab] = React.useState("Business");
+  const handleChange = (event, newValue) => {
+    setTab(newValue);
+  };
+  return (
+    <Grid style={{ height: "450px", width: "400px" }} fullWidth container>
+      <Grid align="center" style={{ backgroundImage: `url(${world})`}}  item fullWidth container>
+        <Grid item style={{ fontSize: "3em" }} xs>
+          {flight.from}
+        </Grid>
+        <Grid style={{ fontSize: "3em" }} item xs={6}>
+          <FlightIcon style={{ transform: "scale(1.5)  rotate(90deg)" }} />
+        </Grid>
+        <Grid style={{ fontSize: "3em" }} item xs>
+          {flight.to}
+        </Grid>
+      </Grid>
+      <List
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Divider />
+        <ListItem fullWidth>
+          <ListItemAvatar>
+            <FlightTakeoffIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
+            <Grid item align="left" xs={12}>
+              <Typography
+                sx={{ mt: 0.5 }}
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                from
+              </Typography>
+            </Grid>
+            <Grid>{flight.from}</Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemAvatar>
+            <FlightLandIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
+            <Grid item align="left" xs={12}>
+              <Typography
+                sx={{ mt: 0.5 }}
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                to
+              </Typography>
+            </Grid>
+            <Grid>{flight.to}</Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemAvatar>
+            <EventIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
+            <Grid container item xs={6}>
+              <Grid item align="left" xs={12}>
+                <Typography
+                  sx={{ mt: 0.5 }}
+                  color="text.secondary"
+                  display="block"
+                  variant="caption"
+                >
+                  Departure
+                </Typography>
+              </Grid>
+              <Grid>{new Date(flight.departureDate).toLocaleString()}</Grid>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container>
+                <Grid item align="left" xs={12}>
+                  <Typography
+                    sx={{ mt: 0.5 }}
+                    color="text.secondary"
+                    display="block"
+                    variant="caption"
+                  >
+                    Return
+                  </Typography>
+                </Grid>
+                <Grid>{new Date(flight.arrivalDate).toLocaleString()}</Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemAvatar>
+            <AirlineSeatReclineExtraIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Tabs
+            value={tab}
+            onChange={handleChange}
+            aria-label="nav tabs example"
+          >
+            <Tab value="Business" label="Business" />
+            <Tab value="First" label="First" />
+            <Tab value="Economy" label="Economy" />
+          </Tabs>
+        </ListItem>
+        <ListItem>
+        {tab==="Business"? <div>lksgfsgrnjlkfdhjlgsnjk</div>:<div> djflsdjdgoijgsjlksgfsgrnjlkfdhjlgsnjk</div>
+        }
+        </ListItem>
+      </List>
+    </Grid>
+  );
 }
 
+/*
 
-                /*
+
+
+<TabsUnstyled defaultValue={0}>
+      <TabsList>
+        <Tab>One</Tab>
+        <Tab>Two</Tab>
+        <Tab>Three</Tab>
+      </TabsList>
+      <TabPanel value={0}>First content</TabPanel>
+      <TabPanel value={1}>Second content</TabPanel>
+      <TabPanel value={2}>Third content</TabPanel>
+    </TabsUnstyled>
+
+
+        <Grid container item>
+            <Grid item xs={2}>
+                <FlightTakeoffIcon />
+            </Grid>
+            <Grid item xs>
+            </Grid>
+        </Grid>
+        <Divider />
+        <Grid container item>
+        <Grid item xs={2}>
+                <FlightLandIcon />
+            </Grid>
+            <Grid item xs>
+            </Grid>
+        </Grid>
+        <Grid container item>
+        </Grid>
+        <Grid container item>
+        </Grid>
+        <Grid container item>
+        </Grid>
+        <Grid container item>
+        </Grid>
+
+
+
+style={{ backgroundImage: `url(${world})` }}
                 <CardActionArea>
                     <AirplaneTicketIcon color="primary" sx={{ fontSize: 150 }} />
                     <CardContent>

@@ -83,7 +83,10 @@ export default function FlightCard(props) {
         onClose={handleClickCloseDetails}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Flight Details"}</DialogTitle>
+        <div style={{backgroundColor:"#4287f5"}}>
+        <DialogTitle ><Typography style={{color: "#ffffff"}}>
+        Flight Details
+      </Typography></DialogTitle></div>
         <DialogContent>
           <FlightDetails flight={props.flight} />
         </DialogContent>
