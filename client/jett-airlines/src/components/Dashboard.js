@@ -53,8 +53,7 @@ export default function Dashboard() {
   const [numberQuery, setNumberQuery] = useState('');
   const [deptDateQuery, setDeptDateQuery] = useState(null);
   const [arrDateQuery, setArrDateQuery] = useState(null);
-  const [deptTerminalQuery, setDeptTerminalQuery] = useState('');
-  const [arrTerminalQuery, setArrTerminalQuery] = useState('');
+  const [terminalQuery, setTerminalQuery] = useState('');
   const [passengerQuery, setPassengerQuery] = useState('');
   const [cabinQuery, setCabinQuery] = useState('');
   const [availabe, setAvailable] = useState(false);
@@ -79,12 +78,8 @@ export default function Dashboard() {
     setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
-  const handleChangeDeptTerminal = (event) => {
-    setDeptTerminalQuery(event.target.value || '');
-  }
-
-  const handleChangeArrTerminal = (event) => {
-    setArrTerminalQuery(event.target.value || '');
+  const handleChangeTerminal = (event) => {
+    setTerminalQuery(event.target.value || '');
   }
 
   const handleChangeAvailable = (event) => {
@@ -178,11 +173,8 @@ export default function Dashboard() {
     if (numberQuery) {
       x = x.filter(flight => flight.flightNumber === numberQuery)
     }
-    if (deptTerminalQuery) {
-      x = x.filter(flight => flight.departureTerminal === deptTerminalQuery)
-    }
-    if (arrTerminalQuery) {
-      x = x.filter(flight => flight.arrivalTerminal === arrTerminalQuery)
+    if (terminalQuery) {
+      x = x.filter(flight => flight.airportTerminal === terminalQuery)
     }
     if (cabinQuery) {
       switch (cabinQuery) {
@@ -283,8 +275,7 @@ export default function Dashboard() {
             variant="contained"
             style={styles.btnstyle}
             startIcon={<HomeIcon />}
-            href='/home'>Home</Button>
-            
+            href='/Home'>Home</Button>
           <Button
             color='primary'
             variant="contained"
@@ -328,39 +319,19 @@ export default function Dashboard() {
             {user.admin ? flightNumberSearch : passengerSeatsSearch}
 
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Departure Terminal</InputLabel>
+              <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
               <Select
                 labelId="demo-dialog-select-label"
                 id="demo-dialog-select"
-                value={deptTerminalQuery}
+                value={terminalQuery}
                 defaultValue=''
-                onChange={handleChangeDeptTerminal}
-                input={<OutlinedInput label="Departure Terminal" />}
+                onChange={handleChangeTerminal}
+                input={<OutlinedInput label="Terminal No." />}
               >
                 <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
-                {flights.map(item => item.departureTerminal)
-                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
-                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Arrival Terminal</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={arrTerminalQuery}
-                defaultValue=''
-                onChange={handleChangeArrTerminal}
-                input={<OutlinedInput label="Arrival Terminal" />}
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-                {flights.map(item => item.arrivalTerminal)
+                {flights.map(item => item.airportTerminal)
                   .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
                     <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
                   ))}
@@ -409,7 +380,7 @@ export default function Dashboard() {
           :
            filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} />
+              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
           ))}
           

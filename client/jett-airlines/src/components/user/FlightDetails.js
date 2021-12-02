@@ -1,6 +1,10 @@
 import React from 'react'
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
-import {Card, CardMedia, CardActionArea, Typography} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActionArea from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+
 
 export default function FlightDetails(props) {
     const flight=props.flight
@@ -8,16 +12,8 @@ export default function FlightDetails(props) {
     const diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
     const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     return (
-            <Card >
-                <CardMedia image="../../assets/world.jpg" >
-
-                </CardMedia>
-            </Card>
-    )
-}
-
-
-                /*
+        <div>
+            <Card sx={{ maxWidth: 500 }}>
                 <CardActionArea>
                     <AirplaneTicketIcon color="primary" sx={{ fontSize: 150 }} />
                     <CardContent>
@@ -62,4 +58,7 @@ export default function FlightDetails(props) {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-                */
+            </Card>
+        </div>
+    )
+}
