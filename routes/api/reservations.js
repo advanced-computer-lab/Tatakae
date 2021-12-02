@@ -46,7 +46,6 @@ router.get('/getuserreservations/',verify, (req, res) => {
 
 router.post('/reservationcreate/',verify,async (req, res) => {
   
-  console.log("asdasfasdfsdaf")
   const {userId , admin} = req 
   if (admin) return res.status(401).send("Unauthorized Action")
   
@@ -74,7 +73,8 @@ router.post('/reservationcreate/',verify,async (req, res) => {
     .catch(err => res.status(400).json({ error: err }));
 });
 
-router.patch('bookhalfreservation',verify,async (req,res)=>{
+router.patch('/bookhalfreservation/',verify,async (req,res)=>{
+
   const {reservationNumber,departureTicket,returnTicket} = req.body 
 
   if (departureTicket){
@@ -108,7 +108,7 @@ router.patch('bookhalfreservation',verify,async (req,res)=>{
 
 
 
-router.patch('/cancelhalfreservation/:id',verify,(req, res) => {
+router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
   const {reservationNumber,departureTicket,returnTicket} = req.body 
 
   if (departureTicket){
@@ -117,6 +117,10 @@ router.patch('/cancelhalfreservation/:id',verify,(req, res) => {
 
   if (returnTicket){
     await reservation.updateOne({"reservationNumber" : reservationNumber},{$set: { "returnFlight" : null , "returnTicket" : null}})
+  }
+
+  if (departureTicket && returnTicket){
+    await reservation.deleteOne({"reservationNumber" : reservationNumber})
   }
 
 });
