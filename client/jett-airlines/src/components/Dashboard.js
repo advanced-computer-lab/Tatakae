@@ -4,6 +4,7 @@ import AdminFlightCard from './admin/FlightCard'
 import UserFlightCard from './user/FlightCard'
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
+import searchbox from '../assets/searchbox.png'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -97,6 +98,7 @@ export default function Dashboard() {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setMainView(false);
   };
 
   const handleClose = (event, reason) => {
@@ -141,11 +143,11 @@ export default function Dashboard() {
     srchbtnstyle: {
       height: '40px',
       width: 'auto',
-      margin:'3vh 0 0 59vw',
+      margin:'-6vh 0 0 60vw',
       backgroundColor:"#00a698"
     },
     dg: {
-     height: '125px',
+      height: '125px',
       width: '100vw',
       margin: '-2.5vh -1.25vw',
 
@@ -156,19 +158,29 @@ export default function Dashboard() {
       width: '100vw',
       margin: '0px auto',
     },
-    paperStyle: {
+    paperStyle1: {
+      padding: 20,
+      conetentFit: 'contain',
+      minHeight: '100vh',
+      maxHeight: 'auto',
+      width: '90vw',
+      margin: "-23vh 0 0 3.75vw"
+    },
+
+    paperStyle2: {
       padding: 20,
       conetentFit: 'contain',
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
       margin: "-9vh 0 0 3.75vw"
-    },
+    }
+    ,
     textStyle: {
       margin: '5px 0 0 0',
       Color: 'white'
     },
-     typo1Style: {
+    typo1Style: {
       margin: '5px 0 0 9vw',
       color: "#FFFFFF",
       fontSize: '3em',
@@ -193,13 +205,19 @@ export default function Dashboard() {
       margin: "12% 2% 0% 0%",
       color: 'white'
     },
+    sbStyle: {
+      height: '50px',
+      margin: '2vh 0 0 55.15vw',
+
+    },
   };
 
   const handleChoice = () => {
+    setMainView(false);
     filtering()
     handleClose()
   }
-  const handleHomeClick= ()=>{
+  const handleHomeClick = () => {
     setMainView(true);
   }
 
@@ -315,7 +333,7 @@ export default function Dashboard() {
             startIcon={<HomeIcon />}
             href='/home'>Home</Button>
 
-          
+
           {user.admin ? (<Button
             color='primary'
             variant="contained"
@@ -332,95 +350,100 @@ export default function Dashboard() {
 
           <Button
             style={styles.logoutbtnstyle}
-            startIcon={<LogoutIcon style={{color:"#ffffff"}} />}
+            startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
             href='/logIn'>
-            <Typography style={{color:"#ffffff"}}>Log Out</Typography>
-            </Button>
+            <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
+          </Button>
         </Grid>
 
       </div>
       <br />
       <br />
-      {!user.admin ? (<Typography style={styles.typo1Style}>Once you have tasted flight</Typography>) : (<div></div>)}
-      {!user.admin ? (<Typography style={styles.typo2Style}>you will forever walk the earth with your eyes turned skyward</Typography>) : (<div></div>)}
-
       
+      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight</Typography>)}
+      {mainView && (<Typography style={styles.typo2Style}>you will forever walk the earth with your eyes turned skyward</Typography>)}
 
-      <Grid style={{ align:"center",height: "300px", width: "100%",alignItems:'center',margin:"0 0 0 13vw"}} container>
-      
-      <Grid  style={{align:"center", height: "200px", width: "71%",backgroundColor:'#02122c',padding:"20px",display:"flex"}}  container>
-      <ThemeProvider theme={darktheme}>
-            <Grid item container style={{alignItems:'center'}}>
 
-            {user.admin ? flightNumberSearch : passengerSeatsSearch}
+      <Grid style={{ align: "center", height: "300px", width: "100%", alignItems: 'center', margin: "0 0 0 13vw" }} container>
 
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={terminalQuery}
-                defaultValue=''
-                onChange={handleChangeTerminal}
-                input={<OutlinedInput label="Terminal No." />}
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-                {flights.map(item => item.airportTerminal)
-                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
-                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+        <Grid style={{ align: "center", height: "200px", width: "71%", backgroundColor: '#02122c', padding: "20px", display: "flex" }} container>
+          <ThemeProvider theme={darktheme}>
+            <Grid item container style={{ alignItems: 'center' }}>
 
-            {!user.admin && cabinClassSearch}
+              {user.admin ? flightNumberSearch : passengerSeatsSearch}
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                label="Departure Date"
-                value={deptDateQuery}
-                onChange={handleChangeDeptDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={terminalQuery}
+                  defaultValue=''
+                  onChange={handleChangeTerminal}
+                  input={<OutlinedInput label="Terminal No." />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {flights.map(item => item.airportTerminal)
+                    .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                      <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                label="Arrival Date"
-                value={arrDateQuery}
-                onChange={handleChangeArrDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+              {!user.admin && cabinClassSearch}
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  label="Departure Date"
+                  value={deptDateQuery}
+                  onChange={handleChangeDeptDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  label="Arrival Date"
+                  value={arrDateQuery}
+                  onChange={handleChangeArrDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Grid>
+            <img src={searchbox} alt='' style={styles.sbStyle} />
 
-  
-            <Button endIcon={<SearchIcon style={{color:"#ffffff"}} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{fontSize:"30",color:"#ffffff"}}>Search</Typography></Button>
+
+            <Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button>
           </ThemeProvider>
-          </Grid>
         </Grid>
+      </Grid>
       <br />
       <br />
 
       {user.admin && availableFlightsCheckbox}
 
-      <Paper elevation={20} style={styles.paperStyle}>
+      {(user.admin) && <Paper elevation={20} style={styles.paperStyle1}>
         <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
-          {user.admin ? filteredFlights.map(flight => (
+          {filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
               <AdminFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))
-            :
-            filteredFlights.map(flight => (
-              <Grid key={flight._id} item xs={4} >
-                <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-              </Grid>
-            ))}
+            </Grid>)
+          )
+          }</Grid></Paper>}
 
-        </Grid>
-      </Paper>
+      {(!user.admin) && (!mainView && <Paper elevation={20} style={styles.paperStyle2}>
+        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+          {filteredFlights.map(flight => (
+            <Grid key={flight._id} item xs={4} >
+              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            </Grid>)
+          )
+          }</Grid></Paper>)}
+
+
+
       {logOut && (<Navigate to='/logIn' />)}
     </div>
   )
