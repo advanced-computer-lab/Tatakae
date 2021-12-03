@@ -25,6 +25,8 @@ export default function FlightCard(props) {
   const [openDetails, setOpenDetails] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [toSignIn, setToSignIn] = React.useState(false);
+  const [toPlane, setToPlane] = React.useState(false);
+  const [toReturnPlane, setToReturnPlane]= React.useState(false);
 
   const handleClickOpenDetails = () => {
     setOpenDetails(true);
@@ -36,7 +38,7 @@ export default function FlightCard(props) {
 
   const handleReserveClick = () => {
     if (JSON.parse(sessionStorage.getItem('signedUser'))) {
-      //hakamel
+      props.return? setToReturnPlane(true) : setToPlane(true);
     }
     else {
       setOpenDetails(false);
@@ -112,7 +114,10 @@ export default function FlightCard(props) {
           </Alert>
         
       </Dialog>
+      
       {toSignIn && (<Navigate to='/logIn'/>)}
+      {toPlane && (<Navigate to={`/Plane/${props.flight._id}`}/>)}
+      {toReturnPlane && (<Navigate to={`/ReturnPlane/${props.flight._id}`}/>)}
     </div>
   );
 }

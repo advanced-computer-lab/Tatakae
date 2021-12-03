@@ -1,18 +1,13 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 
-@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css");
-
-
-* {
-  box-sizing: border-box;
-}
 
 .plane-container {
   margin: 20px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column
+  flex-direction: column;
+  box-sizing: border-box;
+
 }
 
 
@@ -23,6 +18,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+
 }
 
 .seat {
@@ -31,24 +28,34 @@
   margin: 3px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  box-sizing: border-box;
+
 }
 
 .seat:nth-of-type(2) {
   margin-right: 18px;
+  box-sizing: border-box;
+
 }
 
 .seat:nth-last-of-type(2) {
   margin-left: 18px;
+  box-sizing: border-box;
+
 }
 
 .seat:not(.occupied):hover {
   cursor: pointer;
   transform: scale(1.2);
+  box-sizing: border-box;
+
 }
 
 .showcase .seat:not(.occupied):hover {
   cursor: default;
   transform: scale(1);
+  box-sizing: border-box;
+
 }
 
 .showcase {
@@ -58,6 +65,7 @@
   background: rgba(0,0,0,0.1);
   padding: 5px 10px;
   border-radius: 5px;
+  box-sizing: border-box;
   color: #777;
 }
 
@@ -66,26 +74,36 @@
   align-items: center;
   justify-content: center;
   margin: 0 10px;
+  box-sizing: border-box;
+
 }
 
 .showcase li small {
   margin-left: 2px;
+  box-sizing: border-box;
+
 }
 
 .row {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+
 }
 
 
 p.text {
   margin: 40px 0;
+  box-sizing: border-box;
+
 }
 
 p.text span {
   color: #0081cb;
   font-weight: 600;
   box-sizing: content-box;
+  box-sizing: border-box;
+
 }
 
