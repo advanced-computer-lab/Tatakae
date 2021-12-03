@@ -54,8 +54,9 @@ export default function FlightCard(props) {
         setOpenDelete(false);
         props.setRefresh(!props.refresh)
       })
-
-      axios.delete('http://localhost:8082/api/tickets//ticketsdeleteforflight', { data: { token: sessionStorage.getItem('token') , flight:props.flight._id } }).then( res=> {
+      
+      //reservation api name needs to change
+      axios.delete('http://localhost:8082/api/tickets/reservationdelete', { data: { token: sessionStorage.getItem('token') , flight:props.flight._id } }).then( res=> {
       for (var i = 0 ; i <res.length ; i ++){
         let variables = {ticketNumber: res[i].ticketNumber ,totalPrice: res[i].totalPrice ,email: res[i].email}
       emailjs.send(
