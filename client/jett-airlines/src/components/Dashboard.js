@@ -378,8 +378,8 @@ export default function Dashboard() {
 
               {user.admin ? flightNumberSearch : passengerSeatsSearch}
 
-              <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <InputLabel id="demo-dialog-select-label">Departure Terminal</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 90 }}>
+                <InputLabel id="demo-dialog-select-label">Dept Terminal</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
@@ -398,8 +398,8 @@ export default function Dashboard() {
                 </Select>
               </FormControl>
 
-              <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <InputLabel id="demo-dialog-select-label">Arrival Terminal</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 90 }}>
+                <InputLabel id="demo-dialog-select-label">Arr Terminal</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
@@ -419,23 +419,28 @@ export default function Dashboard() {
               </FormControl>
 
               {!user.admin && cabinClassSearch}
-
-              <LocalizationProvider style={{width: '100'}} dateAdapter={AdapterDateFns}>
+             
+              <LocalizationProvider  dateAdapter={AdapterDateFns}>
+              <Grid sx={{ m: 1, Width: 90 }}>
                 <DateTimePicker
                   label="Departure Date"
                   value={deptDateQuery}
                   onChange={handleChangeDeptDate}
+                  
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </Grid>
               </LocalizationProvider>
-
+              
               <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Grid sx={{ m: 1, Width: 90 }}>
                 <DateTimePicker
                   label="Arrival Date"
                   value={arrDateQuery}
                   onChange={handleChangeArrDate}
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </Grid>
               </LocalizationProvider>
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
