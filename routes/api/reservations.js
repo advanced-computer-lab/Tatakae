@@ -119,10 +119,8 @@ router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
     await reservation.updateOne({"reservationNumber" : reservationNumber},{$set: { "returnFlight" : null , "returnTicket" : null}})
   }
 
-  if (departureTicket && returnTicket){
-    await reservation.deleteOne({"reservationNumber" : reservationNumber})
-  }
-
+  await reservation.deleteMany({"departureTicket" : null,"returnTicket" : null})
+  res.json({})
 });
 
 router.delete('/deletefullreservation/:id',verify, async (req, res) => {

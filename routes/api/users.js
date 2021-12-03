@@ -56,7 +56,6 @@ router.patch('/userupdate/', verify, async(req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     
-    console.log(error);
   }
 
 
