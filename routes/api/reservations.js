@@ -101,6 +101,8 @@ router.patch('/bookhalfreservation/',verify,async (req,res)=>{
   await reservation.updateOne({"reservationNumber":reservationNumber},{$set: { "returnTicket" : req.body.returnTicket , "returnFlight" : req.body.returnFlight}} )
 
   }
+  res.json({})
+
 
 });
 
