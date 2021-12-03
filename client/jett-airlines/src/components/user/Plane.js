@@ -20,7 +20,9 @@ import { Navigate } from "react-router-dom";
 import { Box, margin, textAlign } from "@mui/system";
 import PaidIcon from "@mui/icons-material/Paid";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import DiamondIcon from '@mui/icons-material/Diamond';
 import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFlatAngledTwoTone";
+import seatsBackground from '../../assets/seatsBackground.png';
 
 const colors = {
   availableColor: "#b4b4b4",
@@ -60,6 +62,16 @@ export default function Plane(props) {
     }
   };
 
+  const styles = {
+  background: {
+      position: 'absolute',
+      height: '1000',
+      width: '100v',
+      justifyContent:'center',
+      backgroundImage: `url(${seatsBackground})`,
+      backgroundRepeat: 'no-repeat'
+    }
+  };
   const handleConfirm = () => {
     const economySeatsAdults = economySelected
       .filter((e) => e.isChild === false)
@@ -108,7 +120,8 @@ export default function Plane(props) {
   );
 
   return (
-    <Grid>
+    <Grid style={styles.background}container>
+   <Grid>
       {notFound && <Navigate to="/wrongURL" />}
       <Grid class="plane-container">
         <Paper sx={{ borderRadius: "20px"}} elevation={5}>
@@ -187,7 +200,7 @@ export default function Plane(props) {
             >
               <Button
                 color="secondary"
-                startIcon={<AirlineSeatFlatAngledTwoToneIcon />}
+                startIcon={<DiamondIcon />}
                 variant="contained"
               >
                 First Class
@@ -326,6 +339,7 @@ export default function Plane(props) {
         </Grid>
       </Grid>
       {notFound && <Navigate to="/randomURL" />}
+    </Grid>
     </Grid>
   );
 }
