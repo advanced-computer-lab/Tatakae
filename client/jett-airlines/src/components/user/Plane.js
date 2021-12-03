@@ -29,7 +29,6 @@ import DiamondIcon from '@mui/icons-material/Diamond';
 import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFlatAngledTwoTone";
 import seatsBackground from '../../assets/seatsBackground.png';
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });

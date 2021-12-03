@@ -13,7 +13,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import FlightDetails from './FlightDetails';
 import Alert from '@mui/material/Alert';
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
+import Plane from './Plane'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

@@ -445,7 +445,6 @@ export default function Dashboard() {
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
 
-
             <Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button>
           </ThemeProvider>
         </Grid>
@@ -472,8 +471,6 @@ export default function Dashboard() {
             </Grid>)
           )
           }</Grid></Paper>)}
-
-
 
       {logOut && (<Navigate to='/logIn' />)}
     </div>
