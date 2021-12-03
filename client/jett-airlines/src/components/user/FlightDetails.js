@@ -5,7 +5,7 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import EventIcon from "@mui/icons-material/Event";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {
   Card,
   CardMedia,
@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import { TabPanel, TabList } from "@mui/lab";
 import world from "../../assets/world.png";
-import plane from '../../assets/plane.jpg'
+import plane from "../../assets/plane.jpg";
 
 export default function FlightDetails(props) {
   const flight = props.flight;
@@ -38,7 +38,7 @@ export default function FlightDetails(props) {
     setTab(newValue);
   };
   return (
-    <Grid style={{ height: "600px", width: "450px"}} fullWidth container>
+    <Grid style={{ height: "600px", width: "450px" }} fullWidth container>
       <Grid
         align="center"
         style={{
@@ -51,13 +51,15 @@ export default function FlightDetails(props) {
         fullWidth
         container
       >
-        <Grid item style={{ fontSize: "3em",color: "white"}} xs>
+        <Grid item style={{ fontSize: "3em", color: "white" }} xs>
           {flight.from}
         </Grid>
         <Grid style={{ fontSize: "3em" }} item xs={3}>
-          <FlightIcon style={{ transform: "scale(1.5)  rotate(90deg)" ,color: "white"}} />
+          <FlightIcon
+            style={{ transform: "scale(1.5)  rotate(90deg)", color: "white" }}
+          />
         </Grid>
-        <Grid style={{ fontSize: "3em" ,color: "white"}} item xs>
+        <Grid style={{ fontSize: "3em", color: "white" }} item xs>
           {flight.to}
         </Grid>
       </Grid>
@@ -68,7 +70,6 @@ export default function FlightDetails(props) {
           paddingBottom: "0",
         }}
       >
-        <Divider />
         <ListItem fullWidth>
           <ListItemAvatar>
             <FlightTakeoffIcon style={{ transform: "scale(1.2)" }} />
@@ -103,7 +104,6 @@ export default function FlightDetails(props) {
               </Grid>
             </Grid>
           </Grid>
-          
         </ListItem>
         <Divider />
         <ListItem>
@@ -192,10 +192,10 @@ export default function FlightDetails(props) {
             <Tab value="Economy" label="Economy" />
           </Tabs>
         </ListItem>
-        
+
         <ListItem>
           <ListItemAvatar>
-            <SupervisorAccountIcon style={{ transform: "scale(1.2)" }}/>
+            <SupervisorAccountIcon style={{ transform: "scale(1.2)" }} />
           </ListItemAvatar>
           <Grid container>
             <Grid item align="left" xs={12}>
@@ -209,16 +209,26 @@ export default function FlightDetails(props) {
               </Typography>
             </Grid>
             <Grid>
-              {tab==="First"?<p>{flight.availableFirstSeats}</p>:<p>{tab==="Business"?<p>{flight.availableBusinessSeats}</p>:<p>{flight.availableEconomySeats}</p>}</p>}
+              {tab === "First" ? (
+                <p>{flight.availableFirstSeats}</p>
+              ) : (
+                <p>
+                  {tab === "Business" ? (
+                    <p>{flight.availableBusinessSeats}</p>
+                  ) : (
+                    <p>{flight.availableEconomySeats}</p>
+                  )}
+                </p>
+              )}
             </Grid>
           </Grid>
         </ListItem>
         <Divider />
         <ListItem>
-        <ListItemAvatar>
-          <AttachMoneyIcon style={{ transform: "scale(1.2)" }}/>
-        </ListItemAvatar>
-        <Grid container>
+          <ListItemAvatar>
+            <AttachMoneyIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
             <Grid container item xs={6}>
               <Grid item align="left" xs={12}>
                 <Typography
@@ -230,7 +240,19 @@ export default function FlightDetails(props) {
                   Adult Seat price
                 </Typography>
               </Grid>
-              <Grid>{tab==="First"?<p>${flight.firstPrice}</p>:<p>{tab==="Business"?<p>${flight.businessPrice}</p>:<p>${flight.economyPrice}</p>}</p>}</Grid>
+              <Grid>
+                {tab === "First" ? (
+                  <p>${flight.firstPrice}</p>
+                ) : (
+                  <p>
+                    {tab === "Business" ? (
+                      <p>${flight.businessPrice}</p>
+                    ) : (
+                      <p>${flight.economyPrice}</p>
+                    )}
+                  </p>
+                )}
+              </Grid>
             </Grid>
             <Grid item xs={6}>
               <Grid container>
@@ -244,7 +266,19 @@ export default function FlightDetails(props) {
                     Child Seat price
                   </Typography>
                 </Grid>
-                <Grid>{tab==="First"?<p>${0.5*flight.firstPrice}</p>:<p>{tab==="Business"?<p>${0.5*flight.businessPrice}</p>:<p>${0.5*flight.economyPrice}</p>}</p>}</Grid>
+                <Grid>
+                  {tab === "First" ? (
+                    <p>${0.5 * flight.firstPrice}</p>
+                  ) : (
+                    <p>
+                      {tab === "Business" ? (
+                        <p>${0.5 * flight.businessPrice}</p>
+                      ) : (
+                        <p>${0.5 * flight.economyPrice}</p>
+                      )}
+                    </p>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
