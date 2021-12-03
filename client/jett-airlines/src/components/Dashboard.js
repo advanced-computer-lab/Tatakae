@@ -54,7 +54,8 @@ export default function Dashboard() {
   const [numberQuery, setNumberQuery] = useState('');
   const [deptDateQuery, setDeptDateQuery] = useState(null);
   const [arrDateQuery, setArrDateQuery] = useState(null);
-  const [terminalQuery, setTerminalQuery] = useState('');
+  const [deptTerminalQuery, setDeptTerminalQuery] = useState('');
+  const [arrTerminalQuery, setArrTerminalQuery] = useState('');
   const [passengerQuery, setPassengerQuery] = useState('');
   const [cabinQuery, setCabinQuery] = useState('');
   const [availabe, setAvailable] = useState(false);
@@ -80,8 +81,12 @@ export default function Dashboard() {
     setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
-  const handleChangeTerminal = (event) => {
-    setTerminalQuery(event.target.value || '');
+  const handleChangeDeptTerminal = (event) => {
+    setDeptTerminalQuery(event.target.value || '');
+  }
+
+  const handleChangeArrTerminal = (event) => {
+    setArrTerminalQuery(event.target.value || '');
   }
 
   const handleChangeAvailable = (event) => {
@@ -229,8 +234,11 @@ export default function Dashboard() {
     if (numberQuery) {
       x = x.filter(flight => flight.flightNumber === numberQuery)
     }
-    if (terminalQuery) {
-      x = x.filter(flight => flight.airportTerminal === terminalQuery)
+    if (deptTerminalQuery) {
+      x = x.filter(flight => flight.departureTerminal === deptTerminalQuery)
+    }
+    if (arrTerminalQuery) {
+      x = x.filter(flight => flight.arrivalTerminal === arrTerminalQuery)
     }
     if (cabinQuery) {
       switch (cabinQuery) {
@@ -370,8 +378,8 @@ export default function Dashboard() {
 
               {user.admin ? flightNumberSearch : passengerSeatsSearch}
 
-              <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <InputLabel id="demo-dialog-select-label">Departure Terminal</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 90 }}>
+                <InputLabel id="demo-dialog-select-label">Dept Terminal</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
@@ -390,8 +398,8 @@ export default function Dashboard() {
                 </Select>
               </FormControl>
 
-              <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <InputLabel id="demo-dialog-select-label">Arrival Terminal</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 90 }}>
+                <InputLabel id="demo-dialog-select-label">Arr Terminal</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
@@ -411,23 +419,28 @@ export default function Dashboard() {
               </FormControl>
 
               {!user.admin && cabinClassSearch}
-
-              <LocalizationProvider style={{width: '100'}} dateAdapter={AdapterDateFns}>
+             
+              <LocalizationProvider  dateAdapter={AdapterDateFns}>
+              <Grid sx={{ m: 1, Width: 90 }}>
                 <DateTimePicker
                   label="Departure Date"
                   value={deptDateQuery}
                   onChange={handleChangeDeptDate}
+                  
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </Grid>
               </LocalizationProvider>
-
+              
               <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Grid sx={{ m: 1, Width: 90 }}>
                 <DateTimePicker
                   label="Arrival Date"
                   value={arrDateQuery}
                   onChange={handleChangeArrDate}
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </Grid>
               </LocalizationProvider>
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
