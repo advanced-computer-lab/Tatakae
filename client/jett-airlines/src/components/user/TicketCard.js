@@ -57,7 +57,7 @@ export default function TicketCard(props) {
                 <Typography style ={styles.textStyle}>USA</Typography>
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs={3}>
-                <FlightIcon style={{ color:"d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
+                <FlightIcon style={{ color:"#d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs>
             <Typography style ={styles.textStyle}>EGY</Typography>
