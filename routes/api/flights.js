@@ -62,8 +62,7 @@ router.patch('/flightupdate/:id',verify, (req, res) => {
 
   flight.findByIdAndUpdate(req.params.id, req.body)
      .then(flight => res.json({ msg: 'Updated successfully' }))
-     .catch(err =>
-      res.status(400).json({ error: 'Unable to update the Database' })
+     .catch(err => res.status(400).json({ error: 'Unable to update the Database' })
      );
 });
 
