@@ -4,6 +4,7 @@ import AdminFlightCard from './admin/FlightCard'
 import UserFlightCard from './user/FlightCard'
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
+import searchbox from '../assets/searchbox.png'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -59,6 +60,7 @@ export default function Dashboard() {
   const [availabe, setAvailable] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [logOut, setLogOut] = React.useState(false);
+  const [mainView, setMainView] = useState(true);
 
   const user = JSON.parse(sessionStorage.getItem('signedUser'));
 
@@ -96,6 +98,7 @@ export default function Dashboard() {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setMainView(false);
   };
 
   const handleClose = (event, reason) => {
@@ -119,14 +122,32 @@ export default function Dashboard() {
       alignitems: 'center'
     },
 
+    sbStyle: {
+      height: '50px',
+      margin: '2vh 0 0 55.15vw',
+
+    },
+
     logoStyle: {
       height: '50px',
       margin: '50px',
       alignitems: 'left'
 
     },
+    logoutbtnstyle: {
+      height: '40px',
+      width: 'auto',
+      margin: '-130px 0px 0px 40vw',
+      alignitems: 'center'
+    },
+    srchbtnstyle: {
+      height: '40px',
+      width: 'auto',
+      margin:'-6vh 0 0 60vw',
+      backgroundColor:"#00a698"
+    },
     dg: {
-      height: '150px',
+      height: '125px',
       width: '100vw',
       margin: '-2.5vh -1.25vw',
 
@@ -137,17 +158,43 @@ export default function Dashboard() {
       width: '100vw',
       margin: '0px auto',
     },
-    paperStyle: {
+    paperStyle1: {
       padding: 20,
       conetentFit: 'contain',
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
-      margin: "0% 0% 0% 2.5%"
+      margin: "-23vh 0 0 3.75vw"
     },
+
+    paperStyle2: {
+      padding: 20,
+      conetentFit: 'contain',
+      minHeight: '100vh',
+      maxHeight: 'auto',
+      width: '90vw',
+      margin: "-9vh 0 0 3.75vw"
+    }
+    ,
     textStyle: {
       margin: '5px 0 0 0',
       Color: 'white'
+    },
+    typo1Style: {
+      margin: '5px 0 0 9vw',
+      color: "#FFFFFF",
+      fontSize: '3em',
+      fontWeight: 'bold',
+      width: "auto",
+      Height: "auto"
+    },
+    typo2Style: {
+      margin: '-2vh 0 0 9.5vw',
+      color: "#FFFFFF",
+      fontSize: '1.5em',
+      fontWeight: 'bold',
+      width: "auto",
+      Height: "auto"
     },
     checkboxContainer: {
       textAlign: 'right',
@@ -158,11 +205,20 @@ export default function Dashboard() {
       margin: "12% 2% 0% 0%",
       color: 'white'
     },
+    sbStyle: {
+      height: '50px',
+      margin: '2vh 0 0 55.15vw',
+
+    },
   };
 
   const handleChoice = () => {
+    setMainView(false);
     filtering()
     handleClose()
+  }
+  const handleHomeClick = () => {
+    setMainView(true);
   }
 
   const filtering = () => {
@@ -255,15 +311,15 @@ export default function Dashboard() {
       </Select>
     </FormControl>)
 
-    const availableFlightsCheckbox=(
-      <div style={styles.checkboxContainer} >
-        <ThemeProvider theme={darktheme}>
-          <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
-            onChange={handleChangeAvailable}
-            inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
-        </ThemeProvider>
-      </div>
-    )
+  const availableFlightsCheckbox = (
+    <div style={styles.checkboxContainer} >
+      <ThemeProvider theme={darktheme}>
+        <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
+          onChange={handleChangeAvailable}
+          inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
+      </ThemeProvider>
+    </div>
+  )
 
   return (
     <div style={styles.background}>
@@ -275,118 +331,132 @@ export default function Dashboard() {
             variant="contained"
             style={styles.btnstyle}
             startIcon={<HomeIcon />}
-            href='/Home'>Home</Button>
+            href='/home'>Home</Button>
+
+
+          {user.admin ? (<Button
+            color='primary'
+            variant="contained"
+            style={styles.btnstyle}
+            startIcon={<FlightIcon />}
+            href='/CreateFlight'>Create Flight</Button>)
+            :
+            (<Button
+              color='primary'
+              variant="contained"
+              style={styles.btnstyle}
+              startIcon={<EditIcon />}
+              href='/EditProfile'>Edit Profile</Button>)}
+
           <Button
+            style={styles.logoutbtnstyle}
+            startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
+            href='/logIn'>
+            <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
+          </Button>
+        </Grid>
+
+      </div>
+      <br />
+      <br />
+      
+      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight</Typography>)}
+      {mainView && (<Typography style={styles.typo2Style}>you will forever walk the earth with your eyes turned skyward</Typography>)}
+
+
+      <Grid style={{ align: "center", height: "300px", width: "100%", alignItems: 'center', margin: "0 0 0 13vw" }} container>
+
+        <Grid style={{ align: "center", height: "200px", width: "71%", backgroundColor: '#02122c', padding: "20px", display: "flex" }} container>
+          <ThemeProvider theme={darktheme}>
+            <Grid item container style={{ alignItems: 'center' }}>
+
+              {user.admin ? flightNumberSearch : passengerSeatsSearch}
+
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={terminalQuery}
+                  defaultValue=''
+                  onChange={handleChangeTerminal}
+                  input={<OutlinedInput label="Terminal No." />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {flights.map(item => item.airportTerminal)
+                    .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                      <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+
+              {!user.admin && cabinClassSearch}
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  label="Departure Date"
+                  value={deptDateQuery}
+                  onChange={handleChangeDeptDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  label="Arrival Date"
+                  value={arrDateQuery}
+                  onChange={handleChangeArrDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <img src={searchbox} alt='' style={styles.sbStyle} />
+
+
+            <Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button>
+          </ThemeProvider>
+        </Grid>
+      </Grid>
+      <br />
+      <br />
+
+      {user.admin && availableFlightsCheckbox}
+
+      {(user.admin) && <Paper elevation={20} style={styles.paperStyle1}>
+        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+          {filteredFlights.map(flight => (
+            <Grid key={flight._id} item xs={4} >
+              <AdminFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            </Grid>)
+          )
+          }</Grid></Paper>}
+
+      {(!user.admin) && (!mainView && <Paper elevation={20} style={styles.paperStyle2}>
+        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+          {filteredFlights.map(flight => (
+            <Grid key={flight._id} item xs={4} >
+              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
+            </Grid>)
+          )
+          }</Grid></Paper>)}
+
+
+
+      {logOut && (<Navigate to='/logIn' />)}
+    </div>
+  )
+}
+
+/* <Button
             color='primary'
             variant="contained"
             style={styles.btnstyle}
             startIcon={<SearchIcon />}
             onClick={handleClickOpen}>Search For Flights</Button>
 
-          {user.admin? (<Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<FlightIcon />}
-            href='/CreateFlight'>Create Flight</Button>)
-          :
-          (<Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<EditIcon />}
-            href='/EditProfile'>Edit Profile</Button>)}
-
-          <Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<LogoutIcon />}
-            onClick={handleLogOut}>Log Out</Button>
-        </Grid>
-
-      </div>
-
-      <Typography margin={'0vh 4vw'} className={classes.typographyStyle}>
+            <Typography margin={'0vh 4vw'} className={classes.typographyStyle}>
         Welcome {user.firstName} {user.lastName}
       </Typography>
-
-      <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
-        <DialogTitle>Search the following criteria</DialogTitle>
-        <DialogContent>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-
-            {user.admin ? flightNumberSearch : passengerSeatsSearch}
-
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={terminalQuery}
-                defaultValue=''
-                onChange={handleChangeTerminal}
-                input={<OutlinedInput label="Terminal No." />}
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-                {flights.map(item => item.airportTerminal)
-                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
-                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-
-            {!user.admin && cabinClassSearch}
-
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                label="Departure Date"
-                value={deptDateQuery}
-                onChange={handleChangeDeptDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                label="Arrival Date"
-                value={arrDateQuery}
-                onChange={handleChangeArrDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleChoice}>Search</Button>
-        </DialogActions>
-      </Dialog>
-      <br />
-      <br />
-
-      {user.admin && availableFlightsCheckbox}
-
-      <Paper elevation={20} style={styles.paperStyle}>
-        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
-          {user.admin? filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
-              <AdminFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))
-          :
-           filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))}
-          
-        </Grid>
-      </Paper>
-      {logOut && (<Navigate to='/logIn' />)}
-    </div>
-  )
-}
+*/

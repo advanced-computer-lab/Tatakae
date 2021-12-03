@@ -22,10 +22,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import FlightCard from "./FlightCard";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const colors = {
   availableColor: "green",
   selectedColor: "blue",
@@ -33,12 +29,10 @@ const colors = {
 };
 
 export default function Plane(props) {
-  const { id } = useParams();
-  const user = JSON.parse(sessionStorage.getItem('signedUser'));
-
+  //const [selectedCount, setSelectedCount] = React.useState(0);
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [childSelected, setChildSelected] = React.useState(false);
-  const [businessSelected, setBusinessSelected] = React.useState([]);
+  const [BusinessSelected, setBusinessSelected] = React.useState([]);
   const [firstSelected, setFirstSelected] = React.useState([]);
   const [economySelected, setEconomySelected] = React.useState([]);
   const [flight, setFlight] = React.useState({});
@@ -255,14 +249,13 @@ export default function Plane(props) {
 
         <Grid class="container">
           Business
-          {splitArray([].concat(flight.businessSeats)).map((row, rowNumber) => (
-            <Grid key={rowNumber} class="row">
+          {splitArray(businessSeats).map((row, rowNumber) => (
+            <Grid class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={flight.businessPrice}
+                  price={businessPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
@@ -272,28 +265,27 @@ export default function Plane(props) {
                   }
                   //selectedCount={selectedCount}
                   //setSelectedCount={setSelectedCount}
-                  selected={businessSelected}
+                  selected={BusinessSelected}
                   setSelected={setBusinessSelected}
                 />
               ))}
             </Grid>
           ))}
           First
-          {splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
-            <Grid key={rowNumber} class="row">
+          {splitArray(firstSeats).map((row, rowNumber) => (
+            <Grid class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={flight.firstPrice}
+                  price={firstPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
                   colors={colors}
                   seatNumber={
                     String.fromCharCode(code + seatNumber) +
-                    (1 + rowNumber + splitArray([].concat(flight.businessSeats)).length)
+                    (1 + rowNumber + splitArray(businessSeats).length)
                   }
                   //selectedCount={selectedCount}
                   //setSelectedCount={setSelectedCount}
@@ -304,14 +296,13 @@ export default function Plane(props) {
             </Grid>
           ))}
           Economy
-          {splitArray([].concat(flight.economySeats)).map((row, rowNumber) => (
-            <Grid key={rowNumber} class="row">
+          {splitArray(economySeats).map((row, rowNumber) => (
+            <Grid class="row">
               {row.map((element, seatNumber) => (
                 <Seat
-                  key={seatNumber + 8 * rowNumber}
                   seatIndex={seatNumber + 8 * rowNumber}
                   isChild={childSelected}
-                  price={flight.economyPrice}
+                  price={economyPrice}
                   totalPrice={totalPrice}
                   setTotalPrice={setTotalPrice}
                   available={element}
@@ -320,8 +311,8 @@ export default function Plane(props) {
                     String.fromCharCode(code + seatNumber) +
                     (1 +
                       rowNumber +
-                      splitArray([].concat(flight.businessSeats)).length +
-                      splitArray([].concat(flight.firstSeats)).length)
+                      splitArray(businessSeats).length +
+                      splitArray(firstSeats).length)
                   }
                   selected={economySelected}
                   setSelected={setEconomySelected}
@@ -332,7 +323,7 @@ export default function Plane(props) {
           <p class="text">
             You have selected{" "}
             <span>
-              {businessSelected.length +
+              {BusinessSelected.length +
                 firstSelected.length +
                 economySelected.length}
             </span>{" "}
@@ -347,8 +338,6 @@ export default function Plane(props) {
           </Button>
         </Grid>
       </Grid>
-      {notFound && (<Navigate to='/randomURL' />)}
-
     </Grid>
   );
 }
