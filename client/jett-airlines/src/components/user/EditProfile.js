@@ -23,7 +23,8 @@ export default class EditProfile extends Component {
         homeAddress: user.homeAddress,
         passportNumber: user.passportNumber,
         password: '',
-        openAlert:false
+        openSuccess:false,
+        openError: false
     }
    
 
@@ -49,18 +50,21 @@ export default class EditProfile extends Component {
             .then(res => {
                 this.setState({
                     password: '',
-                    openAlert: true 
+                    openSuccess: true ,
+                    openError: false
                 })
                 sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
             })
             .catch(err => {
-                console.log(err);
+                this.setState({
+                    openError: true 
+                })
             })
 
     }
-     handleCloseAlert = () => {
+     handleCloseSuccess = () => {
         this.setState({
-            openAlert: false 
+            openSuccess: false 
         })      }
 
     render() {
@@ -68,16 +72,16 @@ export default class EditProfile extends Component {
             <div className="center">
                 <h1>Edit Profile</h1>
                 <Dialog
-                    open={this.state.openAlert}
+                    open={this.state.openSuccess}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={this.handleCloseAlert}
+                    onClose={this.handleCloseSuccess}
                     aria-describedby="alert-dialog-slide-description"
                 >
 
-                    <Alert severity="success" variant="filled"
+                    <Alert severity="success" 
                         action={
-                            <Button onClick={this.handleCloseAlert} color="inherit" size="small" variant="outlined">
+                            <Button onClick={this.handleCloseSuccess} color="inherit" size="small" variant="outlined">
                                 Done
                             </Button>
                         }
@@ -139,8 +143,10 @@ export default class EditProfile extends Component {
                         onChange={this.handleChange}
                     />
                 </FormControl>
+        
                 <br />
                 <br />
+                {this.state.openError && <Alert severity='error' >Email already exists. Try Again.</Alert>}
                 <Button variant="contained" onClick={this.handleSubmit}>Update Profile</Button>
                 <br />
                 <br />
