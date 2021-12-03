@@ -254,7 +254,7 @@ export default function MainPage() {
       
       <br />
       <br />
-      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight</Typography>)}
+      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight,</Typography>)}
       {mainView && (<Typography style={styles.typo2Style}>you will forever walk the earth with your eyes turned skyward</Typography>)}
       <Grid style={{ align:"center",height: "300px", width: "100%",alignItems:'center',margin:"0 0 0 13vw"}} container>
       
