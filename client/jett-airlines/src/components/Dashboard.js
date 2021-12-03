@@ -143,8 +143,8 @@ export default function Dashboard() {
     srchbtnstyle: {
       height: '40px',
       width: 'auto',
-      margin:'-6vh 0 0 60vw',
-      backgroundColor:"#00a698"
+      margin: '-6vh 0 0 60vw',
+      backgroundColor: "#00a698"
     },
     dg: {
       height: '125px',
@@ -266,9 +266,8 @@ export default function Dashboard() {
   }, [flights, availabe])
 
   const flightNumberSearch = (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
-      <InputLabel>Flight Number</InputLabel>
+    <FormControl sx={{ m: 1, width: 120 }}>
+      <InputLabel>Flight No.</InputLabel>
       <OutlinedInput
         name='flightNumber'
         id="flightNumberfield"
@@ -279,9 +278,8 @@ export default function Dashboard() {
     </FormControl>)
 
   const passengerSeatsSearch = (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-dialog-select-label">Passenger Seats</InputLabel>
-      <InputLabel>Passenger Seats</InputLabel>
+    <FormControl sx={{ m: 1, width: 120 }}>
+      <InputLabel>No. of Seats</InputLabel>
       <OutlinedInput
         name='flightNumber'
         id="flightNumberfield"
@@ -359,8 +357,8 @@ export default function Dashboard() {
       </div>
       <br />
       <br />
-      
-      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight</Typography>)}
+
+      {mainView && (<Typography style={styles.typo1Style}>Once you have tasted flight,</Typography>)}
       {mainView && (<Typography style={styles.typo2Style}>you will forever walk the earth with your eyes turned skyward</Typography>)}
 
 
@@ -372,20 +370,40 @@ export default function Dashboard() {
 
               {user.admin ? flightNumberSearch : passengerSeatsSearch}
 
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 150 }}>
+                <InputLabel id="demo-dialog-select-label">Departure Terminal</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
-                  value={terminalQuery}
+                  value={deptTerminalQuery}
                   defaultValue=''
-                  onChange={handleChangeTerminal}
+                  onChange={handleChangeDeptTerminal}
                   input={<OutlinedInput label="Terminal No." />}
                 >
                   <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
-                  {flights.map(item => item.airportTerminal)
+                  {flights.map(item => item.departureTerminal)
+                    .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                      <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ m: 1, minWidth: 150 }}>
+                <InputLabel id="demo-dialog-select-label">Arrival Terminal</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={arrTerminalQuery}
+                  defaultValue=''
+                  onChange={handleChangeArrTerminal}
+                  input={<OutlinedInput label="Terminal No." />}
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  {flights.map(item => item.arrivalTerminal)
                     .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
                       <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
                     ))}
@@ -394,7 +412,7 @@ export default function Dashboard() {
 
               {!user.admin && cabinClassSearch}
 
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider style={{width: '100'}} dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                   label="Departure Date"
                   value={deptDateQuery}

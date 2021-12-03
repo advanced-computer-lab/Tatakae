@@ -8,31 +8,46 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
+  Paper,
+  Button,
+  Divider,
 } from "@mui/material";
 import Seat from "./Seat";
 import "../../css/Plane.css";
 import { useEffect } from "react";
 import { useParams, Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import FlightCard from "./FlightCard";
+import PaidIcon from "@mui/icons-material/Paid";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import DiamondIcon from '@mui/icons-material/Diamond';
+import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFlatAngledTwoTone";
+import seatsBackground from '../../assets/seatsBackground.png';
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const colors = {
-  availableColor: "green",
-  selectedColor: "blue",
-  occupiedColor: "grey",
+  availableColor: "#b4b4b4",
+  selectedChildColor: "#f25aad",
+  selectedColor: "#0071bc",
+  occupiedColor: "#494848",
 };
 
 export default function Plane(props) {
-  //const [selectedCount, setSelectedCount] = React.useState(0);
+  const { id } = useParams();
+  const user = JSON.parse(sessionStorage.getItem('signedUser'));
+
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [childSelected, setChildSelected] = React.useState(false);
-  const [BusinessSelected, setBusinessSelected] = React.useState([]);
+  const [businessSelected, setBusinessSelected] = React.useState([]);
   const [firstSelected, setFirstSelected] = React.useState([]);
   const [economySelected, setEconomySelected] = React.useState([]);
   const [flight, setFlight] = React.useState({});
@@ -149,19 +164,32 @@ export default function Plane(props) {
       //await axios call for first half of reservation with data then set reservationNumber, and axios call flightreserve
       //if yes sessionStorage the reservation number and view all return flights, else redirect to home
   }
+  const styles = {
+  background: {
+      position: 'absolute',
+      height: '1000',
+      width: '100v',
+      justifyContent:'center',
+      backgroundImage: `url(${seatsBackground})`,
+      backgroundRepeat: 'no-repeat'
+    }
+  };
 
   useEffect(() => {
-    axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res => {
-      setFlight(res.data);
-    }).catch(err => {
-      setNotFound(true)
-    })
-  }, [])
+    axios
+      .get(`http://localhost:8082/api/flights/flightget/${id}`)
+      .then((res) => {
+        setFlight(res.data);
+      })
+      .catch((err) => {
+        setNotFound(true);
+      });
+  }, []);
 
   return (
-    <Grid>
-
-      <Dialog
+    <Grid style={styles.background}container>
+   <Grid>
+     <Dialog
         open={confirmPop}
         TransitionComponent={Transition}
         keepMounted
@@ -211,6 +239,7 @@ export default function Plane(props) {
       {toHome && <Navigate to='/home' />}
 
       <Grid class="plane-container">
+        <Paper sx={{ borderRadius: "20px"}} elevation={5}>
         <List class="showcase">
           <ListItem>
             <Grid
@@ -224,7 +253,14 @@ export default function Plane(props) {
               class="seat selected"
               style={{ background: colors.selectedColor }}
             ></Grid>
-            <small>Selected</small>
+            <small> Adult Selected</small>
+          </ListItem>
+          <ListItem>
+            <Grid
+              class="seat occupied"
+              style={{ background: colors.selectedChildColor }}
+            ></Grid>
+            <small>Child Selected</small>
           </ListItem>
           <ListItem>
             <Grid
@@ -234,8 +270,30 @@ export default function Plane(props) {
             <small>Occupied</small>
           </ListItem>
         </List>
+        </Paper>
 
-        <FormControl onChange={handleRadio} component="fieldset">
+        <Grid class="container">
+          <Paper
+            elevation={10}
+            style={{
+              width: "400px",
+              borderRadius: "200px 200px 0px 0px",
+              paddingBottom: "30px",
+            }}
+          >
+            <div
+              style={{
+                width: "300px",
+                height: "150px",
+                borderTopLeftRadius: "10px",
+                alignContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                justifyContent: "center",
+                margin: "auto"
+              }}
+            >
+               <FormControl onChange={handleRadio} sx={{marginTop:"80px"}} component="fieldset">
           <RadioGroup
             defaultValue="adult"
             row
@@ -246,98 +304,156 @@ export default function Plane(props) {
             <FormControlLabel value="child" control={<Radio />} label="Child" />
           </RadioGroup>
         </FormControl>
-
-        <Grid class="container">
-          Business
-          {splitArray(businessSeats).map((row, rowNumber) => (
-            <Grid class="row">
-              {row.map((element, seatNumber) => (
-                <Seat
-                  seatIndex={seatNumber + 8 * rowNumber}
-                  isChild={childSelected}
-                  price={businessPrice}
-                  totalPrice={totalPrice}
-                  setTotalPrice={setTotalPrice}
-                  available={element}
-                  colors={colors}
-                  seatNumber={
-                    String.fromCharCode(code + seatNumber) + (1 + rowNumber)
-                  }
-                  //selectedCount={selectedCount}
-                  //setSelectedCount={setSelectedCount}
-                  selected={BusinessSelected}
-                  setSelected={setBusinessSelected}
-                />
-              ))}
+              </div>
+            <List fullWidth>
+              <Divider />
+            </List>
+            <Grid
+              fullwidth
+              alignContent="center"
+              sx={{ textAlign: "center", padding: "10px 10px 10px  10px" }}
+            >
+              <Button
+                color="secondary"
+                startIcon={<DiamondIcon />}
+                variant="contained"
+              >
+                First Class
+              </Button>
             </Grid>
-          ))}
-          First
-          {splitArray(firstSeats).map((row, rowNumber) => (
-            <Grid class="row">
-              {row.map((element, seatNumber) => (
-                <Seat
-                  seatIndex={seatNumber + 8 * rowNumber}
-                  isChild={childSelected}
-                  price={firstPrice}
-                  totalPrice={totalPrice}
-                  setTotalPrice={setTotalPrice}
-                  available={element}
-                  colors={colors}
-                  seatNumber={
-                    String.fromCharCode(code + seatNumber) +
-                    (1 + rowNumber + splitArray(businessSeats).length)
-                  }
-                  //selectedCount={selectedCount}
-                  //setSelectedCount={setSelectedCount}
-                  selected={firstSelected}
-                  setSelected={setFirstSelected}
-                />
-              ))}
+            {splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
+              <Grid key={rowNumber} class="row">
+                {row.map((element, seatNumber) => (
+                  <Seat
+                    key={seatNumber + 8 * rowNumber}
+                    seatIndex={seatNumber + 8 * rowNumber}
+                    isChild={childSelected}
+                    price={flight.firstPrice}
+                    totalPrice={totalPrice}
+                    setTotalPrice={setTotalPrice}
+                    available={element}
+                    colors={colors}
+                    seatNumber={
+                      String.fromCharCode(code + seatNumber) + (1 + rowNumber)
+                    }
+                    //selectedCount={selectedCount}
+                    //setSelectedCount={setSelectedCount}
+                    selected={firstSelected}
+                    setSelected={setFirstSelected}
+                  />
+                ))}
+              </Grid>
+            ))}
+            <List fullWidth>
+              <Divider />
+            </List>
+            <Grid
+              fullwidth
+              alignContent="center"
+              sx={{ textAlign: "center", padding: "10px 10px 10px  10px" }}
+            >
+              <Button
+                //color="primary"
+                startIcon={<BusinessCenterIcon />}
+                variant="contained"
+                style={{ background: "#ffbf00" }}
+              >
+                Business Class
+              </Button>
             </Grid>
-          ))}
-          Economy
-          {splitArray(economySeats).map((row, rowNumber) => (
-            <Grid class="row">
-              {row.map((element, seatNumber) => (
-                <Seat
-                  seatIndex={seatNumber + 8 * rowNumber}
-                  isChild={childSelected}
-                  price={economyPrice}
-                  totalPrice={totalPrice}
-                  setTotalPrice={setTotalPrice}
-                  available={element}
-                  colors={colors}
-                  seatNumber={
-                    String.fromCharCode(code + seatNumber) +
-                    (1 +
-                      rowNumber +
-                      splitArray(businessSeats).length +
-                      splitArray(firstSeats).length)
-                  }
-                  selected={economySelected}
-                  setSelected={setEconomySelected}
-                />
-              ))}
+            {splitArray([].concat(flight.businessSeats)).map(
+              (row, rowNumber) => (
+                <Grid key={rowNumber} class="row">
+                  {row.map((element, seatNumber) => (
+                    <Seat
+                      key={seatNumber + 8 * rowNumber}
+                      seatIndex={seatNumber + 8 * rowNumber}
+                      isChild={childSelected}
+                      price={flight.businessPrice}
+                      totalPrice={totalPrice}
+                      setTotalPrice={setTotalPrice}
+                      available={element}
+                      colors={colors}
+                      seatNumber={
+                        String.fromCharCode(code + seatNumber) +
+                        (1 +
+                          rowNumber +
+                          splitArray([].concat(flight.firstSeats)).length)
+                      }
+                      //selectedCount={selectedCount}
+                      //setSelectedCount={setSelectedCount}
+                      selected={businessSelected}
+                      setSelected={setBusinessSelected}
+                    />
+                  ))}
+                </Grid>
+              )
+            )}
+            <List fullWidth>
+              <Divider />
+            </List>
+            <Grid
+              fullwidth
+              alignContent="center"
+              sx={{ textAlign: "center", padding: "10px 10px 10px  10px" }}
+            >
+              <Button
+                color="success"
+                startIcon={<PaidIcon />}
+                variant="contained"
+                style={{ backgroundColor: "#00a698" }}
+              >
+                Economy Class
+              </Button>
             </Grid>
-          ))}
+            {splitArray([].concat(flight.economySeats)).map(
+              (row, rowNumber) => (
+                <Grid key={rowNumber} class="row">
+                  {row.map((element, seatNumber) => (
+                    <Seat
+                      key={seatNumber + 8 * rowNumber}
+                      seatIndex={seatNumber + 8 * rowNumber}
+                      isChild={childSelected}
+                      price={flight.economyPrice}
+                      totalPrice={totalPrice}
+                      setTotalPrice={setTotalPrice}
+                      available={element}
+                      colors={colors}
+                      seatNumber={
+                        String.fromCharCode(code + seatNumber) +
+                        (1 +
+                          rowNumber +
+                          splitArray([].concat(flight.businessSeats)).length +
+                          splitArray([].concat(flight.firstSeats)).length)
+                      }
+                      selected={economySelected}
+                      setSelected={setEconomySelected}
+                    />
+                  ))}
+                </Grid>
+              )
+            )}
+          </Paper>
           <p class="text">
             You have selected{" "}
             <span>
-              {BusinessSelected.length +
+              {businessSelected.length +
                 firstSelected.length +
                 economySelected.length}
             </span>{" "}
             seats for the total price of <span id="total">${totalPrice}</span>
           </p>
           <Button
-            type='submit'
-            color='primary'
+            type="submit"
+            color="primary"
             variant="contained"
             onClick={handleOpen}>
            Reserve Seat(s)
           </Button>
         </Grid>
       </Grid>
+      {notFound && <Navigate to="/randomURL" />}
+    </Grid>
     </Grid>
   );
 }
