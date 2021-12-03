@@ -39,7 +39,7 @@ export default function FlightDetails(props) {
     setTab(newValue);
   };
   return (
-    <Grid style={{ height: "670px", width: "450px" }} fullWidth container>
+    <Grid style={{ width: "450px" }} fullWidth container>
       <Grid
         align="center"
         style={{
@@ -165,6 +165,10 @@ export default function FlightDetails(props) {
                   year: "numeric",
                   month: "short",
                   day: "numeric",
+                })}
+                <br />
+                at{" "}
+                {new Date(flight.departureDate).toLocaleString("en-US", {
                   hour: "numeric",
                   minute: "numeric",
                   hour12: true,
@@ -190,6 +194,10 @@ export default function FlightDetails(props) {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
+                  })}
+                  <br />
+                  at{" "}
+                  {new Date(flight.arrivalDate).toLocaleString("en-US", {
                     hour: "numeric",
                     minute: "numeric",
                     hour12: true,
@@ -246,7 +254,44 @@ export default function FlightDetails(props) {
           </Grid>
         </ListItem>
         <Divider />
-
+        <ListItem>
+          <ListItemAvatar>
+            <LuggageIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
+            <Grid item align="left" xs={12}>
+              <Typography
+                sx={{ mt: 0.5 }}
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                Baggage allowance 
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              {tab === "First" ? (
+                <p>{flight.firstBaggage} KG</p>
+              ) : (
+                <p>
+                  {tab === "Business" ? (
+                    <p>{flight.businessBaggage} KG</p>
+                  ) : (
+                    <p>{flight.economyBaggage} KG</p>
+                  )}
+                </p>
+              )} 
+               <Typography
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                <small>*in kilograms</small> 
+              </Typography>
+            </Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
         <ListItem>
           <ListItemAvatar>
             <AttachMoneyIcon style={{ transform: "scale(1.2)" }} />
@@ -304,40 +349,15 @@ export default function FlightDetails(props) {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <ListItemAvatar>
-            <SupervisorAccountIcon style={{ transform: "scale(1.2)" }} />
-          </ListItemAvatar>
-          <Grid container>
-            <Grid item align="left" xs={12}>
-              <Typography
-                sx={{ mt: 0.5 }}
+            <Typography
                 color="text.secondary"
                 display="block"
                 variant="caption"
               >
-                Baggage allowance for {tab} class
+                <small>*Childern Prices are 50% of the full price</small> 
               </Typography>
-            </Grid>
-            <Grid item xs>
-              {tab === "First" ? (
-                <p>{flight.firstBaggage}</p>
-              ) : (
-                <p>
-                  {tab === "Business" ? (
-                    <p>{flight.businessBaggage}</p>
-                  ) : (
-                    <p>{flight.economyBaggage}</p>
-                  )}
-                </p>
-              )}
-            </Grid>
           </Grid>
         </ListItem>
-        <Divider />
       </List>
     </Grid>
   );
