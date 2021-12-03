@@ -6,6 +6,7 @@ import EventIcon from "@mui/icons-material/Event";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import LuggageIcon from "@mui/icons-material/Luggage";
 import {
   Card,
   CardMedia,
@@ -38,7 +39,7 @@ export default function FlightDetails(props) {
     setTab(newValue);
   };
   return (
-    <Grid style={{ height: "600px", width: "450px" }} fullWidth container>
+    <Grid style={{ height: "670px", width: "450px" }} fullWidth container>
       <Grid
         align="center"
         style={{
@@ -65,7 +66,7 @@ export default function FlightDetails(props) {
       </Grid>
       <List
         sx={{
-          width: "100%",
+          width: "450px",
           paddingTop: "0",
           paddingBottom: "0",
         }}
@@ -146,8 +147,8 @@ export default function FlightDetails(props) {
           <ListItemAvatar>
             <EventIcon style={{ transform: "scale(1.2)" }} />
           </ListItemAvatar>
-          <Grid container>
-            <Grid container item xs={6}>
+          <Grid container columns={16}>
+            <Grid container item xs={7}>
               <Grid item align="left" xs={12}>
                 <Typography
                   sx={{ mt: 0.5 }}
@@ -158,9 +159,20 @@ export default function FlightDetails(props) {
                   Departure Date
                 </Typography>
               </Grid>
-              <Grid>{new Date(flight.departureDate).toLocaleString()}</Grid>
+              <Grid>
+                {new Date(flight.departureDate).toLocaleString("en-US", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item sx={{ flexGrow: 3 }} xs={1} />
+            <Grid item xs>
               <Grid container>
                 <Grid item align="left" xs={12}>
                   <Typography
@@ -172,7 +184,17 @@ export default function FlightDetails(props) {
                     Arrival Date
                   </Typography>
                 </Grid>
-                <Grid>{new Date(flight.arrivalDate).toLocaleString()}</Grid>
+                <Grid>
+                  {new Date(flight.arrivalDate).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -192,7 +214,7 @@ export default function FlightDetails(props) {
             <Tab value="Economy" label="Economy" />
           </Tabs>
         </ListItem>
-
+        <Divider />
         <ListItem>
           <ListItemAvatar>
             <SupervisorAccountIcon style={{ transform: "scale(1.2)" }} />
@@ -224,6 +246,7 @@ export default function FlightDetails(props) {
           </Grid>
         </ListItem>
         <Divider />
+
         <ListItem>
           <ListItemAvatar>
             <AttachMoneyIcon style={{ transform: "scale(1.2)" }} />
@@ -283,6 +306,38 @@ export default function FlightDetails(props) {
             </Grid>
           </Grid>
         </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemAvatar>
+            <SupervisorAccountIcon style={{ transform: "scale(1.2)" }} />
+          </ListItemAvatar>
+          <Grid container>
+            <Grid item align="left" xs={12}>
+              <Typography
+                sx={{ mt: 0.5 }}
+                color="text.secondary"
+                display="block"
+                variant="caption"
+              >
+                Baggage allowance for {tab} class
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              {tab === "First" ? (
+                <p>{flight.firstBaggage}</p>
+              ) : (
+                <p>
+                  {tab === "Business" ? (
+                    <p>{flight.businessBaggage}</p>
+                  ) : (
+                    <p>{flight.economyBaggage}</p>
+                  )}
+                </p>
+              )}
+            </Grid>
+          </Grid>
+        </ListItem>
+        <Divider />
       </List>
     </Grid>
   );
