@@ -13,7 +13,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import FlightDetails from './FlightDetails';
 import Alert from '@mui/material/Alert';
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
+import Plane from './Plane'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +26,7 @@ export default function FlightCard(props) {
   const [openDetails, setOpenDetails] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [toSignIn, setToSignIn] = React.useState(false);
+  const [toPlane, setToPlane] = React.useState(false);
 
   const handleClickOpenDetails = () => {
     setOpenDetails(true);
@@ -36,7 +38,7 @@ export default function FlightCard(props) {
 
   const handleReserveClick = () => {
     if (JSON.parse(sessionStorage.getItem('signedUser'))) {
-      //hakamel
+      setToPlane(true);
     }
     else {
       setOpenDetails(false);
@@ -113,6 +115,7 @@ export default function FlightCard(props) {
         
       </Dialog>
       {toSignIn && (<Navigate to='/logIn'/>)}
+      {toPlane && (<Navigate to={`/Plane/${props.flight._id}`}/>)}
     </div>
   );
 }
