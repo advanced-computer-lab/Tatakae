@@ -36,14 +36,30 @@ router.post('/usercreate/',(req, res) => {
 
 router.patch('/userupdate/', verify, async(req, res) => {
   const {userId , admin} = req 
+  if (req.body.password){
   const encryptedPassword = await bcrypt.hash(req.body.password, 10);
   req.body.password = encryptedPassword
+  }
+  try{
+  await user.findByIdAndUpdate(userId, req.body)
+  const userIn ={ 
+    firstName: req.body.firstName ,
+    lastName: req.body.lastName ,
+    email: req.body.email,
+    admin: false,
+    passportNumber: req.body.passportNumber,
+    homeAddress: req.body.homeAddress
+  }
+  res.status(200).json({userIn});
 
-  const user =  user.findByIdAndUpdate(userId, req.body)
-     .then(user => res.json({ msg: 'Updated successfully' }))
-     .catch(err =>
-      res.status(400).json({ error: 'Unable to update the Database' })
-     );
+  
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    
+    console.log(error);
+  }
+
+
 });
 
 router.delete('/userdelete/:id', (req, res) => {
