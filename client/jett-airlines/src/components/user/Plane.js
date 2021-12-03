@@ -213,7 +213,7 @@ export default function Plane(props) {
                     key={seatNumber + 8 * rowNumber}
                     seatIndex={seatNumber + 8 * rowNumber}
                     isChild={childSelected}
-                    price={flight.businessPrice}
+                    price={flight.firstPrice}
                     totalPrice={totalPrice}
                     setTotalPrice={setTotalPrice}
                     available={element}
@@ -223,8 +223,8 @@ export default function Plane(props) {
                     }
                     //selectedCount={selectedCount}
                     //setSelectedCount={setSelectedCount}
-                    selected={businessSelected}
-                    setSelected={setBusinessSelected}
+                    selected={firstSelected}
+                    setSelected={setFirstSelected}
                   />
                 ))}
               </Grid>
@@ -254,7 +254,7 @@ export default function Plane(props) {
                       key={seatNumber + 8 * rowNumber}
                       seatIndex={seatNumber + 8 * rowNumber}
                       isChild={childSelected}
-                      price={flight.firstPrice}
+                      price={flight.businessPrice}
                       totalPrice={totalPrice}
                       setTotalPrice={setTotalPrice}
                       available={element}
@@ -267,8 +267,8 @@ export default function Plane(props) {
                       }
                       //selectedCount={selectedCount}
                       //setSelectedCount={setSelectedCount}
-                      selected={firstSelected}
-                      setSelected={setFirstSelected}
+                      selected={businessSelected}
+                      setSelected={setBusinessSelected}
                     />
                   ))}
                 </Grid>
