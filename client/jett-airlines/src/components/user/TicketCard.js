@@ -1,11 +1,7 @@
 import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
-import FlightLandIcon from "@mui/icons-material/FlightLand";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import EventIcon from "@mui/icons-material/Event";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import qrcode from "../../assets/qrcode.png";
+import bg from '../../assets/travelwallpaper-1.png'
 import {
     Card,
     CardMedia,
@@ -27,12 +23,23 @@ import {
 export default function TicketCard(props) {
 
 
-
+    const styles = {
+        background: {
+          position: 'absolute',
+          padding: 'auto',
+          height: '100vh',
+          width: '100vw',
+          backgroundImage: `url(${bg})`
+        },
+        textStyle: {
+            fontWeight: "700",fontSize: '0.9em',color:"#0071bc"
+          },}
 
 
 
     return (
-        <Grid style={{ alignitems: "right", margin: "5vh 0 0 37vw", backgroundColor: "#ff3c41", height: "400px", width: "350px" }} container>
+        <div style={styles.background}>
+        <Grid style={{ alignitems: "right", margin: "5vh 0 0 37vw", backgroundColor: "#ffffff", height: "400px", width: "350px" }} container>
             <Grid
                 align="center"
                 style={{
@@ -47,13 +54,13 @@ export default function TicketCard(props) {
                 container
             >
             <Grid item style={{ fontSize: "3em" }} xs>
-                <Typography style ={{fontWeight: 'bold',fontSize: '0.9em',}}>USA</Typography>
+                <Typography style ={styles.textStyle}>USA</Typography>
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs={3}>
-                <FlightIcon style={{ margin:"-2vh 0 0 0",transform: "scale(1.5)  rotate(90deg)" }} />
+                <FlightIcon style={{ color:"d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs>
-            <Typography style ={{fontWeight: 'bold',fontSize: '0.9em',}}>EGY</Typography>
+            <Typography style ={styles.textStyle}>EGY</Typography>
             </Grid>
             
             
@@ -62,9 +69,10 @@ export default function TicketCard(props) {
           width: "100%",
           paddingTop: "0",
           paddingBottom: "0",
+          margin:'3vh 0 0 0 '
         }}  
       >
-        <Divider style ={{margin:"5vh 0 0 0 "}}/>
+        
         <ListItem fullWidth>
           <Grid container style={{}}>
             <Grid container item xs={3}>
@@ -74,11 +82,13 @@ export default function TicketCard(props) {
                   color="text.secondary"
                   display="block"
                   variant="caption"
+                  fontSize= '0.65em'
+                  color='#c6c6c9'
                 >
                   FLIGHT
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.8em'}}>819</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>819</Typography></Grid>
             </Grid>
             <Grid item xs>
               <Grid container>
@@ -88,11 +98,13 @@ export default function TicketCard(props) {
                     color="text.secondary"
                     display="block"
                     variant="caption"
+                    fontSize= '0.65em'
+                    color='#c6c6c9'
                   >
                     TERMINAL
                   </Typography>
                 </Grid>
-                <Grid> <Typography style={{fontSize: '0.8em'}}>2</Typography></Grid>
+                <Grid> <Typography style={{fontSize: '0.9em'}}>2</Typography></Grid>
               </Grid>
             </Grid>
             <Grid item xs>
@@ -103,11 +115,13 @@ export default function TicketCard(props) {
                     color="text.secondary"
                     display="block"
                     variant="caption"
+                    fontSize= '0.65em'
+                    color='#c6c6c9'
                   >
                     SEAT
                   </Typography>
                 </Grid>
-                <Grid> <Typography style={{fontSize: '0.8em'}}>C2</Typography></Grid>
+                <Grid> <Typography style={{fontSize: '0.9em'}}>C2</Typography></Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -121,11 +135,13 @@ export default function TicketCard(props) {
                   color="text.secondary"
                   display="block"
                   variant="caption"
+                  fontSize= '0.65em'
+                  color='#c6c6c9'
                 >
                   PASSENGER
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.8em'}}>Mostafa Sharaf</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>Mostafa Sharaf</Typography></Grid>
             </Grid>
             </Grid>
         </ListItem>
@@ -138,13 +154,16 @@ export default function TicketCard(props) {
                   color="text.secondary"
                   display="block"
                   variant="caption"
+                  fontSize= '0.65em'
+                  color='#c6c6c9'
                 >
                   CLASS
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.8em'}}>FIRST</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>FIRST</Typography></Grid>
             </Grid>
             </Grid>
+            
         </ListItem>
         <ListItem>
         <Grid container>
@@ -155,16 +174,23 @@ export default function TicketCard(props) {
                   color="text.secondary"
                   display="block"
                   variant="caption"
+                  fontSize= '0.65em'
+                  color='#c6c6c9'
                 >
                   CLASS
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.8em'}}>FIRST</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>FIRST</Typography></Grid>
             </Grid>
             </Grid>
+            
         </ListItem>
       </List> 
+      <Grid item xs>
+                <img src={qrcode} alt='' style={{height: '200px',margin:"-22vh 0 0 10vw"
+      }} /></Grid>
       </Grid>
         </Grid>
+        </div>
     )
 }

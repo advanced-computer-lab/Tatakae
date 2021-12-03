@@ -7,7 +7,13 @@ export default function Seat(props) {
   //const [refresh, setRefresh] = React.useState(false);
   //const [pressed, setPressed] = React.useState(false);
   const [pressed, setPressed] = React.useState(0);
-  let seatColor = { backgroundColor: props.colors.selectedColor };
+  var seatColor;
+  if(pressed === 1){
+    seatColor = {backgroundColor:props.colors.selectedColor};
+  }else{
+    seatColor = { backgroundColor: props.colors.selectedChildColor };
+  }
+  
   let className = "seat";
   if (!props.available) {
     if (pressed === 0) {
@@ -75,7 +81,7 @@ export default function Seat(props) {
 
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
-      <span style={{color: "white", margin: "auto"}}>{props.seatNumber}</span>
+      <span style={{color: "white", textAlign: "center"}}>{props.seatNumber}</span>
     </Box>
   );
 }
