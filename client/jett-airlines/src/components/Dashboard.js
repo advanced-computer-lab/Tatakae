@@ -54,7 +54,8 @@ export default function Dashboard() {
   const [numberQuery, setNumberQuery] = useState('');
   const [deptDateQuery, setDeptDateQuery] = useState(null);
   const [arrDateQuery, setArrDateQuery] = useState(null);
-  const [terminalQuery, setTerminalQuery] = useState('');
+  const [deptTerminalQuery, setDeptTerminalQuery] = useState('');
+  const [arrTerminalQuery, setArrTerminalQuery] = useState('');
   const [passengerQuery, setPassengerQuery] = useState('');
   const [cabinQuery, setCabinQuery] = useState('');
   const [availabe, setAvailable] = useState(false);
@@ -80,8 +81,12 @@ export default function Dashboard() {
     setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
-  const handleChangeTerminal = (event) => {
-    setTerminalQuery(event.target.value || '');
+  const handleChangeDeptTerminal = (event) => {
+    setDeptTerminalQuery(event.target.value || '');
+  }
+
+  const handleChangeArrTerminal = (event) => {
+    setArrTerminalQuery(event.target.value || '');
   }
 
   const handleChangeAvailable = (event) => {
@@ -229,8 +234,11 @@ export default function Dashboard() {
     if (numberQuery) {
       x = x.filter(flight => flight.flightNumber === numberQuery)
     }
-    if (terminalQuery) {
-      x = x.filter(flight => flight.airportTerminal === terminalQuery)
+    if (deptTerminalQuery) {
+      x = x.filter(flight => flight.departureTerminal === deptTerminalQuery)
+    }
+    if (arrTerminalQuery) {
+      x = x.filter(flight => flight.arrivalTerminal === arrTerminalQuery)
     }
     if (cabinQuery) {
       switch (cabinQuery) {
@@ -414,11 +422,85 @@ export default function Dashboard() {
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
 
+      <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
+        <DialogTitle>Search the following criteria</DialogTitle>
+        <DialogContent>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
 
+            {user.admin ? flightNumberSearch : passengerSeatsSearch}
+
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Departure Terminal</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={deptTerminalQuery}
+                defaultValue=''
+                onChange={handleChangeDeptTerminal}
+                input={<OutlinedInput label="Departure Terminal" />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {flights.map(item => item.departureTerminal)
+                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Arrival Terminal</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={arrTerminalQuery}
+                defaultValue=''
+                onChange={handleChangeArrTerminal}
+                input={<OutlinedInput label="Arrival Terminal" />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                {flights.map(item => item.arrivalTerminal)
+                  .filter((value, index, self) => self.indexOf(value) === index).map(terminal => (
+                    <MenuItem key={terminal} value={terminal}>{terminal}</MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+
+            {!user.admin && cabinClassSearch}
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                label="Departure Date"
+                value={deptDateQuery}
+                onChange={handleChangeDeptDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                label="Arrival Date"
+                value={arrDateQuery}
+                onChange={handleChangeArrDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleChoice}>Search</Button>
+        </DialogActions>
+      </Dialog>
             <Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button>
           </ThemeProvider>
         </Grid>
       </Grid>
+
       <br />
       <br />
 
@@ -437,13 +519,12 @@ export default function Dashboard() {
         <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
           {filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>)
-          )
-          }</Grid></Paper>)}
-
-
-
+              <UserFlightCard flight={flight} />
+            </Grid>
+          ))}
+          
+        </Grid>
+      </Paper>
       {logOut && (<Navigate to='/logIn' />)}
     </div>
   )

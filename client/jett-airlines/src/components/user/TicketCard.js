@@ -1,3 +1,4 @@
+
 import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
 import qrcode from "../../assets/qrcode.png";
@@ -22,7 +23,6 @@ import {
 
 export default function TicketCard(props) {
 
-
     const styles = {
         background: {
           position: 'absolute',
@@ -34,8 +34,6 @@ export default function TicketCard(props) {
         textStyle: {
             fontWeight: "700",fontSize: '0.9em',color:"#0071bc"
           },}
-
-
 
     return (
         <div style={styles.background}>

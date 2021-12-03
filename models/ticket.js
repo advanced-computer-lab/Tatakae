@@ -1,6 +1,6 @@
 // models/ticket.js
 //import { ObjectId } from 'mongoose';
-
+// NOT USED ANYMORE ONLY FOR SCHEMA
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -8,14 +8,6 @@ const ticketSchema = new mongoose.Schema({
   ticketNumber: {
     type: String,       // not needed from user handled in backend
     unique: true,
-    required: true
-  },
-  user:{
-    type: mongoose.ObjectId,
-    required: true
-  },
-  email:{
-    type: String,
     required: true
   },
   flight:{
@@ -76,7 +68,6 @@ const ticketSchema = new mongoose.Schema({
     required: true,
     default: [0] 
   },
-
   totalPrice: {            
     type: Number,
     required: true,

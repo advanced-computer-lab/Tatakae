@@ -30,7 +30,7 @@ export default function Seat(props) {
         //props.setSelectedCount(props.selectedCount - 1);
         props.setSelected(
           props.selected.filter(function (f) {
-            return f.SeatIndex !== props.absIndex;
+            return f.seatIndex !== props.seatIndex;
           })
         );
         if (pressed === 1) {

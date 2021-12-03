@@ -36,7 +36,8 @@ export default class CreateFlight extends Component {
         flightNumber: '',
         from: '',
         to: '',
-        airportTerminal: '',
+        departureTerminal: '',
+        arrivalTerminal: '',
         departureDate: new Date(),
         arrivalDate: new Date(),
         economy: '',
@@ -68,7 +69,8 @@ export default class CreateFlight extends Component {
             flightNumber: (this.state.flightNumber).toUpperCase(),
             from: this.state.from,
             to: this.state.to,
-            airportTerminal: this.state.airportTerminal,
+            departureTerminal: this.state.departureTerminal,
+            arrivalTerminal: this.state.arrivalTerminal,
             departureDate: this.state.departureDate,
             arrivalDate: this.state.arrivalDate,
             economySeats: this.state.economy,
@@ -84,14 +86,14 @@ export default class CreateFlight extends Component {
             token: sessionStorage.getItem('token')
         };
 
-        axios
-            .post('http://localhost:8082/api/flights/flightcreate/', data)
+        axios.post('http://localhost:8082/api/flights/flightcreate/', data)
             .then(res => {
                 this.setState({
                     flightNumber: '',
                     from: '',
                     to: '',
-                    airportTerminal: '',
+                    departureTerminal: '',
+                    arrivalTerminal: '',
                     departureDate: '',
                     arrivalDate: '',
                     economy: '',
@@ -130,12 +132,22 @@ export default class CreateFlight extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormControl>
+                        <br />
                         <FormControl sx={{ m: 1 }} variant="filled">
-                            <InputLabel>Airport Terminal</InputLabel>
+                            <InputLabel>Departure Terminal</InputLabel>
                             <FilledInput
-                                name='airportTerminal'
-                                id="airportTerminal"
-                                value={this.state.airportTerminal}
+                                name='departureTerminal'
+                                id="departureTerminal"
+                                value={this.state.departureTerminal}
+                                onChange={this.handleChange}
+                            />
+                        </FormControl>
+                        <FormControl sx={{ m: 1 }} variant="filled">
+                            <InputLabel>Arrival Terminal</InputLabel>
+                            <FilledInput
+                                name='arrivalTerminal'
+                                id="arrivalTerminal"
+                                value={this.state.arrivalTerminal}
                                 onChange={this.handleChange}
                             />
                         </FormControl>
@@ -184,7 +196,7 @@ export default class CreateFlight extends Component {
                         <br />
                         <br />
                         <br />
-                        <p>Seat Info</p>
+                        <p>Cabin Info</p>
                         <br />
                         <FormControl sx={{ m: 1 }} variant="filled">
                             <InputLabel>Economy Seats No.</InputLabel>
@@ -245,10 +257,6 @@ export default class CreateFlight extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormControl>
-                        <br />
-                        <br />
-                        <br />
-                        <p>Baggage Allownce</p>
                         <br />
                         <FormControl sx={{ m: 1 }} variant="filled">
                             <InputLabel>Economy Baggage Allownce</InputLabel>
