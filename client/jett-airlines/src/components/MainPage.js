@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import AdminFlightCard from './admin/FlightCard'
-import UserFlightCard from './user/FlightCard'
+import FlightCard from './user/FlightCard';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import Box from '@mui/material/Box';
@@ -22,16 +21,11 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
-import FlightIcon from '@mui/icons-material/Flight';
-import EditIcon from '@mui/icons-material/Edit';
-import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import bg from '../assets/travelwallpaper-1.png'
 import logo from '../assets/Logo.png'
 import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Navigate } from 'react-router-dom'
 
 const darktheme = createTheme({
   palette: {
@@ -45,45 +39,30 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Dashboard() {
+export default function MainPage() {
   const classes = useStyles();
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [numberQuery, setNumberQuery] = useState('');
   const [deptDateQuery, setDeptDateQuery] = useState(null);
   const [arrDateQuery, setArrDateQuery] = useState(null);
   const [terminalQuery, setTerminalQuery] = useState('');
   const [passengerQuery, setPassengerQuery] = useState('');
   const [cabinQuery, setCabinQuery] = useState('');
-  const [availabe, setAvailable] = useState(false);
+  const [mainView, setMainView] = useState(true);
+
   const [open, setOpen] = React.useState(false);
-  const [logOut, setLogOut] = React.useState(false);
-
-  const user = JSON.parse(sessionStorage.getItem('signedUser'));
-
-  const handleLogOut = () => {
-    setLogOut(true);
-  }
-
-  const handleChangeCabin = (event) => {
-    setCabinQuery(event.target.value);
-  }
 
   const handleChangePassenger = (event) => {
     setPassengerQuery((event.target.value) || '');
-  };
-
-  const handleChangeNumber = (event) => {
-    setNumberQuery((event.target.value).toUpperCase() || '');
   };
 
   const handleChangeTerminal = (event) => {
     setTerminalQuery(event.target.value || '');
   }
 
-  const handleChangeAvailable = (event) => {
-    setAvailable(!availabe)
+  const handleChangeCabin = (event)=>{
+    setCabinQuery(event.target.value);
   }
 
   const handleChangeDeptDate = (event) => {
@@ -96,6 +75,7 @@ export default function Dashboard() {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setMainView(false);
   };
 
   const handleClose = (event, reason) => {
@@ -103,6 +83,53 @@ export default function Dashboard() {
       setOpen(false);
     }
   };
+
+  const handleChoice = () => {
+    setRefresh(!refresh);
+    handleClose()
+  }
+
+  const handleHomeClick= ()=>{
+    setMainView(true);
+  }
+
+  const filtering = () => {
+    let x = flights
+    x = x.filter(flight => new Date(flight.departureDate) >= new Date())
+
+    if (terminalQuery) {
+      x = x.filter(flight => flight.airportTerminal === terminalQuery)
+    }
+    if(cabinQuery){
+      switch(cabinQuery){
+        case 'Economy': x=x.filter(flight=>flight.availableEconomySeats>0);break;
+        case 'Business': x=x.filter(flight=>Number(flight.availableBusinessSeats)>0);break;
+        case 'First': x=x.filter(flight=>flight.availableFirstSeats>0);break;
+       default: break;
+      }
+    }
+    if(passengerQuery){
+      x=x.filter(flight=> flight.availableTotalSeats>=passengerQuery)
+    }
+    if (deptDateQuery) {
+      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
+    }
+    if (arrDateQuery) {
+      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
+    }
+    setFilteredFlights(x)
+  }
+
+  useEffect(() => {
+    axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
+      setFlights(res.data)
+    })
+  })
+
+  useEffect(() => {
+    filtering()
+  }, [refresh])
+
   const styles = {
     background: {
       position: 'absolute',
@@ -160,114 +187,10 @@ export default function Dashboard() {
     },
   };
 
-  const handleChoice = () => {
-    filtering()
-    handleClose()
-  }
-
-  const filtering = () => {
-    let x = flights
-    if (!user.admin) {
-      x = x.filter(flight => new Date(flight.departureDate) >= new Date())
-    }
-    if (numberQuery) {
-      x = x.filter(flight => flight.flightNumber === numberQuery)
-    }
-    if (terminalQuery) {
-      x = x.filter(flight => flight.airportTerminal === terminalQuery)
-    }
-    if (cabinQuery) {
-      switch (cabinQuery) {
-        case 'Economy': x = x.filter(flight => flight.availableEconomySeats > 0); break;
-        case 'Business': x = x.filter(flight => Number(flight.availableBusinessSeats) > 0); break;
-        case 'First': x = x.filter(flight => flight.availableFirstSeats > 0); break;
-        default: break;
-      }
-    }
-    if (passengerQuery) {
-      x = x.filter(flight => flight.availableTotalSeats >= passengerQuery)
-    }
-    if (deptDateQuery) {
-      x = x.filter(flight => new Date(flight.departureDate).setSeconds(0, 0) === new Date(deptDateQuery).setSeconds(0, 0))
-    }
-    if (arrDateQuery) {
-      x = x.filter(flight => new Date(flight.arrivalDate).setSeconds(0, 0) === new Date(arrDateQuery).setSeconds(0, 0))
-    }
-    if (availabe) {
-      x = x.filter(flight => new Date(flight.departureDate) >= new Date())
-    }
-    setFilteredFlights(x)
-  }
-
-  useEffect(() => {
-    axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
-      setFlights(res.data)
-    })
-  }, [refresh])
-
-  useEffect(() => {
-    filtering()
-  }, [flights, availabe])
-
-  const flightNumberSearch = (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-dialog-select-label">Flight Number</InputLabel>
-      <InputLabel>Flight Number</InputLabel>
-      <OutlinedInput
-        name='flightNumber'
-        id="flightNumberfield"
-        value={numberQuery}
-        type="text"
-        onChange={handleChangeNumber}
-      />
-    </FormControl>)
-
-  const passengerSeatsSearch = (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-dialog-select-label">Passenger Seats</InputLabel>
-      <InputLabel>Passenger Seats</InputLabel>
-      <OutlinedInput
-        name='flightNumber'
-        id="flightNumberfield"
-        value={passengerQuery}
-        type="text"
-        onChange={handleChangePassenger}
-      />
-    </FormControl>)
-
-  const cabinClassSearch = (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-dialog-select-label">Cabin Class</InputLabel>
-      <Select
-        labelId="demo-dialog-select-label"
-        id="demo-dialog-select"
-        value={cabinQuery}
-        defaultValue=''
-        onChange={handleChangeCabin}
-        input={<OutlinedInput label="Cabin Class" />}
-      >
-        <MenuItem value=''>
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value='Economy'>Economy</MenuItem>
-        <MenuItem value='Business'>Business</MenuItem>
-        <MenuItem value='First'>First</MenuItem>
-      </Select>
-    </FormControl>)
-
-    const availableFlightsCheckbox=(
-      <div style={styles.checkboxContainer} >
-        <ThemeProvider theme={darktheme}>
-          <FormControlLabel style={styles.checkboxStyle} control={<Checkbox checked={availabe}
-            onChange={handleChangeAvailable}
-            inputProps={{ 'aria-label': 'controlled' }} />} label="Show Available Flights" />
-        </ThemeProvider>
-      </div>
-    )
-
   return (
     <div style={styles.background}>
       <div style={styles.dg} >
+
         <img src={logo} alt='' style={styles.logoStyle} />
         <Grid container spacing={5} style={{ margin: '4.75vh 18vw' }}>
           <Button
@@ -275,49 +198,44 @@ export default function Dashboard() {
             variant="contained"
             style={styles.btnstyle}
             startIcon={<HomeIcon />}
-            href='/Home'>Home</Button>
+            onClick={handleHomeClick}
+          >Home</Button>
           <Button
             color='primary'
             variant="contained"
             style={styles.btnstyle}
             startIcon={<SearchIcon />}
-            onClick={handleClickOpen}>Search For Flights</Button>
-
-          {user.admin? (<Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<FlightIcon />}
-            href='/CreateFlight'>Create Flight</Button>)
-          :
-          (<Button
-            color='primary'
-            variant="contained"
-            style={styles.btnstyle}
-            startIcon={<EditIcon />}
-            href='/EditProfile'>Edit Profile</Button>)}
-
+            onClick={handleClickOpen}>
+            Search For Flights
+          </Button>
           <Button
             color='primary'
             variant="contained"
             style={styles.btnstyle}
-            startIcon={<LogoutIcon />}
-            onClick={handleLogOut}>Log Out</Button>
+            startIcon={<LoginIcon />}
+            href='/logIn'>
+            Log In
+          </Button>
         </Grid>
 
       </div>
-
-      <Typography margin={'0vh 4vw'} className={classes.typographyStyle}>
-        Welcome {user.firstName} {user.lastName}
-      </Typography>
 
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose} >
         <DialogTitle>Search the following criteria</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-
-            {user.admin ? flightNumberSearch : passengerSeatsSearch}
-
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Passenger Seats</InputLabel>
+              <InputLabel>Passenger Seats</InputLabel>
+              <OutlinedInput
+                name='flightNumber'
+                id="flightNumberfield"
+                value={passengerQuery}
+                type="text"
+                onChange={handleChangePassenger}
+              />
+            </FormControl>
+            
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel id="demo-dialog-select-label">Terminal</InputLabel>
               <Select
@@ -338,7 +256,24 @@ export default function Dashboard() {
               </Select>
             </FormControl>
 
-            {!user.admin && cabinClassSearch}
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-dialog-select-label">Cabin Class</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={cabinQuery}
+                defaultValue=''
+                onChange={handleChangeCabin}
+                input={<OutlinedInput label="Cabin Class" />}
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value='Economy'>Economy</MenuItem>
+                <MenuItem value='Business'>Business</MenuItem>
+                <MenuItem value='First'>First</MenuItem>
+              </Select>
+            </FormControl>
 
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
@@ -367,26 +302,19 @@ export default function Dashboard() {
       </Dialog>
       <br />
       <br />
+      <div style={styles.checkboxContainer} >
+        <ThemeProvider theme={darktheme}>
+        </ThemeProvider>
+      </div>
+      {!mainView && (<Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+        {filteredFlights.map(flight => (
+          <Grid key={flight._id} item xs={4} >
+            <FlightCard flight={flight} />
+          </Grid>
+        ))}
+      </Grid></Paper>)}
 
-      {user.admin && availableFlightsCheckbox}
-
-      <Paper elevation={20} style={styles.paperStyle}>
-        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
-          {user.admin? filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
-              <AdminFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))
-          :
-           filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
-              <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-          ))}
-          
-        </Grid>
-      </Paper>
-      {logOut && (<Navigate to='/logIn' />)}
+      {mainView && (<h2 className={classes.typographyStyle}>Welcome to Jett airlines. A7la airport feki ya masr.</h2>)}
     </div>
   )
 }

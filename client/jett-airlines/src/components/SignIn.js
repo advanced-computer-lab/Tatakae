@@ -1,24 +1,26 @@
 import React, { Component } from 'react'
 import '../css/SignIn.css'
+import { Navigate } from 'react-router-dom'
 
-import { TextField, Avatar, Paper, Grid, Button, Typography, createTheme ,ThemeProvider } from '@mui/material';
+import { TextField, Avatar, Paper, Grid, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
 
 import bg from '../assets/travelwallpaper22.jpg'
 import logo from '../assets/Logo.png'
-
+import axios from 'axios';
 
 const darktheme = createTheme({
     palette: {
         mode: 'light'
     },
-  });
+});
 const styles = {
     background: {
         position: 'absolute',
@@ -54,12 +56,33 @@ const styles = {
 };
 export default class SignIn extends Component {
     state = {
-        username: '',
+        email: '',
         password: '',
         showPassword: false,
+        home: false,
+        errorPop: false
     }
 
+    handleSubmit = (event) => {
+        event.preventDefault()
 
+        const data = {
+            email: this.state.email,
+            password: this.state.password
+        }
+
+        axios.post('http://localhost:8082/api/users/login/', data)
+            .then(res => {
+                sessionStorage.setItem('token', res.data.token)
+                sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
+                this.setState(() => ({
+                    home: true
+                }))
+            })
+            .catch(err=>this.setState(() => ({
+                errorPop: true
+            })))
+    }
 
     handleChange = (event) => {
         this.setState(() => ({
@@ -69,7 +92,7 @@ export default class SignIn extends Component {
 
     handleUsernameChange = (event) => {
         this.setState(() => ({
-            username: event.target.value
+            email: event.target.value
         }))
     };
 
@@ -83,158 +106,85 @@ export default class SignIn extends Component {
         event.preventDefault();
     };
 
+    componentDidMount() {
+        sessionStorage.clear();
+    }
+
     render() {
         return (
             <div style={styles.background}>
                 <ThemeProvider theme={darktheme}>
-                <Grid>
-                    <img src={logo} alt='' style={styles.logoStyle} />
-                    <Paper elevation={10} style={styles.paperStyle}>
-                        <Grid align='center'>
-                            <Avatar style={styles.avatarStyle}><LockOutlinedIcon /></Avatar>
+                    <Grid>
+                        <img src={logo} alt='' style={styles.logoStyle} />
+                        <Paper elevation={10} style={styles.paperStyle}>
+                            <Grid align='center'>
+                                <Avatar style={styles.avatarStyle}><LockOutlinedIcon /></Avatar>
 
-                            <Typography style={styles.textStyle}>
-                                <h2>Sign In</h2>
-                            </Typography>
+                                <Typography style={styles.textStyle}>
+                                    Sign In
+                                </Typography>
 
-                        </Grid>
-                        <TextField
-                            style={styles.fieldStyle}
-                            label='Username'
-                            placeholder='Enter username' f
-                            fullWidth
-                            required
-                            value={this.state.username}
-                            onChange={this.handleUsernameChange}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                        <TextField
-                            id="passField"
-                            style={styles.fieldStyle}
-                            label='Password'
-                            placeholder='Enter password'
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            fullWidth
-                            required
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={this.handleClickShowPassword}
-                                            onMouseDown={this.handleMouseDownPassword}
-                                        >
-                                            {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                        <Button
-                            type='submit'
-                            color='primary'
-                            variant="contained"
-                            style={styles.btnstyle}
-                            fullWidth
-                            href='/home'
-                            disabled={this.state.password !== 'admin' || this.state.username !== 'admin'}>
-                            Sign in
-                        </Button>
-                    </Paper>
-                </Grid>
+                            </Grid>
+                            <TextField
+                                style={styles.fieldStyle}
+                                label='Email'
+                                placeholder='Enter Email'
+                                fullWidth
+                                required
+                                value={this.state.email}
+                                onChange={this.handleUsernameChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                id="passField"
+                                style={styles.fieldStyle}
+                                label='Password'
+                                placeholder='Enter password'
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                fullWidth
+                                required
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <br/>
+                            {this.state.errorPop && (<Alert severity="error">Email or Password are incorrect. Please try again.</Alert>)}
+
+                            <Button
+                                type='submit'
+                                color='primary'
+                                variant="contained"
+                                style={styles.btnstyle}
+                                fullWidth
+                                onClick={this.handleSubmit}>
+                                Sign in
+                            </Button>
+                            <Link href="/" underline="none">
+                                Continue as Guest
+                            </Link>
+                            {this.state.home && (<Navigate to='/home' />)}
+                        </Paper>
+                    </Grid>
                 </ThemeProvider>
             </div>
         )
     }
 }
-
-/*
-
-<div className="text-fields">
-                <FormControl sx={{ m: 1 }}variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-username"
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 1 }} edge="end" />
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-
-                <br />
-
-                <FormControl sx={{ m: 1  }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
-
-                    className="h"
-                        id="outlined-adornment-password"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-                <br />
-                </div>
-                <Button variant="contained" href='/home' disabled={this.state.password==='' || this.state.username===''}>
-                    Log In
-                </Button>
-
-
-*/
-
-
-/*
-
-<ThemeProvider theme={theme}>
-                    <TextField variant="standard">
-
-                    </TextField>
-                </ThemeProvider>
-
-
-                <FormControl sx={{ m: 3 }} className="password" >
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
-                        dark
-                        id="outlined-adornment-password"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-*/

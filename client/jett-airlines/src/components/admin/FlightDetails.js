@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 export default function FlightDetails(props) {
     const flight=props.flight
-    
     return (
         <div>
             <Card sx={{ maxWidth: 500 }}>
@@ -18,7 +17,9 @@ export default function FlightDetails(props) {
                     <Typography gutterBottom variant="h5" sx={{ fontStyle: 'oblique' }}>
                             Flight Number: {flight.flightNumber}
                             <br/>
-                            Terminal: {flight.airportTerminal}
+                            Departure Terminal: {flight.departureTerminal}
+                            <br/>
+                            Arrival Terminal: {flight.arrivalTerminal}
                             <br/>
                             From: {flight.from}                         
                             <br/>
@@ -30,21 +31,27 @@ export default function FlightDetails(props) {
                         </Typography>
                         <p>-------------------------------------------------------------------------------------</p>
                         <Typography variant="body2" color="text.secondary">
-                            Economy Seats: {flight.economySeats}
-                            <br/>
-                            Business Seats: {flight.businessSeats}
-                            <br/>
-                            First Class Seats: {flight.firstSeats}
-                            <br/>
-                            Total Number Seats: {flight.totalSeats}
-                            <br/>
-                            Price of Economy: {flight.economyPrice}
-                            <br/>
-                            Price of Business: {flight.businessPrice}
+                            First Class Seats: {[].concat(flight.firstSeats).length}
                             <br/>
                             Price of First Class: {flight.firstPrice}
                             <br/>
-                            Baggage Allowance: {flight.baggageAllowance}
+                            First Class Baggage Allowance: {flight.firstBaggage}
+                            <br/>
+                            Business Seats: {[].concat(flight.businessSeats).length}
+                            <br/>
+                            Price of Business: {flight.businessPrice}
+                            <br/>
+                            Business Class Baggage Allowance: {flight.businessBaggage} 
+                            <br/>
+                            Economy Seats: {[].concat(flight.economySeats).length}
+                            <br/>
+                            Price of Economy: {flight.economyPrice}
+                            <br/>
+                            Economy Class Baggage Allowance: {flight.economyBaggage}
+                            <br/>
+                            Total Number Seats: {flight.totalSeats}
+                            <br/>
+                            Available Seats: {flight.availableTotalSeats}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
