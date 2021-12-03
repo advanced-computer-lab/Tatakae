@@ -25,15 +25,18 @@
   align-items: center;
 }
 
+
 .seat {
-  height: 25px;
-  width: 25px;
-  margin: 3px;
-  font-size: 12px;
+  height: 35px;
+  width: 35px;
+  margin: 5px;
+  font-size: 15px;
   align-items: center;
   text-align: center;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  padding-top: 6px;
+  justify-content: center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .seat:nth-of-type(2) {
@@ -58,10 +61,7 @@
   display: flex;
   justify-content: space-between;
   list-style-type: none;
-  background: rgba(0,0,0,0.1);
   padding: 5px 10px;
-  border-radius: 5px;
-  color: #777;
 }
 
 .showcase li {
