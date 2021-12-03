@@ -50,7 +50,6 @@ export default function Plane(props) {
   const [departureTicket, setDepartureTicket] = React.useState(null);
   const [returnFlights, setReturnFlights] = React.useState([]);
   const [returnFlightsPop, setReturnFlightsPop] = React.useState(false);
-  const [trial, setTrial]= React.useState(false);
 
   let code = 65;
 
@@ -75,26 +74,21 @@ export default function Plane(props) {
   }
 
   const handleNoReturn= ()=>{
-
-  }
-
-  const handleYesReturn=()=>{
-
+    setToHome(true);
   }
 
   const handleOpen=()=>{
     setConfirmPop(true);
   }
 
-  const handleYes = async () => {
+  const handleYesReturn = async () => {
     sessionStorage.setItem('reservationNumber', reservationNumber);
-    setConfirmPop(false);
+    setReturnPop(false);
 
     const data={
       token: sessionStorage.getItem('token'),
       departureTicket: departureTicket
     }
-    console.log(data)
 
     await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', data).then(res=>setReturnFlights(res.data))
     .then(()=>setReturnFlightsPop(true))
@@ -103,44 +97,7 @@ export default function Plane(props) {
   }
 
   const handleConfirm = async () => {
-    if (JSON.parse(sessionStorage.getItem('reservationNumber'))) {
-      const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
-      const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
-      const firstSeatsAdults = firstSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
 
-      const economySeatsChildren = economySelected.filter(e => e.isChild === true).map(e => e.seatIndex)
-      const businessSeatsChildren = businessSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
-      const firstSeatsChildren = firstSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
-
-      const returnTicket = {
-        flight: flight._id,
-        from: flight.from,
-        to: flight.to,
-        departureTerminal: flight.departureTerminal,
-        arrivalTerminal: flight.arrivalTerminal,
-        departureDate: new Date(flight.departureDate),
-        arrivalDate: new Date(flight.arrivalDate),
-        economySeatsAdults: economySeatsAdults,
-        businessSeatsAdults: businessSeatsAdults,
-        firstSeatsAdults: firstSeatsAdults,
-        economySeatsChildren: economySeatsChildren,
-        businessSeatsChildren: businessSeatsChildren,
-        firstSeatsChildren: firstSeatsChildren,
-        totalPrice: totalPrice
-      }
-
-      const data = {
-        token: sessionStorage.getItem('token'),
-        returnTicket: returnTicket,
-        returnFlight: flight._id,
-        reservationNumber: sessionStorage.getItem('reservationNumber')
-      }
-      await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data).then(()=>{sessionStorage.removeItem('reservationNumber')})
-      .then(()=>{setToHome(true)})
-      .catch(err=>console.log(err))
-      //await axios call passing data, remove reservationNumber from sessionStorage,then route to home by setting toHome.
-    }
-    else {
       const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
       const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
       const firstSeatsAdults = firstSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -197,7 +154,6 @@ export default function Plane(props) {
       .catch(err=>console.log(err))
       //await axios call for first half of reservation with data then set reservationNumber, and axios call flightreserve
       //if yes sessionStorage the reservation number and view all return flights, else redirect to home
-    }
   }
 
   useEffect(() => {
@@ -243,6 +199,18 @@ export default function Plane(props) {
             No
           </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={returnFlightsPop}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Return Flights"}</DialogTitle>
+        <DialogContent>
+          {returnFlights.map(f=><FlightCard key={f._id} flight={f} return={true}/>)}
+        </DialogContent>
       </Dialog>
 
       {notFound && <Navigate to='/wrongURL' />}
@@ -375,7 +343,7 @@ export default function Plane(props) {
             color='primary'
             variant="contained"
             onClick={handleOpen}>
-            Confirm Reservation
+           Reserve Seat(s)
           </Button>
         </Grid>
       </Grid>
