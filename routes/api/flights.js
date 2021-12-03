@@ -54,7 +54,7 @@ router.post('/flightcreate/', verify, (req, res) => {
 });
 
 
-router.get('/getdeparture0retrun',verify, async (req,res)=>{
+router.post('/getdeparture0retrun', async (req,res)=>{
 const {departureTicket,returnTicket} = req.body
 
 if (departureTicket){
