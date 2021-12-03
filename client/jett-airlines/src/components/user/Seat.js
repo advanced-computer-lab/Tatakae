@@ -9,7 +9,7 @@ export default function Seat(props) {
   const [pressed, setPressed] = React.useState(0);
   let seatColor = { backgroundColor: props.colors.selectedColor };
   let className = "seat";
-  if (props.available) {
+  if (!props.available) {
     if (pressed === 0) {
       seatColor = { backgroundColor: props.colors.availableColor };
     }
@@ -19,7 +19,7 @@ export default function Seat(props) {
   }
 
   const handleClick = () => {
-    if (props.available) {
+    if (!props.available) {
       if (pressed !== 0) {
         //props.setSelectedCount(props.selectedCount - 1);
         props.setSelected(
