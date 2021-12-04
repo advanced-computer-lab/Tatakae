@@ -11,6 +11,7 @@ import {
     Paper,
     Button,
     Divider,
+    Typography,
 } from "@mui/material";
 import Seat from "./Seat";
 import "../../css/Plane.css";
@@ -30,6 +31,7 @@ import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFla
 import seatsBackground from '../../assets/seatsBackground.png';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import TicketDetails from "./TicketDetails";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -171,6 +173,9 @@ export default function ReturnPlane(props) {
                     aria-describedby="alert-dialog-slide-description"
                 >
                     <DialogTitle>{"Do you want to confirm your reservation?"}</DialogTitle>
+                    <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
+                    <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice}/>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={handleConfirm} size="small" color="primary">
                             Yes
@@ -209,28 +214,36 @@ export default function ReturnPlane(props) {
                                     class="seat"
                                     style={{ background: colors.availableColor }}
                                 ></Grid>
+                                <Typography>
                                 <small>Available</small>
+                                </Typography>
                             </ListItem>
                             <ListItem>
                                 <Grid
                                     class="seat selected"
                                     style={{ background: colors.selectedColor }}
                                 ></Grid>
+                                <Typography>
                                 <small> Adult Selected</small>
+                                </Typography>
                             </ListItem>
                             <ListItem>
                                 <Grid
                                     class="seat occupied"
                                     style={{ background: colors.selectedChildColor }}
                                 ></Grid>
+                                <Typography>
                                 <small>Child Selected</small>
+                                </Typography>
                             </ListItem>
                             <ListItem>
                                 <Grid
                                     class="seat occupied"
                                     style={{ background: colors.occupiedColor }}
                                 ></Grid>
+                                <Typography>
                                 <small>Occupied</small>
+                                </Typography>
                             </ListItem>
                         </List>
                     </Paper>
@@ -397,6 +410,7 @@ export default function ReturnPlane(props) {
                                 )
                             )}
                         </Paper>
+                        <Typography>
                         <p class="text">
                             You have selected{" "}
                             <span>
@@ -406,6 +420,7 @@ export default function ReturnPlane(props) {
                             </span>{" "}
                             seats for the total price of <span id="total">${totalPrice}</span>
                         </p>
+                        </Typography>
                         <Button
                             type="submit"
                             color="primary"

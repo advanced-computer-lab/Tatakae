@@ -1,4 +1,3 @@
-
 import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -53,16 +52,20 @@ export default function FlightDetails(props) {
         fullWidth
         container
       >
-        <Grid item style={{ fontSize: "3em", color: "white" }} xs>
+        <Grid item  xs>
+          <Typography style={{ fontSize: "3em", color: "white" }}>
           {flight.from}
+          </Typography>
         </Grid>
         <Grid style={{ fontSize: "3em" }} item xs={3}>
           <FlightIcon
             style={{ transform: "scale(1.5)  rotate(90deg)", color: "white" }}
           />
         </Grid>
-        <Grid style={{ fontSize: "3em", color: "white" }} item xs>
+        <Grid  item xs>
+          <Typography style={{ fontSize: "3em", color: "white" }}>
           {flight.to}
+          </Typography>
         </Grid>
       </Grid>
       <List
@@ -88,7 +91,11 @@ export default function FlightDetails(props) {
                   from
                 </Typography>
               </Grid>
-              <Grid>{flight.from}</Grid>
+              <Grid>
+                <Typography>
+                {flight.from}
+                </Typography>
+                </Grid>
             </Grid>
             <Grid item xs>
               <Grid container>
@@ -102,7 +109,11 @@ export default function FlightDetails(props) {
                     Departure Terminal
                   </Typography>
                 </Grid>
-                <Grid>{flight.departureTerminal}</Grid>
+                <Grid>
+                <Typography>
+                  {flight.departureTerminal}
+                  </Typography>
+                  </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -124,7 +135,11 @@ export default function FlightDetails(props) {
                   to
                 </Typography>
               </Grid>
-              <Grid>{flight.to}</Grid>
+              <Grid>
+              <Typography>
+                {flight.to}
+                </Typography>
+                </Grid>
             </Grid>
             <Grid item xs>
               <Grid container>
@@ -138,7 +153,11 @@ export default function FlightDetails(props) {
                     Arrival Terminal
                   </Typography>
                 </Grid>
-                <Grid>{flight.arrivalTerminal}</Grid>
+                <Grid>
+                <Typography>
+                  {flight.arrivalTerminal}
+                  </Typography>
+                  </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -161,6 +180,7 @@ export default function FlightDetails(props) {
                 </Typography>
               </Grid>
               <Grid>
+              <Typography>
                 {new Date(flight.departureDate).toLocaleString("en-US", {
                   weekday: "short",
                   year: "numeric",
@@ -174,6 +194,7 @@ export default function FlightDetails(props) {
                   minute: "numeric",
                   hour12: true,
                 })}
+                </Typography>
               </Grid>
             </Grid>
             <Grid item sx={{ flexGrow: 3 }} xs={1} />
@@ -190,6 +211,7 @@ export default function FlightDetails(props) {
                   </Typography>
                 </Grid>
                 <Grid>
+                <Typography>
                   {new Date(flight.arrivalDate).toLocaleString("en-US", {
                     weekday: "short",
                     year: "numeric",
@@ -203,6 +225,7 @@ export default function FlightDetails(props) {
                     minute: "numeric",
                     hour12: true,
                   })}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -240,6 +263,7 @@ export default function FlightDetails(props) {
               </Typography>
             </Grid>
             <Grid>
+            <Typography>
               {tab === "First" ? (
                 <p>{flight.availableFirstSeats}</p>
               ) : (
@@ -251,6 +275,7 @@ export default function FlightDetails(props) {
                   )}
                 </p>
               )}
+             </Typography>
             </Grid>
           </Grid>
         </ListItem>
@@ -267,10 +292,11 @@ export default function FlightDetails(props) {
                 display="block"
                 variant="caption"
               >
-                Baggage allowance 
+                Baggage allowance
               </Typography>
             </Grid>
             <Grid item xs>
+            <Typography>
               {tab === "First" ? (
                 <p>{flight.firstBaggage} KG</p>
               ) : (
@@ -281,13 +307,16 @@ export default function FlightDetails(props) {
                     <p>{flight.economyBaggage} KG</p>
                   )}
                 </p>
-              )} 
-               <Typography
+              )}
+              </Typography>
+              <Typography
                 color="text.secondary"
                 display="block"
                 variant="caption"
               >
-                <small>*in kilograms</small> 
+                <Typography>
+                <small>*in kilograms</small>
+                </Typography>
               </Typography>
             </Grid>
           </Grid>
@@ -310,6 +339,7 @@ export default function FlightDetails(props) {
                 </Typography>
               </Grid>
               <Grid>
+              <Typography>
                 {tab === "First" ? (
                   <p>${flight.firstPrice}</p>
                 ) : (
@@ -321,6 +351,7 @@ export default function FlightDetails(props) {
                     )}
                   </p>
                 )}
+              </Typography>
               </Grid>
             </Grid>
             <Grid item xs={6}>
@@ -336,6 +367,7 @@ export default function FlightDetails(props) {
                   </Typography>
                 </Grid>
                 <Grid>
+                <Typography>
                   {tab === "First" ? (
                     <p>${0.5 * flight.firstPrice}</p>
                   ) : (
@@ -347,16 +379,19 @@ export default function FlightDetails(props) {
                       )}
                     </p>
                   )}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Typography
-                color="text.secondary"
-                display="block"
-                variant="caption"
-              >
-                <small>*Childern Prices are 50% of the full price</small> 
-              </Typography>
+              color="text.secondary"
+              display="block"
+              variant="caption"
+            >
+             
+              <small>*Childern Prices are 50% of the full price</small>
+             
+            </Typography>
           </Grid>
         </ListItem>
       </List>
