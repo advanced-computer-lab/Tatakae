@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import FlightDetails from './FlightDetails';
 import Alert from '@mui/material/Alert';
+import TicketDetails from './TicketDetails';
 import { Navigate } from 'react-router-dom';
 import Plane from './Plane'
 
