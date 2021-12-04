@@ -19,24 +19,58 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export default function Reservation(props) {
+    const [deptTicket, setDeptTicket] = useState(null);
+    const [returnTicket, setReturnTicket] = useState(null);
+
     const [deptFlight, setDeptFlight] = useState(null);
     const [returnFlight, setReturnFlight] = useState(null);
+
+    const [deptFirst, setDeptFirst] = useState(null);
+    const [deptBusiness, setDeptBusiness] = useState(null);
+    const [deptEco, setDeptEco] = useState(null);
+
+    const [returnFirst, setReturnFirst] = useState(null);
+    const [returnBusiness, setReturnBusiness] = useState(null);
+    const [returnEco, setReturnEco] = useState(null);
+
     const [returnFlights, setReturnFlights] = useState([]);
     const [returnFlightsPop, setReturnFlightsPop] = useState(false);
     const [noReturns, setNoReturns] = useState(false);
     const [returnPop, setReturnPop] = useState(false);
     const [cancelPop, setCancelPop] = useState(false);
 
+    const getSeats = (seats, n) => {
+        var code = 65;
+        var returnSeats = [];
+        for(var i = 0; i < seats.length ; i++){
+            var mod = i % 8;
+            returnSeats.push({seatNumber: String.fromCharCode(code + mod)+(Math.floor(i/8)+n+1)})
+        }
+    }
+
     useEffect(() => {
         if (props.reservation.departureFlight) {
             axios.get(`http://localhost:8082/api/flights/flightget/${props.reservation.departureFlight}`)
+                .then((res) => setDeptTicket(res.data)).catch((err) => console.log(err));
+            axios.get(`http://localhost:8082/api/flights/flightget/${deptTicket.flight}`)
                 .then((res) => setDeptFlight(res.data)).catch((err) => console.log(err))
+
+            setDeptFirst(getSeats([].concat(deptTicket.firstSeatsChildren).concat(deptTicket.firstSeatsAdults)), Math.floor([].concat(deptFlight.firstSeats).length) + 1);
+            setDeptBusiness(getSeats([].concat(deptTicket.businessSeatsChildren).concat(deptTicket.businessSeatsAdults)), Math.floor([].concat(deptFlight.businessSeats).length) + 1);
+            setDeptEco(getSeats([].concat(deptTicket.economySeatsChildren).concat(deptTicket.economySeatsAdults)), Math.floor([].concat(deptFlight.economySeats).length) + 1);
         }
 
         if (props.reservation.returnFlight) {
             axios.get(`http://localhost:8082/api/flights/flightget/${props.reservation.returnFlight}`)
+                .then((res) => setReturnTicket(res.data)).catch((err) => console.log(err))
+            axios.get(`http://localhost:8082/api/flights/flightget/${returnTicket.flight}`)
                 .then((res) => setReturnFlight(res.data)).catch((err) => console.log(err))
+            
+            setReturnFirst(getSeats([].concat(returnTicket.firstSeatsChildren).concat(returnTicket.firstSeatsAdults)), Math.floor([].concat(returnFlight.firstSeats).length) + 1);
+            setReturnBusiness(getSeats([].concat(returnTicket.businessSeatsChildren).concat(returnTicket.businessSeatsAdults)), Math.floor([].concat(returnFlight.businessSeats).length) +1);
+            setReturnEco(getSeats([].concat(returnTicket.economySeatsChildren).concat(returnTicket.economySeatsAdults)), Math.floor([].concat(returnFlight.economySeats).length) + 1);
         }
+        
     }, [])
 
     const handleonClick = () => {
@@ -68,7 +102,6 @@ export default function Reservation(props) {
             {deptFlight && (<TicketCard  flight={deptFlight} />)}
             {returnFlight && (<TicketCard flight={returnFlight} />)}
             <Button  onClick={handleCancelClick}><Typography style={{color:"#ffffff"}}>Cancel Reservation</Typography></Button>
-
             <Dialog
                 open={cancelPop}
                 TransitionComponent={Transition}
