@@ -32,7 +32,7 @@ router.patch('/reservationupdate/:id', (req, res) => {
 ////////   THE USEFUL APIs
 
 
-router.get('/getuserreservations/',verify, (req, res) => {
+router.post('/getuserreservations/',verify, (req, res) => {
 
   const {userId , admin} = req 
   if (admin) return res.status(401).send("Unauthorized Action")

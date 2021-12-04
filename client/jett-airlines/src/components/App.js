@@ -8,6 +8,7 @@ import MainPage from './MainPage';
 import EditProfile from './user/EditProfile';
 import Plane from './user/Plane'
 import ReturnPlane from './user/ReturnPlane'
+import TicketBoard from './user/TicketBoard'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route exact path='/EditProfile' element={<EditProfile/>} />
           <Route exact path='/Plane/:id' element={<Plane/>} />
           <Route exact path='/ReturnPlane/:id' element={<ReturnPlane/>} />
+          <Route exact path='/TicketBoard' element={<TicketBoard/>} />
           <Route path='/*' element={<NotFound/>} />
         </Routes>
     </div>
