@@ -241,32 +241,32 @@ export default function TicketDetails(props) {
             <Table>
               <TableHead>
                 <TableRow>
-                  {props.firstSelected.length !== 0 && (
+                  {props.firstSelected && props.firstSelected.length !== 0   && (
                     <TableCell>First</TableCell>
                   )}
-                  {props.businessSelected.length !== 0 && (
+                  {props.businessSelected && props.businessSelected.length !== 0 && (
                     <TableCell>Business</TableCell>
                   )}
-                  {props.economySelected.length !== 0 && (
+                  {props.economySelected && props.economySelected.length !== 0 && (
                     <TableCell>Economy</TableCell>
                   )}
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  {props.firstSelected.length !== 0 && (
+                  {props.firstSelected && props.firstSelected.length !== 0  && (
                     <TableCell>
                       {props.firstSelected.map((seat) => (
                         <Typography> {seat.seatNumber},  </Typography>
                       ))}
                     </TableCell>
                   )}
-                  {props.businessSelected.length !== 0 && (
+                  {props.businessSelected && props.businessSelected.length !== 0 && (
                     <TableCell> {props.businessSelected.map((seat) => (
                         <Typography> {seat.seatNumber},  </Typography>
                       ))}</TableCell>
                   )}
-                  {props.economySelected.length !== 0 && (
+                  {props.economySelected && props.economySelected.length !== 0 && (
                     <TableCell> {props.economySelected.map((seat) => (
                         <Typography> {seat.seatNumber},  </Typography>
                       ))}</TableCell>

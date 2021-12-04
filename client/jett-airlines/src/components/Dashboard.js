@@ -140,10 +140,17 @@ export default function Dashboard() {
       alignitems: 'left'
 
     },
-    logoutbtnstyle: {
+    logoutbtnuserstyle: {
       height: '40px',
       width: 'auto',
       margin: '-130px 0px 0px 25vw',
+      alignitems: 'center'
+    },
+
+    logoutbtnadminstyle: {
+      height: '40px',
+      width: 'auto',
+      margin: '-130px 0px 0px 1100px',
       alignitems: 'center'
     },
     srchbtnstyle: {
@@ -363,12 +370,22 @@ export default function Dashboard() {
               href='/TicketBoard'>View Reservations</Button>
               </>)}
 
-          <Button
-            style={styles.logoutbtnstyle}
+              {!user.admin ? 
+          (<Button
+            style={styles.logoutbtnuserstyle}
             startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
             href='/logIn'>
             <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
-          </Button>
+          </Button>) 
+          :
+           (<Button
+            style={styles.logoutbtnadminstyle}
+            startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
+            href='/logIn'>
+            <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
+          </Button>)
+          
+          }
         </Grid>
 
       </div>
