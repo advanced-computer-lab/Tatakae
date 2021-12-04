@@ -140,10 +140,18 @@ export default function Dashboard() {
       alignitems: 'left'
 
     },
-    logoutbtnstyle: {
+
+    logoutbtnuserstyle: {
       height: '40px',
       width: 'auto',
       margin: '-130px 0px 0px 25vw',
+      alignitems: 'center'
+    },
+
+    logoutbtnadminstyle: {
+      height: '40px',
+      width: 'auto',
+      margin: '-130px 0px 0px 1100px',
       alignitems: 'center'
     },
     srchbtnstyle: {
@@ -349,26 +357,35 @@ export default function Dashboard() {
             href='/CreateFlight'>Create Flight</Button>)
             :
             (<>
-            <Button
-              color='primary'
-              variant="contained"
-              style={styles.btnstyle}
-              startIcon={<EditIcon />}
-              href='/EditProfile'>Edit Profile</Button>
               <Button
-              color='primary'
-              variant="contained"
-              style={styles.btnstyle}
-              startIcon={<MenuBookIcon />}
-              href='/TicketBoard'>View Reservations</Button>
-              </>)}
-
-          <Button
-            style={styles.logoutbtnstyle}
+                color='primary'
+                variant="contained"
+                style={styles.btnstyle}
+                startIcon={<EditIcon />}
+                href='/EditProfile'>Edit Profile</Button>
+              <Button
+                color='primary'
+                variant="contained"
+                style={styles.btnstyle}
+                startIcon={<MenuBookIcon />}
+                href='/TicketBoard'>View Reservations</Button>
+            </>)}
+          {!user.admin ? 
+          (<Button
+            style={styles.logoutbtnuserstyle}
             startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
             href='/logIn'>
             <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
-          </Button>
+          </Button>) 
+          :
+           (<Button
+            style={styles.logoutbtnadminstyle}
+            startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
+            href='/logIn'>
+            <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
+          </Button>)
+          }
+
         </Grid>
 
       </div>
@@ -428,27 +445,27 @@ export default function Dashboard() {
               </FormControl>
 
               {!user.admin && cabinClassSearch}
-             
-              <LocalizationProvider  dateAdapter={AdapterDateFns}>
-              <Grid sx={{ m: 1, Width: 90 }}>
-                <DateTimePicker
-                  label="Departure Date"
-                  value={deptDateQuery}
-                  onChange={handleChangeDeptDate}
-                  
-                  renderInput={(params) => <TextField {...params} />}
-                />
+
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Grid sx={{ m: 1, Width: 90 }}>
+                  <DateTimePicker
+                    label="Departure Date"
+                    value={deptDateQuery}
+                    onChange={handleChangeDeptDate}
+
+                    renderInput={(params) => <TextField {...params} />}
+                  />
                 </Grid>
               </LocalizationProvider>
-              
+
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Grid sx={{ m: 1, Width: 90 }}>
-                <DateTimePicker
-                  label="Arrival Date"
-                  value={arrDateQuery}
-                  onChange={handleChangeArrDate}
-                  renderInput={(params) => <TextField {...params} />}
-                />
+                <Grid sx={{ m: 1, Width: 90 }}>
+                  <DateTimePicker
+                    label="Arrival Date"
+                    value={arrDateQuery}
+                    onChange={handleChangeArrDate}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
                 </Grid>
               </LocalizationProvider>
             </Grid>
