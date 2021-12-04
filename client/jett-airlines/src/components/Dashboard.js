@@ -143,7 +143,7 @@ export default function Dashboard() {
     logoutbtnstyle: {
       height: '40px',
       width: 'auto',
-      margin: '-130px 0px 0px 40vw',
+      margin: '-130px 0px 0px 25vw',
       alignitems: 'center'
     },
     srchbtnstyle: {
