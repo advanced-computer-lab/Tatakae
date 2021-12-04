@@ -1,13 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import FilledInput from '@mui/material/FilledInput';
+import OutlinedInput from '@mui/material/OutlinedInput'
 import Button from '@mui/material/Button';
+import { Grid,Typography,Paper, AppBar, Toolbar,Container, Box } from '@mui/material';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import editbackground from '../../assets/editbg.png';
+import { margin } from '@mui/system';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+
+const styles = {
+    background: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        justifyContent:'center',
+        backgroundImage: `url(${editbackground})`,
+        backgroundRepeat: 'no-repeat'
+      }
+    };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +42,8 @@ export default class EditProfile extends Component {
         openSuccess:false,
         openError: false
     }
+
+    
    
 
 
@@ -33,19 +51,19 @@ export default class EditProfile extends Component {
         this.setState({ [e.target.name]: e.target.value });
     };
 
-    handleSubmit = e => {
+    handleSubmit = () => {
         const data = {
+            token: sessionStorage.getItem('token'),
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
             homeAddress: this.state.homeAddress,
             passportNumber: this.state.passportNumber,
-            token: sessionStorage.getItem('token')
         }
         if (this.state.password !== '') {
             data.password = this.state.password
         }
-        //axios
+        
         axios.patch('http://localhost:8082/api/users/userupdate/', data)
             .then(res => {
                 this.setState({
@@ -56,9 +74,7 @@ export default class EditProfile extends Component {
                 sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
             })
             .catch(err => {
-                this.setState({
-                    openError: true 
-                })
+                console.log(err)
             })
 
     }
@@ -67,10 +83,29 @@ export default class EditProfile extends Component {
             openSuccess: false 
         })      }
 
+       
     render() {
-        return (
-            <div className="center">
-                <h1>Edit Profile</h1>
+        return (<div>
+            <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+        <AccountCircleIcon sx={{ fontSize: 40 }} backgroundColor="black"/> 
+          <Typography  style={{ margin: "0 0 0 5px" }} variant="h4" color="inherit" noWrap>
+            Profile
+          </Typography>
+        </Toolbar>
+      </AppBar>
+           <Grid style={styles.background}>
+               
+           <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+                
                 <Dialog
                     open={this.state.openSuccess}
                     TransitionComponent={Transition}
@@ -90,69 +125,87 @@ export default class EditProfile extends Component {
                     </Alert>
 
                 </Dialog>
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>First Name</InputLabel>
-                    <FilledInput
+
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                <Typography component="h1" variant="h4" align="center">
+           Edit Profile
+          </Typography>
+          <br/>
+          <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>First Name</InputLabel>
+                    <OutlinedInput sx={{height:40}}
                         name='firstName'
                         value={this.state.firstName}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Last Name</InputLabel>
-                    <FilledInput
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>Last Name</InputLabel>
+                    <OutlinedInput sx={{height:40}}
                         name='lastName'
                         value={this.state.lastName}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-                <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Passport Number</InputLabel>
-                    <FilledInput
+                </Grid>
+                <Grid item xs={12}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>Passport Number</InputLabel>
+                    <OutlinedInput sx={{height:40}}
                         name='passportNumber'
                         value={this.state.passportNumber}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-                <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Email</InputLabel>
-                    <FilledInput
+                </Grid>
+                <Grid item xs={12}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>Email</InputLabel>
+                    <OutlinedInput sx={{height:40}}
                         name='email'
                         value={this.state.email}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-                <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>Home Address</InputLabel>
-                    <FilledInput
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>Home Address</InputLabel>
+                    <OutlinedInput sx={{height:40}}
                         name='homeAddress'
                         value={this.state.homeAddress}
                         onChange={this.handleChange}
                     />
                 </FormControl>
-                <br />
-                <FormControl sx={{ m: 1 }} variant="filled">
-                    <InputLabel>New Password</InputLabel>
-                    <FilledInput
+                </Grid>
+                <Grid item xs={12}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
+                    <InputLabel style={{margin:"-7px 0 0 -7px"}}>New Password</InputLabel>
+                    <OutlinedInput 
+                    sx={{height:40}}
                         name='password'
                         value={this.state.password}
                         onChange={this.handleChange}
                     />
                 </FormControl>
+                </Grid>
+                </Grid>
         
-                <br />
-                <br />
                 {this.state.openError && <Alert severity='error' >Email already exists. Try Again.</Alert>}
-                <Button variant="contained" onClick={this.handleSubmit}>Update Profile</Button>
-                <br />
-                <br />
-                <Button variant="contained" href='/home'>Back to Home</Button>
-            </div>
-
+                <Grid item style={{textAlign: "center"}}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="contained" onClick={this.handleSubmit} sx={{ mt: 3, ml: 1 }}>Update Profile</Button>
+                <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
+                </Box>
+                </Grid>
+                </Paper>
+                </Container>
+    </Grid>
+    </div>
         )
     }
 }

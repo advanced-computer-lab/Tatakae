@@ -204,7 +204,7 @@ export default function ReturnPlane(props) {
                 </Dialog>
 
                 {notFound && <Navigate to='/wrongURL' />}
-                {(toHome || toReservations) && <Navigate to='/home' />}
+                {(toHome || toReservations) && <Navigate to='/TicketBoard' />}
 
                 <Grid class="plane-container">
                     <Paper sx={{ borderRadius: "20px" }} elevation={5}>
@@ -425,7 +425,8 @@ export default function ReturnPlane(props) {
                             type="submit"
                             color="primary"
                             variant="contained"
-                            onClick={handleOpen}>
+                            onClick={handleOpen}
+                            disabled={(businessSelected.length + economySelected.length + firstSelected.length)===0}>
                             Reserve Seat(s)
                         </Button>
                     </Grid>

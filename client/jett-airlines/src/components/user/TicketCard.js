@@ -51,13 +51,13 @@ export default function TicketCard(props) {
                 container
             >
             <Grid item style={{ fontSize: "3em" }} xs>
-                <Typography style ={styles.textStyle}>USA</Typography>
+                <Typography style ={styles.textStyle}>{props.reservation.departureTicket.from}</Typography>
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs={3}>
                 <FlightIcon style={{ color:"#d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs>
-            <Typography style ={styles.textStyle}>EGY</Typography>
+            <Typography style ={styles.textStyle}>{props.reservation.departureTicket.to}</Typography>
             </Grid>
             
             
@@ -85,7 +85,7 @@ export default function TicketCard(props) {
                   FLIGHT
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>819</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{props.reservation.reservationNumber}</Typography></Grid>
             </Grid>
             <Grid item xs>
               <Grid container>

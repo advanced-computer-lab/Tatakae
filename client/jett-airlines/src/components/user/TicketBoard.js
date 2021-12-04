@@ -1,29 +1,86 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import TicketCard from './TicketCard';
+import Reservation from './Reservation';
+import Grid from '@mui/material/Grid';
+import axios from 'axios'
+import {Paper} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import Button from '@mui/material/Button';
+
+
+const styles = {
+    paperStyle1: {
+        padding: 20,
+        conetentFit: 'contain',
+        minHeight: '100vh',
+        maxHeight: 'auto',
+        width: '90vw',
+        margin: "-23vh 0 0 3.75vw"
+    },
+
+    paperStyle2: {
+        padding: 20,
+        conetentFit: 'contain',
+        minHeight: '100vh',
+        maxHeight: 'auto',
+        width: '90vw',
+        margin: "-9vh 0 0 3.75vw"
+    }
+    ,
+    btnstyle: {
+        height: '40px',
+        width: '220px',
+        margin: '-130px 0px 0px 20px',
+        alignitems: 'center'
+      },
+};
 
 export default function TicketBoard() {
 
     const [reservations, setReservations] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [noReservations, setNoReservations] = useState(false);
+
+    const data = {
+        token: sessionStorage.getItem('token')
+    }
 
     useEffect(() => {
-        axios.get('http://localhost:8082/api/users/getUserReservation').then(res => {
-            setReservations(res.data)
+
+        axios.post('http://localhost:8082/api/reservations/getuserreservations/', data).then(res => {
+            if(res.data.length !== 0){
+                setReservations(res.data);
+                setNoReservations(false)
+            }
+            else{
+                setNoReservations(true)
+            }
         })
     }, [refresh])
+
+
     return (
         <div>
-            <br/>
-            <br/>
-            <div>
+                <Button
+            color='primary'
+            variant="contained"
+            startIcon={<HomeIcon />}
+            href='/home'>Home</Button>
+
+
+          
+                {noReservations? (<h1>maho mafeesh reservation gy tshoof ehhhhhhh</h1>) 
+                :
+                (                <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
                 {reservations.map(reservation => (
-                    <Grid key={reservation._id} item xs={4} >
-                        <TicketCard reservation={reservation} refresh={refresh} setRefresh={setRefresh} />
+                    <Grid key={reservation.reservationNumber} item xs={4} >
+                        <Reservation reservation={reservation} refresh={refresh} setRefresh={setRefresh} />
                     </Grid>
                 ))
                 }
-            </div>
+            </Grid>)}
 
+        
         </div>
     )
 }

@@ -25,6 +25,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import FlightIcon from '@mui/icons-material/Flight';
 import EditIcon from '@mui/icons-material/Edit';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import LogoutIcon from '@mui/icons-material/Logout';
 import bg from '../assets/travelwallpaper-1.png'
 import logo from '../assets/Logo.png'
@@ -142,7 +143,7 @@ export default function Dashboard() {
     logoutbtnstyle: {
       height: '40px',
       width: 'auto',
-      margin: '-130px 0px 0px 40vw',
+      margin: '-130px 0px 0px 25vw',
       alignitems: 'center'
     },
     srchbtnstyle: {
@@ -347,12 +348,20 @@ export default function Dashboard() {
             startIcon={<FlightIcon />}
             href='/CreateFlight'>Create Flight</Button>)
             :
-            (<Button
+            (<>
+            <Button
               color='primary'
               variant="contained"
               style={styles.btnstyle}
               startIcon={<EditIcon />}
-              href='/EditProfile'>Edit Profile</Button>)}
+              href='/EditProfile'>Edit Profile</Button>
+              <Button
+              color='primary'
+              variant="contained"
+              style={styles.btnstyle}
+              startIcon={<MenuBookIcon />}
+              href='/TicketBoard'>View Reservations</Button>
+              </>)}
 
           <Button
             style={styles.logoutbtnstyle}
