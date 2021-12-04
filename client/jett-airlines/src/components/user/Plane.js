@@ -13,6 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import Seat from "./Seat";
+import Alert from '@mui/material/Alert';
 import "../../css/Plane.css";
 import { useEffect } from "react";
 import { useParams, Link } from 'react-router-dom';
@@ -58,6 +59,7 @@ export default function Plane(props) {
   const [departureTicket, setDepartureTicket] = React.useState(null);
   const [returnFlights, setReturnFlights] = React.useState([]);
   const [returnFlightsPop, setReturnFlightsPop] = React.useState(false);
+  const [noReturns, setNoReturns]= React.useState(false);
 
   let code = 65;
 
@@ -99,7 +101,7 @@ export default function Plane(props) {
     }
 
     await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', data).then(res=>setReturnFlights(res.data))
-    .then(()=>setReturnFlightsPop(true))
+    .then(()=>returnFlights? setNoReturns(true) : setReturnFlightsPop(true))
     .catch(err=>console.log(err))
     //await axios call to get return flights by passing {departureTicket:departureTicket} and setting returnFlights.
   }
@@ -203,6 +205,23 @@ export default function Plane(props) {
             No
           </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={noReturns}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <Alert severity="info" variant="filled"
+            action={
+              <Button onClick={handleNoReturn} color="inherit" size="small" variant="outlined">
+                Back to Home
+              </Button>
+            }
+          >
+            Sorry this flight has no returns.
+          </Alert>
       </Dialog>
 
       <Dialog
@@ -446,7 +465,8 @@ export default function Plane(props) {
             type="submit"
             color="primary"
             variant="contained"
-            onClick={handleOpen}>
+            onClick={handleOpen}
+            disabled={(businessSelected.length + economySelected.length + firstSelected.length)===0}>
            Reserve Seat(s)
           </Button>
         </Grid>
