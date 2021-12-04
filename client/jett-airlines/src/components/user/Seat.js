@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import "../../css/Plane.css";
 import { useEffect } from "react";
 
@@ -81,7 +81,9 @@ export default function Seat(props) {
 
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
+      <Typography>
       <span style={{color: "white", textAlign: "center"}}>{props.seatNumber}</span>
+      </Typography>
     </Box>
   );
 }
