@@ -1,6 +1,7 @@
 import { React, useEffect, useState, forwardRef } from 'react'
 import FlightDetails from './FlightDetails';
 import FlightCard from './FlightCard';
+import TicketCard from './TicketCard';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -10,6 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
+import { Typography,Toolbar,AppBar } from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -92,11 +95,13 @@ export default function Reservation(props) {
     }
 
     return (
-        <Grid>
-            {deptTicket && (<FlightCard flight={deptTicket} />)}
-            {returnTicket && (<FlightCard flight={returnTicket} />)}
-            <Button onClick={handleCancelClick}>Cancel reservation</Button>
+        <Grid sx={{width:"410px",backgroundColor: "#0071bc" }}>
+            <Typography style={{color:"#ffffff" ,fontSize:"2em"}}>Reservation 1</Typography>
+        <Grid sx={{margin:"0 0 0 30px"}}>
 
+            {deptFlight && (<TicketCard  flight={deptFlight} />)}
+            {returnFlight && (<TicketCard flight={returnFlight} />)}
+            <Button  onClick={handleCancelClick}><Typography style={{color:"#ffffff"}}>Cancel Reservation</Typography></Button>
             <Dialog
                 open={cancelPop}
                 TransitionComponent={Transition}
@@ -164,7 +169,7 @@ export default function Reservation(props) {
             </Dialog> */}
 
         </Grid>
-
-
+         </Grid>
+         
     )
 }
