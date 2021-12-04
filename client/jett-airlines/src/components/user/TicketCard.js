@@ -2,6 +2,7 @@ import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
 import FlightDetails from './FlightDetails';
 import qrcode from "../../assets/qrcode.png";
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import bg from '../../assets/travelwallpaper-1.png'
 import {
     Card,
@@ -27,6 +28,7 @@ import {
 
 
 } from "@mui/material";
+import TicketDetails from "./TicketDetails";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -36,6 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function TicketCard(props) {
 
+  const user = JSON.parse(sessionStorage.getItem('signedUser'));
   const [openDetails, setOpenDetails] = React.useState(false);
 
 
@@ -63,6 +66,7 @@ export default function TicketCard(props) {
 
     return (
         <div className='center'>
+          
         <Paper  elevation={20} style={{ alignitems: "right", margin: "0 0 0 0", backgroundColor: "#ffffff", height: "400px", width: "350px" }} container>
             <Grid
                 align="center"
@@ -112,7 +116,7 @@ export default function TicketCard(props) {
                   FLIGHT
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>983</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{props.flight.flightNumber}</Typography></Grid>
             </Grid>
             <Grid item xs>
               <Grid container>
@@ -128,7 +132,7 @@ export default function TicketCard(props) {
                     DEPARTURE TERMINAL
                   </Typography>
                 </Grid>
-                <Grid> <Typography style={{fontSize: '0.9em'}}>2</Typography></Grid>
+                <Grid> <Typography style={{fontSize: '0.9em'}}>{props.flight.departureTerminal}</Typography></Grid>
               </Grid>
             </Grid>
            
@@ -149,7 +153,7 @@ export default function TicketCard(props) {
                   PASSENGER
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>Mostafa Sharaf</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{user.firstName} {user.lastName}</Typography></Grid>
             </Grid>
             </Grid>
         </ListItem>
@@ -168,7 +172,12 @@ export default function TicketCard(props) {
                   DEPARTURE DATE
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>12/06/2021</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{new Date(props.flight.departureDate).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</Typography></Grid>
             </Grid>
             </Grid>
             
@@ -188,7 +197,12 @@ export default function TicketCard(props) {
                   ARRIVAL DATE
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>12/06/2021</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{new Date(props.flight.arrivalDate).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</Typography></Grid>
             </Grid>
             </Grid>
             
@@ -219,7 +233,7 @@ export default function TicketCard(props) {
       </Typography></DialogTitle></div>
   */}
         <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
-          <FlightDetails  flight={props.flight} />
+        <TicketDetails flight={props.flight} firstSelected={props.firstSelected} businessSelected={props.businessSelected} economySelected={props.economySelected} totalPrice={props.totalPrice}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClickCloseDetails}>Close</Button>

@@ -269,7 +269,7 @@ export default function Plane(props) {
       </Dialog>
 
       {notFound && <Navigate to='/wrongURL' />}
-      {toHome && <Navigate to='/home' />}
+      {toHome && <Navigate to='/TicketBoard' />}
 
       <Grid class="plane-container">
         <Paper sx={{ borderRadius: "20px"}} elevation={5}>
