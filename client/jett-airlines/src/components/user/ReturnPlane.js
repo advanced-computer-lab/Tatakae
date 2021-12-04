@@ -410,7 +410,8 @@ export default function ReturnPlane(props) {
                             type="submit"
                             color="primary"
                             variant="contained"
-                            onClick={handleOpen}>
+                            onClick={handleOpen}
+                            disabled={(businessSelected.length + economySelected.length + firstSelected.length)===0}>
                             Reserve Seat(s)
                         </Button>
                     </Grid>
