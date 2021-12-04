@@ -32,6 +32,7 @@ import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFla
 import seatsBackground from '../../assets/seatsBackground.png';
 import TicketDetails from "./TicketDetails";
 import FlightDetails from "./FlightDetails";
+import { set } from "mongoose";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -104,8 +105,15 @@ export default function Plane(props) {
       departureTicket: departureTicket
     }
 
-    await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', data).then(res=>setReturnFlights(res.data))
-    .then(()=>returnFlights? setNoReturns(true) : setReturnFlightsPop(true))
+    await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', data).then(res=>{
+      if(res.data.length !== 0){
+       setReturnFlights(res.data)
+       setReturnFlightsPop(true)
+      }
+      else{
+        setNoReturns(true)
+      }
+    })
     .catch(err=>console.log(err))
     //await axios call to get return flights by passing {departureTicket:departureTicket} and setting returnFlights.
   }
@@ -338,7 +346,7 @@ export default function Plane(props) {
           </RadioGroup>
         </FormControl>
               </div>
-            <List fullWidth>
+            <List fullwidth>
               <Divider />
             </List>
             <Grid
@@ -377,7 +385,7 @@ export default function Plane(props) {
                 ))}
               </Grid>
             ))}
-            <List fullWidth>
+            <List fullwidth>
               <Divider />
             </List>
             <Grid
@@ -422,7 +430,7 @@ export default function Plane(props) {
                 </Grid>
               )
             )}
-            <List fullWidth>
+            <List fullwidth>
               <Divider />
             </List>
             <Grid

@@ -204,7 +204,7 @@ export default function ReturnPlane(props) {
                 </Dialog>
 
                 {notFound && <Navigate to='/wrongURL' />}
-                {(toHome || toReservations) && <Navigate to='/home' />}
+                {(toHome || toReservations) && <Navigate to='/TicketBoard' />}
 
                 <Grid class="plane-container">
                     <Paper sx={{ borderRadius: "20px" }} elevation={5}>

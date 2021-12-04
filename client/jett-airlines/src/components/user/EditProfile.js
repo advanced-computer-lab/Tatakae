@@ -51,19 +51,19 @@ export default class EditProfile extends Component {
         this.setState({ [e.target.name]: e.target.value });
     };
 
-    handleSubmit = e => {
+    handleSubmit = () => {
         const data = {
+            token: sessionStorage.getItem('token'),
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
             homeAddress: this.state.homeAddress,
             passportNumber: this.state.passportNumber,
-            token: sessionStorage.getItem('token')
         }
         if (this.state.password !== '') {
             data.password = this.state.password
         }
-        //axios
+        
         axios.patch('http://localhost:8082/api/users/userupdate/', data)
             .then(res => {
                 this.setState({
@@ -74,9 +74,7 @@ export default class EditProfile extends Component {
                 sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
             })
             .catch(err => {
-                this.setState({
-                    openError: true 
-                })
+                console.log(err)
             })
 
     }
