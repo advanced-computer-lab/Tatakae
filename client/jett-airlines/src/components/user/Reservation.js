@@ -13,6 +13,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import { Typography,Toolbar,AppBar } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import blueTexture from '../../assets/blueTexture.png'
+import { Box } from '@mui/system';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -44,6 +46,14 @@ export default function Reservation(props) {
 
     }
 
+    const styles = {
+        background: {
+            width: '410px',
+            backgroundImage: `url(${blueTexture})`,
+            borderRadius: '16px'
+          }
+        };
+
     const handleCancelClick = () => {
         setCancelPop(true);
     }
@@ -61,8 +71,9 @@ export default function Reservation(props) {
     }
 
     return (
-        <Grid sx={{width:"410px",backgroundColor: "#0071bc" }}>
-            <Typography style={{color:"#ffffff" ,fontSize:"2em"}}>Reservation 1</Typography>
+        <Box style={styles.background}>
+            <Grid sx={{ display:"flex",
+    justifyContent:"center"}}><Typography style={{color:"#ffffff" ,fontSize:"2em", ju:"center"}}>Reservation 1</Typography></Grid>
         <Grid sx={{margin:"0 0 0 30px"}}>
 
             {deptFlight && (<TicketCard  flight={deptFlight} />)}
@@ -136,7 +147,7 @@ export default function Reservation(props) {
             </Dialog> */}
 
         </Grid>
-         </Grid>
+         </Box>
          
     )
 }

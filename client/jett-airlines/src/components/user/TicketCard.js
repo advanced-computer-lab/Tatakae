@@ -2,6 +2,7 @@ import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
 import FlightDetails from './FlightDetails';
 import qrcode from "../../assets/qrcode.png";
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import bg from '../../assets/travelwallpaper-1.png'
 import {
     Card,

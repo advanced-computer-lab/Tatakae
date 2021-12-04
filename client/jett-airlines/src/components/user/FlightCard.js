@@ -92,6 +92,7 @@ export default function FlightCard(props) {
       </Typography></DialogTitle></div>
   */}
         <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
+          
           <FlightDetails  flight={props.flight} />
         </DialogContent>
         <DialogActions>
