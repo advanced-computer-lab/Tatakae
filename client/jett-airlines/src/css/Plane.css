@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap%22");
+
+.plane-container {
+  margin: 20px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+
+.container {
+  perspective: 1000px;
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+
+.seat {
+  height: 35px;
+  width: 35px;
+  margin: 5px;
+  font-size: 15px;
+  align-items: center;
+  text-align: center;
+  padding-top: 6px;
+  justify-content: center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-sizing: border-box;
+}
+
+.seat:nth-of-type(2) {
+  margin-right: 18px;
+  box-sizing: border-box;
+}
+
+.seat:nth-last-of-type(2) {
+  margin-left: 18px;
+  box-sizing: border-box;
+}
+
+.seat:not(.occupied):hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  box-sizing: border-box;
+}
+
+.showcase .seat:not(.occupied):hover {
+  cursor: default;
+  transform: scale(1);
+  box-sizing: border-box;
+}
+
+.showcase {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+
+.showcase li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  box-sizing: border-box;
+}
+
+.showcase li small {
+  margin-left: 2px;
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+
+p.text {
+  margin: 40px 0;
+  box-sizing: border-box;
+}
+
+p.text span {
+  color: #0081cb;
+  font-weight: 600;
+  box-sizing: content-box;
+  box-sizing: border-box;
+
+}
+
