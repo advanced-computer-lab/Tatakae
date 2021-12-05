@@ -67,13 +67,12 @@ export default function TicketCard(props) {
     return (
         <div className='center'>
           
-        <Paper  elevation={20} style={{ alignitems: "right", margin: "0 0 0 0", backgroundColor: "#ffffff", height: "400px", width: "350px" }} container>
+        <Paper  elevation={20} style={{ alignitems: "right", margin: "0 0 0 0", backgroundColor: "#ffffff", width: "350px" }} container>
             <Grid
                 align="center"
                 style={{
                     margin:"0 0 0 0 ",
                     width: "350px",
-                    height: "400px",
                     alignItems: "center",
                     padding:"0"
                 }}
@@ -82,13 +81,13 @@ export default function TicketCard(props) {
                 container
             >
             <Grid item style={{ fontSize: "3em" }} xs>
-                <Typography style ={styles.textStyle}>USA</Typography>
+                <Typography style ={styles.textStyle}>{props.flight.from}</Typography>
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs={3}>
                 <FlightIcon style={{ color:"#d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs>
-            <Typography style ={styles.textStyle}>EGY</Typography>
+            <Typography style ={styles.textStyle}>{props.flight.to}</Typography>
             </Grid>
             
             
@@ -211,7 +210,7 @@ export default function TicketCard(props) {
       <Grid item xs>
                 <img src={qrcode} alt='' style={{height: '200px',margin:"-200px 0 0 150px"
       }} /></Grid>
-      <Button onClick={handleClickOpenDetails} sx={{margin:"0 0 0 15px"}} size="small" color="primary">
+      <Button onClick={handleClickOpenDetails} sx={{margin:"0 0 10px 15px"}} size="small" color="primary">
             View Details
           </Button>
       </Grid>

@@ -16,7 +16,10 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import emailjs from "emailjs-com";
 import blueTexture from "../../assets/blueTexture.png";
 import { Box } from "@mui/system";
-emailjs.init(process.env.EMAIL_USER_ID);
+import Config from "../../config.json";
+emailjs.init(Config.EMAIL_USER_ID);
+
+
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -144,6 +147,7 @@ export default function Reservation(props) {
   };
 
   const handleYesCancel = () => {
+
     axios
       .delete(
         `http://localhost:8082/api/reservations/deletefullreservation/${props.reservation._id}`,
@@ -152,6 +156,7 @@ export default function Reservation(props) {
       .then(() => {
         setCancelPop(false);
         props.setRefresh(!props.refresh);
+        
       });
 
     if (props.reservation.departureTicket) {
@@ -173,22 +178,21 @@ export default function Reservation(props) {
 
       axios
         .patch("http://localhost:8082/api/flights/flightcancelseats/", data)
-        .then(() => {
+        .then(()=>{
           let variables = {
-            ticketNumber: props.reservaion.departureTicket.ticketNumber,
-            totalPrice: props.reservaion.departureTicket.totalPrice,
-            email: props.reservation.email,
-          };
+            ticketNumber: props.reservation.departureTicket.ticketNumber,
+            totalPrice: props.reservation.departureTicket.totalPrice,
+            email: props.reservation.email
+          }
           emailjs
             .send(
-              process.env.EMAIL_SERVICE_ID,
-              process.env.EMAIL_TEMPLATE_ID,
+              Config.EMAIL_SERVICE_ID,
+              Config.EMAIL_TEMPLATE_ID,
               variables
             )
             .then((res) => {
-              console.log("Email successfully sent!");
+              console.log("Email successfully sent for departure ticket!");
             })
-            // Handle errors here however you like, or use a React error boundary
             .catch((err) =>
               console.error(
                 "Oh well, you failed. Here some thoughts on the error that occured:",
@@ -198,37 +202,37 @@ export default function Reservation(props) {
         })
         .catch((err) => console.log(err));
     }
-    if (props.reservation.arrivalTicket) {
+    if (props.reservation.returnTicket) {
       const data = {
         token: sessionStorage.getItem("token"),
-        flightId: props.reservation.arrivalFlight,
-        economySeatsAdults: props.reservation.arrivalTicket.economySeatsAdults,
-        firstSeatsAdults: props.reservation.arrivalTicket.firstSeatsAdults,
+        flightId: props.reservation.returnFlight,
+        economySeatsAdults: props.reservation.returnTicket.economySeatsAdults,
+        firstSeatsAdults: props.reservation.returnTicket.firstSeatsAdults,
         businessSeatsAdults:
-          props.reservation.arrivalTicket.businessSeatsAdults,
+          props.reservation.returnTicket.businessSeatsAdults,
         economySeatsChildren:
-          props.reservation.arrivalTicket.economySeatsChildren,
-        firstSeatsChildren: props.reservation.arrivalTicket.firstSeatsChildren,
+          props.reservation.returnTicket.economySeatsChildren,
+        firstSeatsChildren: props.reservation.returnTicket.firstSeatsChildren,
         businessSeatsChildren:
-          props.reservation.arrivalTicket.businessSeatsChildren,
+          props.reservation.returnTicket.businessSeatsChildren,
       };
 
       axios
         .patch("http://localhost:8082/api/flights/flightcancelseats/", data)
         .then(() => {
           let variables = {
-            ticketNumber: props.reservaion.returnTicket.ticketNumber,
-            totalPrice: props.reservaion.returnTicket.totalPrice,
+            ticketNumber: props.reservation.returnTicket.ticketNumber,
+            totalPrice: props.reservation.returnTicket.totalPrice,
             email: props.reservation.email,
           };
           emailjs
             .send(
-              process.env.EMAIL_SERVICE_ID,
-              process.env.EMAIL_TEMPLATE_ID,
+              Config.EMAIL_SERVICE_ID,
+              Config.EMAIL_TEMPLATE_ID,
               variables
             )
             .then((res) => {
-              console.log("Email successfully sent!");
+              console.log("Email successfully sent for return ticket!");
             })
             // Handle errors here however you like, or use a React error boundary
             .catch((err) =>

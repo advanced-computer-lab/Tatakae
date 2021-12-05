@@ -5,12 +5,7 @@ import UserFlightCard from './user/FlightCard'
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import searchbox from '../assets/searchbox.png'
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -271,6 +266,10 @@ export default function Dashboard() {
     setFilteredFlights(x)
   }
 
+  useEffect(()=>{
+    sessionStorage.removeItem('reservationNumber')
+  },[])
+  
   useEffect(() => {
     axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
       setFlights(res.data)

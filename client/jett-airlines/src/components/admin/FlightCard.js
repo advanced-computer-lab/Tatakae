@@ -16,7 +16,10 @@ import axios from 'axios';
 import FlightDetails from './FlightDetails';
 import EditFlight from './EditFlight';
 import emailjs from 'emailjs-com';
-emailjs.init(process.env.EMAIL_USER_ID);
+import Config from "../../config.json";
+
+emailjs.init(Config.EMAIL_USER_ID);
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -56,10 +59,12 @@ export default function FlightCard(props) {
       })
       
       axios.delete('http://localhost:8082/api/reservations/reservationsdeleteforflight/', { data: { token: sessionStorage.getItem('token') , flight:props.flight._id } }).then( res=> {
-      for (var i = 0 ; i <res.length ; i ++){
-        let variables = {ticketNumber: res[i].ticketNumber ,totalPrice: res[i].totalPrice ,email: res[i].email}
-      emailjs.send(
-        process.env.EMAIL_SERVICE_ID,process.env.EMAIL_TEMPLATE_ID,
+      console.log(res.data)
+      for (var i = 0 ; i <res.data.length ; i ++){
+        let variables = {ticketNumber: res.data[i].ticketNumber ,totalPrice: res.data[i].totalPrice ,email: res.data[i].email}
+      
+        emailjs.send(
+        Config.EMAIL_SERVICE_ID,Config.EMAIL_TEMPLATE_ID,
         variables
         ).then(res => {
           console.log('Email successfully sent!')

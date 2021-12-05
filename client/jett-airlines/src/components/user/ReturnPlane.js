@@ -172,7 +172,7 @@ export default function ReturnPlane(props) {
                     keepMounted
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"Do you want to confirm your reservation?"}</DialogTitle>
+                    <DialogTitle>{`  Confirm your reservation for Flight #${flight.flightNumber} ?`}</DialogTitle>
                     <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
                     <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice}/>
                     </DialogContent>
@@ -429,6 +429,7 @@ export default function ReturnPlane(props) {
                             disabled={(businessSelected.length + economySelected.length + firstSelected.length)===0}>
                             Reserve Seat(s)
                         </Button>
+                        <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
                     </Grid>
                 </Grid>
             </Grid>
