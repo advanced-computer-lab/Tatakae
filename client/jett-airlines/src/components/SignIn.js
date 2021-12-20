@@ -199,6 +199,12 @@ export default class SignIn extends Component {
               >
                 Sign in
               </Button>
+              <span>Don't have an account? </span>
+              <Link href="/SignUp" underline="none">
+                Sign Up.
+              </Link>
+              <br/>
+              <br/>
               <Link href="/" underline="none">
                 Continue as Guest
               </Link>
