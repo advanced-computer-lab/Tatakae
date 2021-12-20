@@ -125,7 +125,8 @@ router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
 });
 
 router.delete('/deletefullreservation/:id',verify, async (req, res) => {
-  reservation.findByIdAndRemove(req.params.id, req.body)
+
+  reservation.findByIdAndRemove(req.params.id)
     .then(ticket => res.json({ mgs: 'ticket entry deleted successfully' }))
     .catch(err => res.status(404).json({ error: 'No such a ticket' }));
 });
@@ -138,33 +139,31 @@ router.delete('/reservationsdeleteforflight/',verify,async (req, res) => {
   return res.status(401).send("Unauthorized Action")
 
   const {flight} = req.body
-
+  let emails = []
   departureFlights =  await reservation.find({"departureFlight" : flight})
   if (departureFlights){
-    let emails = []
     for (var i = 0 ; i< departureFlights.length ; i++){
       t = departureFlights[i].departureTicket
       emails.push({email: departureFlights[i].email , ticketNumber: t.ticketNumber , price: t.totalPrice })
     }
     await reservation.updateMany({"departureFlight" : flight},{$set: { "departureFlight" : null , "departureTicket" : null}})
     // send emails
-    res.json(emails)
   }
 
   returnFlights =  await reservation.find({"returnFlight" : flight})
   if (returnFlights){
-    let emails = []
     for (var i = 0 ; i< returnFlights.length ; i++){
-      t = returnflights[i].returnTicket
+      t = returnFlights[i].returnTicket
       emails.push({email: returnFlights[i].email , ticketNumber: t.ticketNumber , price: t.totalPrice })
     }
     await reservation.updateMany({"returnFlight" : flight},{$set: { "returnFlight" : null , "returnTicket" : null}})
     // send emails
-    res.json(emails)
   }
 
   // delete empty reservations
-  await reservation.deleteMany({ $and: [{"departureFlight": null}, {"returnFlight":null}] })
+  await reservation.deleteMany({"departureFlight": null, "returnFlight":null})
+
+  res.json(emails)
 
 });
 

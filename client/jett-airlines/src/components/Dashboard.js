@@ -5,12 +5,7 @@ import UserFlightCard from './user/FlightCard'
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
 import searchbox from '../assets/searchbox.png'
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -140,10 +135,17 @@ export default function Dashboard() {
       alignitems: 'left'
 
     },
-    logoutbtnstyle: {
+    logoutbtnuserstyle: {
       height: '40px',
       width: 'auto',
-      margin: '-130px 0px 0px 40vw',
+      margin: '-130px 0px 0px 25vw',
+      alignitems: 'center'
+    },
+
+    logoutbtnadminstyle: {
+      height: '40px',
+      width: 'auto',
+      margin: '-130px 0px 0px 1100px',
       alignitems: 'center'
     },
     srchbtnstyle: {
@@ -264,6 +266,10 @@ export default function Dashboard() {
     setFilteredFlights(x)
   }
 
+  useEffect(()=>{
+    sessionStorage.removeItem('reservationNumber')
+  },[])
+  
   useEffect(() => {
     axios.get('http://localhost:8082/api/flights/flightgetall').then(res => {
       setFlights(res.data)
@@ -363,12 +369,22 @@ export default function Dashboard() {
               href='/TicketBoard'>View Reservations</Button>
               </>)}
 
-          <Button
-            style={styles.logoutbtnstyle}
+              {!user.admin ? 
+          (<Button
+            style={styles.logoutbtnuserstyle}
             startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
             href='/logIn'>
             <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
-          </Button>
+          </Button>) 
+          :
+           (<Button
+            style={styles.logoutbtnadminstyle}
+            startIcon={<LogoutIcon style={{ color: "#ffffff" }} />}
+            href='/logIn'>
+            <Typography style={{ color: "#ffffff" }}>Log Out</Typography>
+          </Button>)
+          
+          }
         </Grid>
 
       </div>

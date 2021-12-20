@@ -1,6 +1,8 @@
 import React from "react";
 import FlightIcon from "@mui/icons-material/Flight";
+import FlightDetails from './FlightDetails';
 import qrcode from "../../assets/qrcode.png";
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import bg from '../../assets/travelwallpaper-1.png'
 import {
     Card,
@@ -18,10 +20,38 @@ import {
     ListItemText,
     Tab,
     Tabs,
+    Button,
+    Dialog,
+    DialogContent,
+    Slide,
+    DialogActions,
+
+
 } from "@mui/material";
+import TicketDetails from "./TicketDetails";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 
 export default function TicketCard(props) {
 
+  const user = JSON.parse(sessionStorage.getItem('signedUser'));
+  const [openDetails, setOpenDetails] = React.useState(false);
+
+
+  const handleClickOpenDetails = () => {
+    setOpenDetails(true);
+  };
+  
+  const handleClickCloseDetails = () => {
+    setOpenDetails(false);
+  };
+
+
+  
     const styles = {
         background: {
           position: 'absolute',
@@ -35,14 +65,14 @@ export default function TicketCard(props) {
           },}
 
     return (
-        <div style={styles.background}>
-        <Grid style={{ alignitems: "right", margin: "5vh 0 0 37vw", backgroundColor: "#ffffff", height: "400px", width: "350px" }} container>
+        <div className='center'>
+          
+        <Paper  elevation={20} style={{ alignitems: "right", margin: "0 0 0 0", backgroundColor: "#ffffff", width: "350px" }} container>
             <Grid
                 align="center"
                 style={{
-                    margin:"5vh 0 0 0 ",
-                    width: "450px",
-                    height: "120px",
+                    margin:"0 0 0 0 ",
+                    width: "350px",
                     alignItems: "center",
                     padding:"0"
                 }}
@@ -51,13 +81,13 @@ export default function TicketCard(props) {
                 container
             >
             <Grid item style={{ fontSize: "3em" }} xs>
-                <Typography style ={styles.textStyle}>{props.reservation.departureTicket.from}</Typography>
+                <Typography style ={styles.textStyle}>{props.flight.from}</Typography>
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs={3}>
                 <FlightIcon style={{ color:"#d3e6f4",margin:"-2vh 0 0 0",transform: "scale(1.2)  rotate(90deg)" }} />
             </Grid>
             <Grid item style={{ fontSize: "3em" }} xs>
-            <Typography style ={styles.textStyle}>{props.reservation.departureTicket.to}</Typography>
+            <Typography style ={styles.textStyle}>{props.flight.to}</Typography>
             </Grid>
             
             
@@ -85,7 +115,7 @@ export default function TicketCard(props) {
                   FLIGHT
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>{props.reservation.reservationNumber}</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{props.flight.flightNumber}</Typography></Grid>
             </Grid>
             <Grid item xs>
               <Grid container>
@@ -98,29 +128,13 @@ export default function TicketCard(props) {
                     fontSize= '0.65em'
                     color='#c6c6c9'
                   >
-                    TERMINAL
+                    DEPARTURE TERMINAL
                   </Typography>
                 </Grid>
-                <Grid> <Typography style={{fontSize: '0.9em'}}>2</Typography></Grid>
+                <Grid> <Typography style={{fontSize: '0.9em'}}>{props.flight.departureTerminal}</Typography></Grid>
               </Grid>
             </Grid>
-            <Grid item xs>
-              <Grid container>
-                <Grid item align="left" xs={12}>
-                  <Typography
-                    sx={{ mt: 0.5 }}
-                    color="text.secondary"
-                    display="block"
-                    variant="caption"
-                    fontSize= '0.65em'
-                    color='#c6c6c9'
-                  >
-                    SEAT
-                  </Typography>
-                </Grid>
-                <Grid> <Typography style={{fontSize: '0.9em'}}>C2</Typography></Grid>
-              </Grid>
-            </Grid>
+           
           </Grid>
         </ListItem>
         <ListItem>
@@ -138,7 +152,7 @@ export default function TicketCard(props) {
                   PASSENGER
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>Mostafa Sharaf</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{user.firstName} {user.lastName}</Typography></Grid>
             </Grid>
             </Grid>
         </ListItem>
@@ -154,10 +168,15 @@ export default function TicketCard(props) {
                   fontSize= '0.65em'
                   color='#c6c6c9'
                 >
-                  CLASS
+                  DEPARTURE DATE
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>FIRST</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{new Date(props.flight.departureDate).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</Typography></Grid>
             </Grid>
             </Grid>
             
@@ -174,20 +193,52 @@ export default function TicketCard(props) {
                   fontSize= '0.65em'
                   color='#c6c6c9'
                 >
-                  CLASS
+                  ARRIVAL DATE
                 </Typography>
               </Grid>
-              <Grid> <Typography style={{fontSize: '0.9em'}}>FIRST</Typography></Grid>
+              <Grid> <Typography style={{fontSize: '0.9em'}}>{new Date(props.flight.arrivalDate).toLocaleString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</Typography></Grid>
             </Grid>
             </Grid>
             
         </ListItem>
       </List> 
       <Grid item xs>
-                <img src={qrcode} alt='' style={{height: '200px',margin:"-22vh 0 0 10vw"
+                <img src={qrcode} alt='' style={{height: '200px',margin:"-200px 0 0 150px"
       }} /></Grid>
+      <Button onClick={handleClickOpenDetails} sx={{margin:"0 0 10px 15px"}} size="small" color="primary">
+            View Details
+          </Button>
       </Grid>
-        </Grid>
+      
+        </Paper>
+
+
+        <Dialog style={{
+    }}
+        open={openDetails}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClickCloseDetails}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        {/*<div style={{backgroundColor:"#4287f5"}}>
+        <DialogTitle ><Typography style={{color: "#ffffff"}}>
+        Flight Details
+      </Typography></DialogTitle></div>
+  */}
+        <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
+        <TicketDetails flight={props.flight} firstSelected={props.firstSelected} businessSelected={props.businessSelected} economySelected={props.economySelected} totalPrice={props.totalPrice}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClickCloseDetails}>Close</Button>
+        </DialogActions>
+      </Dialog>
         </div>
     )
 }
+

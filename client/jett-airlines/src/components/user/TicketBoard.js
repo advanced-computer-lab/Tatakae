@@ -6,6 +6,8 @@ import axios from 'axios'
 import {Paper} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Button from '@mui/material/Button';
+import { Typography,Toolbar,AppBar } from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 
 const styles = {
@@ -61,11 +63,29 @@ export default function TicketBoard() {
 
     return (
         <div>
-                <Button
+            <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+        <MenuBookIcon sx={{ fontSize: 40 }} backgroundColor="black"/> 
+          <Typography  style={{ margin: "0 0 0 5px" }} variant="h4" color="inherit" noWrap>
+            Reservations
+          </Typography>
+          <Button
             color='primary'
             variant="contained"
+            sx={{margin:"0 0 0 1100px"}}
             startIcon={<HomeIcon />}
             href='/home'>Home</Button>
+        </Toolbar>
+
+      </AppBar>
 
 
           
