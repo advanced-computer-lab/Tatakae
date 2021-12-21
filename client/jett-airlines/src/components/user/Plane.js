@@ -81,6 +81,9 @@ export default function Plane(props) {
   const [passengerQuery, setPassengerQuery] = React.useState('');
   const [cabinQuery, setCabinQuery] = React.useState('');
 
+  const authChannelRef = React.useRef(new BroadcastChannel("auth"));
+  const authChannel = authChannelRef.current;
+
   let code = 65;
 
   const splitArray = (seatArray) => {
@@ -109,7 +112,10 @@ export default function Plane(props) {
   }
 
   const handleOpen = () => {
-    setConfirmPop(true);
+    //setConfirmPop(true);
+    axios.post('http://localhost:8082/api/reservations/payment').then(res=>{
+      window.open(res.data, '_blank');
+    })
   }
 
   const handleOpenSearch = () => {
@@ -266,6 +272,12 @@ export default function Plane(props) {
       backgroundRepeat: 'no-repeat'
     }
   };
+
+  useEffect(() => {
+    authChannel.onmessage = function (e) {
+      setToHome(true);
+    };
+  }, [authChannel]);
 
   useEffect(() => {
     axios
