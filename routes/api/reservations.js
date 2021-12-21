@@ -7,6 +7,30 @@ const verify = require('../../middleware/verifyTokenUser')
 // Load reservation model
 const reservation = require('../../models/reservation');
 
+const stripe = require('stripe')(process.env.STRIPE_KEY)
+
+router.post('/payment', async (req, res) => {
+ // const {reservationNumber,totalPrice} = req.body ;
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Reservation #',
+          },
+          unit_amount: 100,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: 'https://example.com/success',
+    cancel_url: 'https://example.com/cancel',
+  });
+
+  res.redirect(303, session.url);
+});
 
 
 router.get('/reservationgetall', (req, res) => {
