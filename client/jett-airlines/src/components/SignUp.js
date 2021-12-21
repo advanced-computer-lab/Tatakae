@@ -29,21 +29,23 @@ export default class SignUp extends Component {
         passportNumber: '',
         openSuccess: false,
         openError: false,
+        errorMessage:'',
         showPassword: false,
     }
-
-    emptyCheck= this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || 
-    this.state.password==='' || this.state.homeAddress==='' || this.state.countryCode==='' || 
-    this.state.telephoneNumber==='' || this.state.passportNumber==='';
 
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     };
 
     handleSubmit = () => {
-        if (this.emptyCheck===true) {
+        const emptyCheck= this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || 
+        this.state.password==='' || this.state.homeAddress==='' || this.state.countryCode==='' || 
+        this.state.telephoneNumber==='' || this.state.passportNumber==='';
+
+        if (emptyCheck===true) {
             this.setState({
-                openError: true
+                openError: true,
+                errorMessage: "Please fill all fields."
             })
         }
         else {
@@ -63,10 +65,15 @@ export default class SignUp extends Component {
                 .then(res => {
                     this.setState({
                         openSuccess: true,
+                        openError:false
                     })
-                    sessionStorage.setItem('signedUser', JSON.stringify(res.data.userIn))
                 })
-                .catch()
+                .catch((err)=>{
+                    this.setState(() => ({
+                        errorMessage: err.response.data.message,
+                        openError:true
+                    }));
+                })
         }
 
     }
@@ -93,7 +100,7 @@ export default class SignUp extends Component {
 
                     <Alert severity="success"
                         action={
-                            <Button href='/home' color="inherit" size="small" variant="outlined">
+                            <Button href='/logIn' color="inherit" size="small" variant="outlined">
                                 Check it out
                             </Button>
                         }
@@ -193,7 +200,7 @@ export default class SignUp extends Component {
                 <br />
                 {this.state.openError && (
                 <Alert severity="error">
-                  Please fill all fields.
+                  {this.state.errorMessage}
                 </Alert>
               )}
              

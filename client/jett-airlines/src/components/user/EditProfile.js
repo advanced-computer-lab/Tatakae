@@ -38,9 +38,11 @@ export default class EditProfile extends Component {
         email: user.email,
         homeAddress: user.homeAddress,
         passportNumber: user.passportNumber,
-        password: '',
+        oldPassword:'',
+        newPassword: '',
         openSuccess: false,
-        openError: false
+        openError: false,
+        errorMessage:''
     }
 
     handleChange = e => {
@@ -48,6 +50,16 @@ export default class EditProfile extends Component {
     };
 
     handleSubmit = () => {
+        const emptyCheck= this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || 
+        this.state.password==='' || this.state.homeAddress==='' || this.state.passportNumber==='';
+
+        if (emptyCheck===true) {
+            this.setState({
+                openError: true,
+                errorMessage: "Please fill all fields."
+            })
+        }
+        else{
         const data = {
             token: sessionStorage.getItem('token'),
             firstName: this.state.firstName,
@@ -55,15 +67,15 @@ export default class EditProfile extends Component {
             email: this.state.email,
             homeAddress: this.state.homeAddress,
             passportNumber: this.state.passportNumber,
-        }
-        if (this.state.password !== '') {
-            data.password = this.state.password
+            newPassword:this.state.newPassword,
+            oldPassword:this.state.oldPassword
         }
 
         axios.patch('http://localhost:8082/api/users/userupdate/', data)
             .then(res => {
                 this.setState({
-                    password: '',
+                    newPassword: '',
+                    oldPassword:'',
                     openSuccess: true,
                     openError: false
                 })
@@ -71,9 +83,11 @@ export default class EditProfile extends Component {
             })
             .catch(err => {
                 this.setState({
-                    openError: true
+                    openError: true,
+                    errorMessage:err.response.data.message
                 })
             })
+        }
 
     }
     handleCloseSuccess = () => {
@@ -81,7 +95,6 @@ export default class EditProfile extends Component {
             openSuccess: false
         })
     }
-
 
     render() {
         return (<div>
@@ -183,18 +196,29 @@ export default class EditProfile extends Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl sx={{ m: 1, minWidth: 100 }}>
+                                    <InputLabel style={{ margin: "-7px 0 0 -7px" }}>Old Password</InputLabel>
+                                    <OutlinedInput
+                                        sx={{ height: 40 }}
+                                        name='oldPassword'
+                                        value={this.state.oldPassword}
+                                        onChange={this.handleChange}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl sx={{ m: 1, minWidth: 100 }}>
                                     <InputLabel style={{ margin: "-7px 0 0 -7px" }}>New Password</InputLabel>
                                     <OutlinedInput
                                         sx={{ height: 40 }}
-                                        name='password'
-                                        value={this.state.password}
+                                        name='newPassword'
+                                        value={this.state.newPassword}
                                         onChange={this.handleChange}
                                     />
                                 </FormControl>
                             </Grid>
                         </Grid>
 
-                        {this.state.openError && <Alert severity='error' >Email already exists. Try Again.</Alert>}
+                        {this.state.openError && <Alert severity='error' >{this.state.errorMessage}</Alert>}
                         <Grid item style={{ textAlign: "center" }}>
                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Button variant="contained" onClick={this.handleSubmit} sx={{ mt: 3, ml: 1 }}>Update Profile</Button>
