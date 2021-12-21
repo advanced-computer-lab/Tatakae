@@ -42,6 +42,7 @@ export default function Reservation(props) {
   const [noReturns, setNoReturns] = useState(false);
   const [returnPop, setReturnPop] = useState(false);
   const [cancelPop, setCancelPop] = useState(false);
+  const [emailPop, setEmailPop] = useState(false);
 
   const getSeats = (seats, n) => {
     var code = 65;
@@ -140,11 +141,14 @@ export default function Reservation(props) {
       borderRadius: "16px",
     },
   };
-  const handleonClick = () => {};
 
   const handleCancelClick = () => {
     setCancelPop(true);
   };
+
+  const handleEmailClick=()=>{
+    setEmailPop(true)
+  }
 
   const handleYesCancel = () => {
 
@@ -250,6 +254,22 @@ export default function Reservation(props) {
     setCancelPop(false);
   };
 
+  const handleNoEmail=()=>{
+    setEmailPop(false);
+  }
+
+  const handleYesEmail=()=>{
+    //accumulate message string from frontend to pass it to email.js
+    let variables = {email: props.reservation.email}
+
+    emailjs.send(
+      Config.EMAIL_SERVICE_ID,Config.EMAIL_DETAILS_TEMPLATE_ID,
+      variables
+      ).then(res => {
+        console.log('Email successfully sent!')
+      })
+  }
+
   return (
     <Box style={styles.background}>
       <Grid sx={{ display: "flex", justifyContent: "center" }}>
@@ -277,6 +297,11 @@ export default function Reservation(props) {
             totalPrice={props.reservation.returnTicket.totalPrice}
           />
         )}
+        <Button onClick={handleEmailClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Email Details
+          </Typography>
+        </Button>
         <Button onClick={handleCancelClick}>
           <Typography style={{ color: "#ffffff" }}>
             Cancel Reservation
@@ -297,6 +322,24 @@ export default function Reservation(props) {
               Yes
             </Button>
             <Button onClick={handleNoCancel}>No</Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={emailPop}
+          TransitionComponent={Transition}
+          onClose={handleNoEmail}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Email myself this reservation's details?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesEmail} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoEmail}>No</Button>
           </DialogActions>
         </Dialog>
 

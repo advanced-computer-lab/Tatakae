@@ -39,6 +39,7 @@ router.post('/usercreate/',(req, res) => {
 router.patch('/userupdate/', verify, async(req, res) => {
   const {userId , admin} = req 
   const signInUser = await user.findById( userId );
+
   let isPassword = false ;
   if (req.body.oldPassword){
   isPassword = await bcrypt.compare(req.body.oldPassword, signInUser.password);

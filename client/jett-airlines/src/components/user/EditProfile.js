@@ -50,8 +50,7 @@ export default class EditProfile extends Component {
     };
 
     handleSubmit = () => {
-        const emptyCheck= this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || 
-        this.state.password==='' || this.state.homeAddress==='' || this.state.passportNumber==='';
+        const emptyCheck= this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || this.state.homeAddress==='' || this.state.passportNumber==='';
 
         if (emptyCheck===true) {
             this.setState({
@@ -202,6 +201,7 @@ export default class EditProfile extends Component {
                                         name='oldPassword'
                                         value={this.state.oldPassword}
                                         onChange={this.handleChange}
+                                        type='password'
                                     />
                                 </FormControl>
                             </Grid>
@@ -213,6 +213,7 @@ export default class EditProfile extends Component {
                                         name='newPassword'
                                         value={this.state.newPassword}
                                         onChange={this.handleChange}
+                                        type='password'
                                     />
                                 </FormControl>
                             </Grid>
