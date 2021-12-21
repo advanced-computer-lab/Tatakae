@@ -38,10 +38,11 @@ router.post('/usercreate/',(req, res) => {
 
 router.patch('/userupdate/', verify, async(req, res) => {
   const {userId , admin} = req 
-  const signInUser = await user.findById({ userId });
-  const isPassword = false ;
+  const signInUser = await user.findById( userId );
+  let isPassword = false ;
   if (req.body.oldPassword){
   isPassword = await bcrypt.compare(req.body.oldPassword, signInUser.password);
+  if (!isPassword) return res.status(400).json({ message: "Old password is wrong/missing." });
   delete req.body.oldPassword ;
   }
 
