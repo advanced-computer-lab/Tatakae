@@ -11,21 +11,21 @@ const flight = require('../../models/flight');
 router.get('/flightgetall', (req, res) => {
   flight.find()
     .then(flights => res.json(flights))
-    .catch(err => res.status(404).json({ message: 'No flights found' }));
+    .catch(err => res.status(404).json({ message: 'No flights found.' }));
 });
 
 
 router.get('/flightget/:id', (req, res) => {
   flight.findById(req.params.id)
     .then(flight => res.json(flight))
-    .catch(err => res.status(404).json({ message: 'No flight found' }));
+    .catch(err => res.status(404).json({ message: 'No flight found.' }));
 });
 
 
 router.post('/flightcreate/', verify, (req, res) => {
   const { userId, admin } = req
   if (!admin)
-    return res.status(401).send({message: "Unauthorized Action"})
+    return res.status(401).send({message: "Unauthorized Action."})
 
   const { economySeats, firstSeats, businessSeats } = req.body
   economylist = []
@@ -49,8 +49,8 @@ router.post('/flightcreate/', verify, (req, res) => {
   req.body.availableBusinessSeats = businessSeats;
 
   flight.create(req.body)
-    .then(flight => res.json({ message: 'flight added successfully' }))
-    .catch(err => res.status(400).json({ message: 'Unable to add this flight' }));
+    .then(flight => res.json({ message: 'flight added successfully.' }))
+    .catch(err => res.status(400).json({ message: 'Unable to add this flight.' }));
 });
 
 
@@ -75,7 +75,7 @@ if (returnTicket){
 router.patch('/flightupdate/:id', verify, (req, res) => {
   const { userId, admin } = req
   if (!admin)
-    return res.status(401).send({message:"Unauthorized Action"})
+    return res.status(401).send({message:"Unauthorized Action."})
 
   const { economySeats, firstSeats, businessSeats, changeFlag } = req.body
   if (!changeFlag) {
@@ -102,9 +102,9 @@ router.patch('/flightupdate/:id', verify, (req, res) => {
   }
   delete req.body.changeFlag;
   flight.findByIdAndUpdate(req.params.id, req.body)
-    .then(flight => res.json({ message: 'Updated successfully' }))
+    .then(flight => res.json({ message: 'Updated successfully.' }))
     .catch(err =>
-      res.status(400).json({ message: 'Unable to update the Database' })
+      res.status(400).json({ message: 'Unable to update the Database.' })
     );
 });
 
@@ -152,9 +152,9 @@ router.patch('/flightbookseats/', verify, async (req, res) => {
 
   f.availableTotalSeats -= (economySeatsAdults.length + businessSeatsAdults.length + firstSeatsAdults.length + economySeatsChildren.length + businessSeatsChildren.length + firstSeatsChildren.length);
   flight.findByIdAndUpdate(flightId, f)
-    .then(f => res.json({ message: 'Updated successfully' }))
+    .then(f => res.json({ message: 'Updated successfully.' }))
     .catch(err =>
-      res.status(400).json({ message: 'Unable to update the Database' })
+      res.status(400).json({ message: 'Unable to update the Database.' })
     );
 
 })
@@ -202,9 +202,9 @@ router.patch('/flightcancelseats/', verify, async (req, res) => {
 
   f.availableTotalSeats += (economySeatsAdults.length + businessSeatsAdults.length + firstSeatsAdults.length + economySeatsChildren.length + businessSeatsChildren.length + firstSeatsChildren.length);
   flight.findByIdAndUpdate(flightId, f)
-    .then(f => res.json({ message: 'Updated successfully' }))
+    .then(f => res.json({ message: 'Updated successfully.' }))
     .catch(err =>
-      res.status(400).json({ message: 'Unable to update the Database' })
+      res.status(400).json({ message: 'Unable to update the Database.' })
     );
 
 })
@@ -214,11 +214,11 @@ router.delete('/flightdelete/:id', verify, (req, res) => {
 
   const { userId, admin } = req
   if (!admin)
-    return res.status(401).send({message:"Unauthorized Action"})
+    return res.status(401).send({message:"Unauthorized Action."})
 
   flight.findByIdAndRemove(req.params.id, req.body)
-    .then(flight => res.json({ message: 'flight entry deleted successfully' }))
-    .catch(err => res.status(404).json({ message: 'No such a flight' }));
+    .then(flight => res.json({ message: 'flight entry deleted successfully.' }))
+    .catch(err => res.status(404).json({ message: 'No such a flight.' }));
 });
 
 

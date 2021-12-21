@@ -12,20 +12,20 @@ const reservation = require('../../models/reservation');
 router.get('/reservationgetall', (req, res) => {
   reservation.find()
     .then(reservations => res.json(reservations))
-    .catch(err => res.status(404).json({ message: 'No reservations found' }));
+    .catch(err => res.status(404).json({ message: 'No reservations found.' }));
 });
 
 
 router.get('/reservationget/:id', (req, res) => {
   reservation.findById(req.params.id)
     .then(reservation => res.json(reservation))
-    .catch(err => res.status(404).json({ message: 'No reservation found' }));
+    .catch(err => res.status(404).json({ message: 'No reservation found.' }));
 });
 router.patch('/reservationupdate/:id', (req, res) => {
   const reservation =  reservation.findByIdAndUpdate(req.params.id, req.body)
-     .then(reservation => res.json({ message: 'Updated successfully' }))
+     .then(reservation => res.json({ message: 'Updated successfully.' }))
      .catch(err =>
-      res.status(400).json({ message: 'Unable to update the Database' })
+      res.status(400).json({ message: 'Unable to update the Database.' })
      );
 });
 
@@ -35,11 +35,11 @@ router.patch('/reservationupdate/:id', (req, res) => {
 router.post('/getuserreservations/',verify, (req, res) => {
 
   const {userId , admin} = req 
-  if (admin) return res.status(401).send({message: "Unauthorized Action"})
+  if (admin) return res.status(401).send({message: "Unauthorized Action."})
 
   reservation.find({user : userId})
     .then(reservation => res.json(reservation))
-    .catch(err => res.status(404).json({ message: 'No reservation found' }));
+    .catch(err => res.status(404).json({ message: 'No reservation found.' }));
 });
 
 
@@ -47,7 +47,7 @@ router.post('/getuserreservations/',verify, (req, res) => {
 router.post('/reservationcreate/',verify,async (req, res) => {
   
   const {userId , admin} = req 
-  if (admin) return res.status(401).send({message :"Unauthorized Action"})
+  if (admin) return res.status(401).send({message :"Unauthorized Action."})
   
   let reservationNum 
    while (true){
@@ -127,8 +127,8 @@ router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
 router.delete('/deletefullreservation/:id',verify, async (req, res) => {
 
   reservation.findByIdAndRemove(req.params.id)
-    .then(ticket => res.json({ message: 'ticket entry deleted successfully' }))
-    .catch(err => res.status(404).json({ message: 'No such a ticket' }));
+    .then(ticket => res.json({ message: 'ticket entry deleted successfully.' }))
+    .catch(err => res.status(404).json({ message: 'No such a ticket.' }));
 });
 
 
