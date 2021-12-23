@@ -10,23 +10,23 @@ const reservation = require('../../models/reservation');
 const stripe = require('stripe')(process.env.STRIPE_KEY)
 
 router.post('/payment', async (req, res) => {
- // const {reservationNumber,totalPrice} = req.body ;
+  const {totalPrice} = req.body ;
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Reservation #',
+            name: 'Flight Reservation',
           },
-          unit_amount: 100,
+          unit_amount: 100*totalPrice,
         },
         quantity: 1,
       },
     ],
     mode: 'payment',
-    success_url: 'http://localhost:3000/Test',
-    cancel_url: 'https://example.com/cancel',
+    success_url: 'http://localhost:3000/Success',
+    cancel_url: 'http://localhost:3000/Failure',
   });
 
   res.send(session.url);
