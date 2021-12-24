@@ -1,6 +1,6 @@
 import { React, useEffect, useState, forwardRef } from "react";
 import FlightDetails from "./FlightDetails";
-import FlightCard from "./FlightCard";
+import TicketDetails from "./TicketDetails";
 import TicketCard from "./TicketCard";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
@@ -17,8 +17,10 @@ import emailjs from "emailjs-com";
 import blueTexture from "../../assets/blueTexture.png";
 import { Box } from "@mui/system";
 import Config from "../../config.json";
-emailjs.init(Config.EMAIL_USER_ID);
+import ReactDOMServer from "react-dom/server";
 
+
+emailjs.init(Config.EMAIL_USER_ID);
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -85,7 +87,7 @@ export default function Reservation(props) {
               .concat(props.reservation.departureTicket.economySeatsChildren)
               .concat(props.reservation.departureTicket.economySeatsAdults),
             Math.ceil([].concat(res.data.firstSeats).length / 8) +
-              Math.ceil([].concat(res.data.businessSeats).length / 8)
+            Math.ceil([].concat(res.data.businessSeats).length / 8)
           );
           setDeptEco(x);
           /*
@@ -126,7 +128,7 @@ export default function Reservation(props) {
               .concat(props.reservation.returnTicket.economySeatsChildren)
               .concat(props.reservation.returnTicket.economySeatsAdults),
             Math.ceil([].concat(res.data.firstSeats).length / 8) +
-              Math.ceil([].concat(res.data.businessSeats).length / 8)
+            Math.ceil([].concat(res.data.businessSeats).length / 8)
           );
           setReturnEco(x);
         })
@@ -146,7 +148,7 @@ export default function Reservation(props) {
     setCancelPop(true);
   };
 
-  const handleEmailClick=()=>{
+  const handleEmailClick = () => {
     setEmailPop(true)
   }
 
@@ -160,7 +162,7 @@ export default function Reservation(props) {
       .then(() => {
         setCancelPop(false);
         props.setRefresh(!props.refresh);
-        
+
       });
 
     if (props.reservation.departureTicket) {
@@ -182,7 +184,7 @@ export default function Reservation(props) {
 
       axios
         .patch("http://localhost:8082/api/flights/flightcancelseats/", data)
-        .then(()=>{
+        .then(() => {
           let variables = {
             ticketNumber: props.reservation.departureTicket.ticketNumber,
             totalPrice: props.reservation.departureTicket.totalPrice,
@@ -254,20 +256,32 @@ export default function Reservation(props) {
     setCancelPop(false);
   };
 
-  const handleNoEmail=()=>{
+  const handleNoEmail = () => {
     setEmailPop(false);
   }
 
-  const handleYesEmail=()=>{
+  const handleYesEmail = () => {
     //accumulate message string from frontend to pass it to email.js
-    let variables = {email: props.reservation.email}
-
+    let variables;
+    if (returnFlight) {
+      variables = {
+        depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
+        retFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={returnFlight} firstSelected={returnFirst} businessSelected={returnBusiness} economySelected={returnEco} totalPrice={props.reservation.returnTicket.totalPrice} />)
+      }
+    }
+    else {
+      variables = {
+        depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
+        retFlight: ReactDOMServer.renderToStaticMarkup(<p>No Return Flight</p>)
+      }    
+    }
     emailjs.send(
-      Config.EMAIL_SERVICE_ID,Config.EMAIL_DETAILS_TEMPLATE_ID,
+      Config.EMAIL_SERVICE_ID, Config.RESERVATION_TEMPLATE,
       variables
-      ).then(res => {
-        console.log('Email successfully sent!')
-      })
+    ).then(res => {
+      console.log('Email successfully sent!')
+      setEmailPop(false);
+    })
   }
 
   return (
