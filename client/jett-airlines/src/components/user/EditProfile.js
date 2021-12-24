@@ -137,7 +137,7 @@ export default class EditProfile extends Component {
 
                     </Dialog>
 
-                    <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Paper elevation={10} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" align="center">
                             Edit Profile
                         </Typography>
@@ -183,7 +183,7 @@ export default class EditProfile extends Component {
                                     />
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <FormControl sx={{ m: 1, minWidth: 100 }}>
                                     <InputLabel style={{ margin: "-7px 0 0 -7px" }}>Home Address</InputLabel>
                                     <OutlinedInput sx={{ height: 40 }}
@@ -193,7 +193,7 @@ export default class EditProfile extends Component {
                                     />
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12}sm={6}>
                                 <FormControl sx={{ m: 1, minWidth: 100 }}>
                                     <InputLabel style={{ margin: "-7px 0 0 -7px" }}>Old Password</InputLabel>
                                     <OutlinedInput
@@ -205,7 +205,7 @@ export default class EditProfile extends Component {
                                     />
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12}sm={6}>
                                 <FormControl sx={{ m: 1, minWidth: 100 }}>
                                     <InputLabel style={{ margin: "-7px 0 0 -7px" }}>New Password</InputLabel>
                                     <OutlinedInput
@@ -217,13 +217,13 @@ export default class EditProfile extends Component {
                                     />
                                 </FormControl>
                             </Grid>
-                        </Grid>
+                        </Grid><br/><br/>
 
                         {this.state.openError && <Alert severity='error' >{this.state.errorMessage}</Alert>}
-                        <Grid item style={{ textAlign: "center" }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <Button variant="contained" onClick={this.handleSubmit} sx={{ mt: 3, ml: 1 }}>Update Profile</Button>
-                                <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
+                        <Grid item style={{  textAlign: "center" }}>
+                            <Box sx={{ display: 'flex', justifyContent:"space-evenly"}}>
+                                <Button variant="contained" onClick={this.handleSubmit} sx={{ width:"180px", mt: 3, ml: 1 }}>Update Profile</Button>
+                                <Button variant="contained" href='/home' sx={{width:"180px", mt: 3, ml: 1 }}>Back to Home</Button>
                             </Box>
                         </Grid>
                     </Paper>

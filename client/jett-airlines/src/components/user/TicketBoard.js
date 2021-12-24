@@ -86,12 +86,15 @@ export default function TicketBoard() {
         </Toolbar>
 
       </AppBar>
+      <br/>
+      <br/>
+      <br/>
 
 
           
                 {noReservations? (<h1>maho mafeesh reservation gy tshoof ehhhhhhh</h1>) 
                 :
-                (                <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+                (                <Grid container spacing={5} style={{ margin: ' 0vh 0vw' ,justifyContent:"space-evenly"}}>
                 {reservations.map(reservation => (
                     <Grid key={reservation.reservationNumber} item xs={4} >
                         <Reservation reservation={reservation} refresh={refresh} setRefresh={setRefresh} />
