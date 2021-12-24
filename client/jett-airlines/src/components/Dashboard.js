@@ -156,7 +156,7 @@ export default function Dashboard() {
     },
     dg: {
       height: '125px',
-      width: '100vw',
+      width: '101vw',
       margin: '-2.5vh -1.25vw',
 
       backgroundImage: `url(${darktab})`
