@@ -107,30 +107,18 @@ export default function ReturnPlane(props) {
         setToReservations(true);
     }
 
-    const handleCloseFailure= ()=>{
+    const handleCloseFailure = () => {
         setOpenFailure(false)
-      }
+    }
 
-      const handleYes = () => {
-          const price={totalPrice: JSON.parse(sessionStorage.getItem('deptData')).departureTicket.totalPrice+totalPrice}
-        axios.post('http://localhost:8082/api/reservations/payment', price).then(res => {
-          setOpenFailure(false)
-          setConfirmPop(false)
-          setLoadingPop(true)
-          window.open(res.data, '_blank');
-        })
-      }
-
-    const handleConfirm = async () => {
+    const handleToPayment = async () => {
+        /*
         let reservationNumber='';
         await axios.post('http://localhost:8082/api/reservations/reservationcreate/', JSON.parse(sessionStorage.getItem('deptData')))
             .then(res => reservationNumber=res.data)
             .catch(err => console.log(err))
         await axios.patch('http://localhost:8082/api/flights/flightbookseats/', JSON.parse(sessionStorage.getItem('deptDataBooks')))
-            .catch(err => console.log(err))
-
-        sessionStorage.removeItem('deptData')
-        sessionStorage.removeItem('deptDataBooks')
+            .catch(err => console.log(err))*/
 
         const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
         const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -161,7 +149,7 @@ export default function ReturnPlane(props) {
             token: sessionStorage.getItem('token'),
             returnTicket: returnTicket,
             returnFlight: flight._id,
-            reservationNumber: reservationNumber
+            // reservationNumber: reservationNumber
         }
 
         const dataBooks = {
@@ -175,12 +163,23 @@ export default function ReturnPlane(props) {
             flightId: flight._id
         }
 
-        await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data)
+        sessionStorage.setItem('returnData', JSON.stringify(data))
+        sessionStorage.setItem('returnDataBooks', JSON.stringify(dataBooks))
+
+        /*await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data)
             .catch(err => console.log(err))
         await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
             .catch(err => console.log(err))
 
-        setToReservations(true);
+        setToReservations(true);*/
+
+        const price = { totalPrice: JSON.parse(sessionStorage.getItem('deptData')).departureTicket.totalPrice + totalPrice }
+        axios.post('http://localhost:8082/api/reservations/payment', price).then(res => {
+            setOpenFailure(false)
+            setConfirmPop(false)
+            setLoadingPop(true)
+            window.open(res.data, '_blank');
+        })
     }
 
     useEffect(() => {
@@ -204,13 +203,21 @@ export default function ReturnPlane(props) {
         };
     }, []);
 
+    const clearStorageToHome = () => {
+        sessionStorage.removeItem('deptData')
+        sessionStorage.removeItem('deptDataBooks')
+        sessionStorage.removeItem('returnData')
+        sessionStorage.removeItem('returnDataBooks')
+        setToHome(true)
+    }
+
     const failureButtons = (<>
-        <Button onClick={handleYes} color="inherit" size="small" >
-        Try Again
-      </Button>
-      <Button href='/home' color="inherit" size="small" >
-      Back to Home
-      </Button></>)
+        <Button onClick={handleToPayment} color="inherit" size="small" >
+            Try Again
+        </Button>
+        <Button href='/home' color="inherit" size="small" >
+            Back to Home
+        </Button></>)
 
     return (
         <Grid style={styles.background} container>
@@ -253,7 +260,7 @@ export default function ReturnPlane(props) {
                         <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice} />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleYes} size="small" color="primary">
+                        <Button onClick={handleToPayment} size="small" color="primary">
                             Yes
                         </Button>
                         <Button onClick={handleNo}>
@@ -272,7 +279,7 @@ export default function ReturnPlane(props) {
                     <Alert severity="success" variant='filled'>
                         <AlertTitle>Success</AlertTitle>
                         Your reservation is Complete. Have a safe flight!
-                        <Button onClick={handleConfirm} color="inherit" size="small" variant="filled">
+                        <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
                             Check it Out!
                         </Button>
                     </Alert>
