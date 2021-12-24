@@ -39,6 +39,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import TextField from '@mui/material/TextField';
+import AlertTitle from '@mui/material/AlertTitle';
+import { RingLoader } from 'react-spinners'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -66,12 +68,13 @@ export default function Plane(props) {
   const [confirmPop, setConfirmPop] = React.useState(false);
   const [returnPop, setReturnPop] = React.useState(false);
   const [toHome, setToHome] = React.useState(false);
-  const [reservationNumber, setReservationNumber] = React.useState('');
-  const [departureTicket, setDepartureTicket] = React.useState(null);
   const [returnFlights, setReturnFlights] = React.useState([]);
   const [returnFlightsPop, setReturnFlightsPop] = React.useState(false);
   const [noReturns, setNoReturns] = React.useState(false);
   const [searchPop, setSearchPop] = React.useState(false);
+  const [loadingPop, setLoadingPop] = React.useState(false);
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const [openFailure, setOpenFailure] = React.useState(false);
 
   const [filteredFlights, setFilteredFlights] = React.useState([]);
   const [deptDateQuery, setDeptDateQuery] = React.useState(null);
@@ -80,6 +83,9 @@ export default function Plane(props) {
   const [arrTerminalQuery, setArrTerminalQuery] = React.useState('');
   const [passengerQuery, setPassengerQuery] = React.useState('');
   const [cabinQuery, setCabinQuery] = React.useState('');
+
+  const authChannelRef = React.useRef(new BroadcastChannel("auth"));
+  const authChannel = authChannelRef.current;
 
   let code = 65;
 
@@ -103,9 +109,22 @@ export default function Plane(props) {
     setConfirmPop(false);
   }
 
+  const handleToHome = () => {
+    setToHome(true)
+  }
+
+  const handleCloseFailure= ()=>{
+    setOpenFailure(false)
+  }
+
   const handleNoReturn = () => {
-    setToHome(true);
-    sessionStorage.removeItem('reservationNumber')
+    axios.post('http://localhost:8082/api/reservations/payment', {totalPrice: totalPrice}).then(res => {
+      setReturnPop(false)
+      setNoReturns(false)
+      setOpenFailure(false)
+      setLoadingPop(true)
+      window.open(res.data, '_blank');
+    })
   }
 
   const handleOpen = () => {
@@ -175,15 +194,62 @@ export default function Plane(props) {
   }
 
   const handleYesReturn = async () => {
-    sessionStorage.setItem('reservationNumber', reservationNumber);
-    setReturnPop(false);
+    const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
+    const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
+    const firstSeatsAdults = firstSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
+
+    const economySeatsChildren = economySelected.filter(e => e.isChild === true).map(e => e.seatIndex)
+    const businessSeatsChildren = businessSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
+    const firstSeatsChildren = firstSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
+
+    const deptTicket = {
+      flight: flight._id,
+      from: flight.from,
+      to: flight.to,
+      departureTerminal: flight.departureTerminal,
+      arrivalTerminal: flight.arrivalTerminal,
+      departureDate: new Date(flight.departureDate),
+      arrivalDate: new Date(flight.arrivalDate),
+      economySeatsAdults: economySeatsAdults,
+      businessSeatsAdults: businessSeatsAdults,
+      firstSeatsAdults: firstSeatsAdults,
+      economySeatsChildren: economySeatsChildren,
+      businessSeatsChildren: businessSeatsChildren,
+      firstSeatsChildren: firstSeatsChildren,
+      totalPrice: totalPrice
+    }
 
     const data = {
       token: sessionStorage.getItem('token'),
-      departureTicket: departureTicket
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      departureTicket: deptTicket,
+      departureFlight: flight._id,
     }
 
-    await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', data).then(res => {
+    const dataBooks = {
+      token: sessionStorage.getItem('token'),
+      economySeatsAdults: economySeatsAdults,
+      businessSeatsAdults: businessSeatsAdults,
+      firstSeatsAdults: firstSeatsAdults,
+      economySeatsChildren: economySeatsChildren,
+      businessSeatsChildren: businessSeatsChildren,
+      firstSeatsChildren: firstSeatsChildren,
+      flightId: flight._id
+    }
+
+    sessionStorage.setItem('deptData', JSON.stringify(data))
+    sessionStorage.setItem('deptDataBooks', JSON.stringify(dataBooks))
+
+    setReturnPop(false);
+
+    const returnData = {
+      token: sessionStorage.getItem('token'),
+      departureTicket: flight
+    }
+
+    await axios.post('http://localhost:8082/api/flights/getdeparture0retrun', returnData).then(res => {
       if (res.data.length !== 0) {
         setReturnFlights(res.data)
         setFilteredFlights(res.data)
@@ -194,7 +260,6 @@ export default function Plane(props) {
       }
     })
       .catch(err => console.log(err))
-    //await axios call to get return flights by passing {departureTicket:departureTicket} and setting returnFlights.
   }
 
   const handleConfirm = async () => {
@@ -224,8 +289,6 @@ export default function Plane(props) {
       totalPrice: totalPrice
     }
 
-    setDepartureTicket(deptTicket);
-
     const data = {
       token: sessionStorage.getItem('token'),
       firstName: user.firstName,
@@ -246,16 +309,19 @@ export default function Plane(props) {
       flightId: flight._id
     }
 
-    await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data).then(res => setReservationNumber(res.data))
+    await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data)
       .catch(err => console.log(err))
-    await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks).then(() => {
-      setConfirmPop(false);
-      setReturnPop(true);
-    })
+    await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
       .catch(err => console.log(err))
-    //await axios call for first half of reservation with data then set reservationNumber, and axios call flightreserve
-    //if yes sessionStorage the reservation number and view all return flights, else redirect to home
+
+    setToHome(true);
   }
+
+  const handleYesConfirm = () => {
+    setConfirmPop(false);
+    setReturnPop(true);
+  }
+
   const styles = {
     background: {
       position: 'absolute',
@@ -276,6 +342,19 @@ export default function Plane(props) {
       .catch((err) => {
         setNotFound(true);
       });
+  }, []);
+
+  useEffect(() => {
+    authChannel.onmessage = (e) => {
+      if (e.data.success) {
+        setLoadingPop(false)
+        setOpenSuccess(true)
+      }
+      else {
+        setLoadingPop(false)
+        setOpenFailure(true)
+      }
+    };
   }, []);
 
   const passengerSeatsSearch = (
@@ -377,9 +456,62 @@ export default function Plane(props) {
     </LocalizationProvider>
   )
 
+  const failureButtons = (<>
+  <Button onClick={handleNoReturn} color="inherit" size="small" >
+  Try Again
+</Button>
+<Button href='/home' color="inherit" size="small" >
+Back to Home
+</Button></>)
+
   return (
     <Grid style={styles.background} container>
       <Grid>
+
+        <Dialog
+          open={openFailure}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleCloseFailure}
+          aria-describedby="alert-dialog-slide-description"
+        >
+
+          <Alert severity="error" variant="filled"
+            action={failureButtons}
+          >
+            Your transaction failed!.
+          </Alert>
+
+        </Dialog>
+
+        <Dialog
+          open={openSuccess}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+
+          <Alert severity="success" variant='filled'>
+            <AlertTitle>Success</AlertTitle>
+            Your reservation is Complete. Have a safe flight!
+            <Button onClick={handleConfirm} color="inherit" size="small" variant="filled">
+              Check it Out!
+            </Button>
+          </Alert>
+
+        </Dialog>
+
+        <Dialog
+          open={loadingPop}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>Processing your payment...</DialogTitle>
+          <DialogContent sx={{ width: 120, height: 120, ml: 8 }}>
+            <RingLoader size='90' color='#0000ff' />
+          </DialogContent>
+        </Dialog>
 
         <Dialog
           open={confirmPop}
@@ -387,12 +519,12 @@ export default function Plane(props) {
           keepMounted
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{`  Confirm your reservation for Flight #${flight.flightNumber} ?`}</DialogTitle>
+          <DialogTitle>{`Want to add Flight #${flight.flightNumber} to your reservation?`}</DialogTitle>
           <DialogContent style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '0', overflowX: "hidden" }}>
             <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleConfirm} size="small" color="primary">
+            <Button onClick={handleYesConfirm} size="small" color="primary">
               Yes
             </Button>
             <Button onClick={handleNo}>
@@ -408,10 +540,14 @@ export default function Plane(props) {
           aria-describedby="alert-dialog-slide-description"
         >
           <Alert severity="info" variant="filled"
-            action={
+            action={<>
               <Button onClick={handleNoReturn} color="inherit" size="small" variant="outlined">
-                View Reservations
+                Pay for Dept. Flight
               </Button>
+              <Button href='/home' color="inherit" size="small" variant="outlined">
+                Back to Home
+              </Button>
+              </>
             }
           >
             Sorry this flight has no returns.

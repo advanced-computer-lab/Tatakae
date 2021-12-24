@@ -9,3 +9,15 @@ Mohamed Sonbol = Frontend functionalities with primitive views(Delete, Search, U
 Youssef Ahmed = Frontend Routing, some functionalitites(Create), and design  
 
 Mostafa Mohamed = Frontend Routing, some functionalitites(Search), and design  
+
+Sprint 2 Job distribution:  
+
+Mahmoud Hesham = All Backend methods, Database, Edit Profile , Emails  
+
+Ahmed Yehia = Frontend functionalities with primitive views(Reservation events, Routing, Search, Connection to Backend, Dynamic Dashboard)  
+
+Mohamed Sonbol = Frontend functionalities with primitive views(Reservation events, Search, Emails) and design  
+
+Youssef Ahmed = Frontend Routing, some functionalitites(Most of Reservation), and design  
+
+Mostafa Mohamed = Frontend Routing, some functionalitites(Dynamic Dashboard, Reservation), and design  

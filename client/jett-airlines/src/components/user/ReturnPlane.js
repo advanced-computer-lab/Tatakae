@@ -32,6 +32,7 @@ import seatsBackground from '../../assets/seatsBackground.png';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import TicketDetails from "./TicketDetails";
+import { RingLoader } from 'react-spinners'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -70,6 +71,11 @@ export default function ReturnPlane(props) {
     const [toHome, setToHome] = React.useState(false);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [toReservations, setToReservations] = React.useState(false);
+    const [openFailure, setOpenFailure] = React.useState(false);
+    const [loadingPop, setLoadingPop] = React.useState(false);
+
+    const authChannelRef = React.useRef(new BroadcastChannel("auth"));
+    const authChannel = authChannelRef.current;
 
     let code = 65;
 
@@ -101,7 +107,31 @@ export default function ReturnPlane(props) {
         setToReservations(true);
     }
 
+    const handleCloseFailure= ()=>{
+        setOpenFailure(false)
+      }
+
+      const handleYes = () => {
+          const price={totalPrice: JSON.parse(sessionStorage.getItem('deptData')).departureTicket.totalPrice+totalPrice}
+        axios.post('http://localhost:8082/api/reservations/payment', price).then(res => {
+          setOpenFailure(false)
+          setConfirmPop(false)
+          setLoadingPop(true)
+          window.open(res.data, '_blank');
+        })
+      }
+
     const handleConfirm = async () => {
+        let reservationNumber='';
+        await axios.post('http://localhost:8082/api/reservations/reservationcreate/', JSON.parse(sessionStorage.getItem('deptData')))
+            .then(res => reservationNumber=res.data)
+            .catch(err => console.log(err))
+        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', JSON.parse(sessionStorage.getItem('deptDataBooks')))
+            .catch(err => console.log(err))
+
+        sessionStorage.removeItem('deptData')
+        sessionStorage.removeItem('deptDataBooks')
+
         const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
         const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
         const firstSeatsAdults = firstSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -131,7 +161,7 @@ export default function ReturnPlane(props) {
             token: sessionStorage.getItem('token'),
             returnTicket: returnTicket,
             returnFlight: flight._id,
-            reservationNumber: sessionStorage.getItem('reservationNumber')
+            reservationNumber: reservationNumber
         }
 
         const dataBooks = {
@@ -145,14 +175,12 @@ export default function ReturnPlane(props) {
             flightId: flight._id
         }
 
-        await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data).then(() => { sessionStorage.removeItem('reservationNumber') })
+        await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data)
             .catch(err => console.log(err))
-        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks).then(() => {
-            setConfirmPop(false)
-            setOpenSuccess(true)
-        })
+        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
             .catch(err => console.log(err))
-        //await axios call passing data, remove reservationNumber from sessionStorage,then route to home by setting toHome.
+
+        setToReservations(true);
     }
 
     useEffect(() => {
@@ -163,21 +191,69 @@ export default function ReturnPlane(props) {
         })
     }, [])
 
+    useEffect(() => {
+        authChannel.onmessage = (e) => {
+            if (e.data.success) {
+                setLoadingPop(false)
+                setOpenSuccess(true)
+            }
+            else {
+                setLoadingPop(false)
+                setOpenFailure(true)
+            }
+        };
+    }, []);
+
+    const failureButtons = (<>
+        <Button onClick={handleYes} color="inherit" size="small" >
+        Try Again
+      </Button>
+      <Button href='/home' color="inherit" size="small" >
+      Back to Home
+      </Button></>)
+
     return (
         <Grid style={styles.background} container>
             <Grid>
+                <Dialog
+                    open={openFailure}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseFailure}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+
+                    <Alert severity="error" variant="filled"
+                        action={failureButtons}
+                    >
+                        Your transaction failed!.
+                    </Alert>
+
+                </Dialog>
+                <Dialog
+                    open={loadingPop}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>Processing your payment...</DialogTitle>
+                    <DialogContent sx={{ width: 120, height: 120, ml: 8 }}>
+                        <RingLoader size='90' color='#0000ff' />
+                    </DialogContent>
+                </Dialog>
+
                 <Dialog
                     open={confirmPop}
                     TransitionComponent={Transition}
                     keepMounted
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{`  Confirm your reservation for Flight #${flight.flightNumber} ?`}</DialogTitle>
-                    <DialogContent style={{paddingLeft:'0', paddingRight:'0',paddingTop:'0' , overflowX: "hidden"}}>
-                    <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice}/>
+                    <DialogTitle>{`Want to add Flight #${flight.flightNumber} to your reservation?`}</DialogTitle>
+                    <DialogContent style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '0', overflowX: "hidden" }}>
+                        <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice} />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleConfirm} size="small" color="primary">
+                        <Button onClick={handleYes} size="small" color="primary">
                             Yes
                         </Button>
                         <Button onClick={handleNo}>
@@ -196,7 +272,7 @@ export default function ReturnPlane(props) {
                     <Alert severity="success" variant='filled'>
                         <AlertTitle>Success</AlertTitle>
                         Your reservation is Complete. Have a safe flight!
-                        <Button onClick={redirectReservations} color="inherit" size="small" variant="filled">
+                        <Button onClick={handleConfirm} color="inherit" size="small" variant="filled">
                             Check it Out!
                         </Button>
                     </Alert>
@@ -215,7 +291,7 @@ export default function ReturnPlane(props) {
                                     style={{ background: colors.availableColor }}
                                 ></Grid>
                                 <Typography>
-                                <small>Available</small>
+                                    <small>Available</small>
                                 </Typography>
                             </ListItem>
                             <ListItem>
@@ -224,7 +300,7 @@ export default function ReturnPlane(props) {
                                     style={{ background: colors.selectedColor }}
                                 ></Grid>
                                 <Typography>
-                                <small> Adult Selected</small>
+                                    <small> Adult Selected</small>
                                 </Typography>
                             </ListItem>
                             <ListItem>
@@ -233,7 +309,7 @@ export default function ReturnPlane(props) {
                                     style={{ background: colors.selectedChildColor }}
                                 ></Grid>
                                 <Typography>
-                                <small>Child Selected</small>
+                                    <small>Child Selected</small>
                                 </Typography>
                             </ListItem>
                             <ListItem>
@@ -242,7 +318,7 @@ export default function ReturnPlane(props) {
                                     style={{ background: colors.occupiedColor }}
                                 ></Grid>
                                 <Typography>
-                                <small>Occupied</small>
+                                    <small>Occupied</small>
                                 </Typography>
                             </ListItem>
                         </List>
@@ -411,22 +487,22 @@ export default function ReturnPlane(props) {
                             )}
                         </Paper>
                         <Typography>
-                        <p class="text">
-                            You have selected{" "}
-                            <span>
-                                {businessSelected.length +
-                                    firstSelected.length +
-                                    economySelected.length}
-                            </span>{" "}
-                            seats for the total price of <span id="total">${totalPrice}</span>
-                        </p>
+                            <p class="text">
+                                You have selected{" "}
+                                <span>
+                                    {businessSelected.length +
+                                        firstSelected.length +
+                                        economySelected.length}
+                                </span>{" "}
+                                seats for the total price of <span id="total">${totalPrice}</span>
+                            </p>
                         </Typography>
                         <Button
                             type="submit"
                             color="primary"
                             variant="contained"
                             onClick={handleOpen}
-                            disabled={(businessSelected.length + economySelected.length + firstSelected.length)===0}>
+                            disabled={(businessSelected.length + economySelected.length + firstSelected.length) === 0}>
                             Reserve Seat(s)
                         </Button>
                         <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
