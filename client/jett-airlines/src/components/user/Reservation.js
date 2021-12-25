@@ -262,13 +262,15 @@ export default function Reservation(props) {
     if (returnFlight) {
       variables = {
         depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
-        retFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={returnFlight} firstSelected={returnFirst} businessSelected={returnBusiness} economySelected={returnEco} totalPrice={props.reservation.returnTicket.totalPrice} />)
+        retFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={returnFlight} firstSelected={returnFirst} businessSelected={returnBusiness} economySelected={returnEco} totalPrice={props.reservation.returnTicket.totalPrice} />),
+        email: props.reservation.email
       }
     }
     else {
       variables = {
         depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
-        retFlight: ReactDOMServer.renderToStaticMarkup(<p>No Return Flight</p>)
+        retFlight: ReactDOMServer.renderToStaticMarkup(<p>No Return Flight</p>),
+        email: props.reservation.email
       }    
     }
     emailjs.send(

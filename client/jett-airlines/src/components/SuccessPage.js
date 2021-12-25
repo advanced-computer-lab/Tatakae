@@ -33,56 +33,30 @@ export default function SuccessPage() {
             sessionStorage.removeItem('returnData')
             sessionStorage.removeItem('returnDataBooks')
         }
-        /* const deptTicket = {
-            flight: flight._id,
-            from: flight.from,
-            to: flight.to,
-            departureTerminal: flight.departureTerminal,
-            arrivalTerminal: flight.arrivalTerminal,
-            departureDate: new Date(flight.departureDate),
-            arrivalDate: new Date(flight.arrivalDate),
-            economySeatsAdults: economySeatsAdults,
-            businessSeatsAdults: businessSeatsAdults,
-            firstSeatsAdults: firstSeatsAdults,
-            economySeatsChildren: economySeatsChildren,
-            businessSeatsChildren: businessSeatsChildren,
-            firstSeatsChildren: firstSeatsChildren,
-            totalPrice: totalPrice
 
-            const dataBooks = {
-      token: sessionStorage.getItem('token'),
-      economySeatsAdults: economySeatsAdults,
-      businessSeatsAdults: businessSeatsAdults,
-      firstSeatsAdults: firstSeatsAdults,
-      economySeatsChildren: economySeatsChildren,
-      businessSeatsChildren: businessSeatsChildren,
-      firstSeatsChildren: firstSeatsChildren,
-      flightId: flight._id
-    }
-        }*/
         const prevTicket = JSON.parse(sessionStorage.getItem('Ticket'));
         const newTicket = JSON.parse(sessionStorage.getItem('newTicket'));
 
         if (prevTicket) {
-            const token_allold_seatlists_flightid = {
-                token: sessionStorage.getItem('token'),
-                flightId: prevTicket.flight,
-                firstSeatsAdults: prevTicket.firstSeatsAdults,
-                businessSeatsAdults: prevTicket.businessSeatsAdults,
-                economySeatsAdults: prevTicket.economySeatsAdults,
-                firstSeatsChildren: prevTicket.firstSeatsChildren,
-                businessSeatsChildren: prevTicket.businessSeatsChildren,
-                economySeatsChildren: prevTicket.economySeatsChildren
-            }
-            await axios.patch('http://localhost:8082/api/flights/flightcancelseats/', token_allold_seatlists_flightid)
             if (prevTicket.departureTicket) {
+                const token_allold_seatlists_flightid = {
+                    token: sessionStorage.getItem('token'),
+                    flightId: prevTicket.departureTicket.flight,
+                    firstSeatsAdults: prevTicket.departureTicket.firstSeatsAdults,
+                    businessSeatsAdults: prevTicket.departureTicket.businessSeatsAdults,
+                    economySeatsAdults: prevTicket.departureTicket.economySeatsAdults,
+                    firstSeatsChildren: prevTicket.departureTicket.firstSeatsChildren,
+                    businessSeatsChildren: prevTicket.departureTicket.businessSeatsChildren,
+                    economySeatsChildren: prevTicket.departureTicket.economySeatsChildren
+                }
+                await axios.patch('http://localhost:8082/api/flights/flightcancelseats/', token_allold_seatlists_flightid)
                 const token_oldTicket_reservNo = {
                     token: sessionStorage.getItem('token'),
                     departureTicket: prevTicket.departureTicket,
                     reservationNumber: prevTicket.resNo
                 }
-                await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
-                    .catch(err => console.log(err))
+               // await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
+                   // .catch(err => console.log(err))
 
                 const token_newTicket_reservNo = {
                     token: sessionStorage.getItem('token'),
@@ -93,13 +67,24 @@ export default function SuccessPage() {
                     .catch(err => console.log(err))
             }
             else if (prevTicket.returnTicket) {
+                const token_allold_seatlists_flightid = {
+                    token: sessionStorage.getItem('token'),
+                    flightId: prevTicket.returnTicket.flight,
+                    firstSeatsAdults: prevTicket.returnTicket.firstSeatsAdults,
+                    businessSeatsAdults: prevTicket.returnTicket.businessSeatsAdults,
+                    economySeatsAdults: prevTicket.returnTicket.economySeatsAdults,
+                    firstSeatsChildren: prevTicket.returnTicket.firstSeatsChildren,
+                    businessSeatsChildren: prevTicket.returnTicket.businessSeatsChildren,
+                    economySeatsChildren: prevTicket.returnTicket.economySeatsChildren
+                }
+                await axios.patch('http://localhost:8082/api/flights/flightcancelseats/', token_allold_seatlists_flightid)
                 const token_oldTicket_reservNo = {
                     token: sessionStorage.getItem('token'),
                     returnTicket: prevTicket.returnTicket,
                     reservationNumber: prevTicket.resNo
                 }
-                await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
-                    .catch(err => console.log(err))
+                //await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
+                    //.catch(err => console.log(err))
 
                 const token_newTicket_reservNo = {
                     token: sessionStorage.getItem('token'),
@@ -123,6 +108,10 @@ export default function SuccessPage() {
             await axios.patch('http://localhost:8082/api/flights/flightbookseats/', token_newSeats)
                 .catch(err => console.log(err))
         }
+
+sessionStorage.removeItem('newTicket')
+        sessionStorage.removeItem('Ticket')
+        sessionStorage.removeItem('seatsData')
 
         const authChannel = new BroadcastChannel("auth")
         authChannel.postMessage({ success: true })

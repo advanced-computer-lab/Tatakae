@@ -165,6 +165,7 @@ export default function EditSeats() {
 
         axios.post('http://localhost:8082/api/reservations/payment', { totalPrice: totalPrice }).then(res => {
             setOpenFailure(false)
+            setConfirmPop(false)
             setLoadingPop(true)
             window.open(res.data, '_blank');
         })
@@ -194,8 +195,6 @@ export default function EditSeats() {
     const clearStorageToHome = () => {
         sessionStorage.removeItem('newTicket')
         sessionStorage.removeItem('Ticket')
-        sessionStorage.removeItem('returnData')
-        sessionStorage.removeItem('returnDataBooks')
         setToHome(true)
     }
 
@@ -205,8 +204,6 @@ export default function EditSeats() {
         })
 
     }, []);
-
-
 
     useEffect(() => {
         authChannel.onmessage = (e) => {
@@ -397,7 +394,7 @@ export default function EditSeats() {
                             {flight?.firstPrice &&
                                 splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
                                     <Grid key={rowNumber} class="row">
-                                        {row.map((element, seatNumber) => (console.log(flight.firstPrice),
+                                        {row.map((element, seatNumber) => (
                                             <Seat
                                                 id={id}
                                                 key={seatNumber + 8 * rowNumber}
@@ -537,7 +534,7 @@ export default function EditSeats() {
                             type="submit"
                             color="primary"
                             variant="contained"
-                            onClick={handleOpen}
+                            onClick={()=>setConfirmPop(true)}
                             disabled={((businessSelected.length + economySelected.length + firstSelected.length) === 0) || checkPrev() === true}>
                             Edit Seat(s)
                         </Button>
