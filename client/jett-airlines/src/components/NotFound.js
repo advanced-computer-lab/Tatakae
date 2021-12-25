@@ -22,7 +22,7 @@ export default function NotFound() {
   </svg>
   </div>
   
-  <div class="cont">
+  <div class="contain">
       <div class="content">
           <div class="heading">System Error</div>
           <div class="sorry">

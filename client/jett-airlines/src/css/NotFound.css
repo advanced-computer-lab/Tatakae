@@ -1,4 +1,4 @@
-.main {
+.body {
 	background: #fff;
 	font-family: "Roboto", sans-serif;
 	width: 100%;
@@ -9,7 +9,7 @@
 	top: 0px;
 	left: 0px;
 }
-.cloud-container > .svg {
+.cloud-container > svg {
 	display: block;
 	position: absolute;
 	width: 200px;
@@ -19,17 +19,17 @@
 	transform: translateX(-100%);
 	animation: cloud-passover linear infinite;
 }
-.cloud-container > .svg:nth-child(1) {
+.cloud-container > svg:nth-child(1) {
 	top: 20px;
 	animation-delay: 2s;
 	animation-duration: 12s;
 }
-.cloud-container > .svg:nth-child(2) {
+.cloud-container > svg:nth-child(2) {
 	top: 160px;
 	animation-delay: 4s;
 	animation-duration: 13s;
 }
-.cloud-container > .svg:nth-child(3) {
+.cloud-container > svg:nth-child(3) {
 	top: 280px;
 	animation-delay: 6s;
 	animation-duration: 11s;
@@ -42,7 +42,7 @@
 		transform: translateX(100vw);
    }
 }
-.cont {
+.contain {
 	display: flex;
 	width: 100vw;
 	height: 100vh;
