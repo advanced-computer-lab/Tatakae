@@ -92,7 +92,10 @@ export default function TicketBoard() {
 
 
           
-                {noReservations? (<h1>maho mafeesh reservation gy tshoof ehhhhhhh</h1>) 
+                {noReservations? (<Typography sx={{
+     
+      fontSize: '3em',
+      fontWeight: 'bold',textAlign:"center"}}>No reservations yet</Typography>) 
                 :
                 (                <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
                 {reservations.map(reservation => (

@@ -1,6 +1,7 @@
 import React from 'react'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
-    Button,
+    Button,Grid
   } from "@mui/material";
 import '../css/Success.css'
 import $ from "jquery";
@@ -55,16 +56,38 @@ export default function SuccessPage() {
     },[])
     
     return (
+      
         <div class="main">
+         
             <div class ="body">
             
-           
+            <Grid container sx={{alignItems:"center",margin:"100px 0 0 0"}} direction={"column"}>
+              <Grid xs={12}  item>
 <div class="type-js headline">
   <h1 class="text-js">Thank you for using Jett AirLines :)</h1>
   
 </div>
+</Grid>
+</Grid>
+<Grid item xs={12} sx={{justifyContent:"center"}}>
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="message-box _success">
+                     <i class="fa fa-check-circle" aria-hidden="true"></i>
+                     <CheckCircleIcon sx={{color:"#28a745",fontSize: 60 }}></CheckCircleIcon>
+                    <h2> Your payment was successful </h2>
+                   <p> Thank you for your payment. We will <br/>
+redirect you to the Home page shortly.... </p>      
+            </div> 
+        </div> 
+    </div> 
+  
+  
 
-
+  
+ 
+  
+</Grid> 
 
 
         </div></div>
