@@ -3,26 +3,15 @@ import FlightIcon from "@mui/icons-material/Flight";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import EventIcon from "@mui/icons-material/Event";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import LuggageIcon from "@mui/icons-material/Luggage";
 import {
-  Card,
-  CardMedia,
-  CardActionArea,
   Typography,
-  Paper,
   Grid,
   Divider,
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
-  BeachAccessIcon,
-  ListItemText,
-  Tab,
-  Tabs,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -30,8 +19,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { TabPanel, TabList } from "@mui/lab";
-import world from "../../assets/world.png";
 import plane from "../../assets/plane.jpg";
 
 export default function TicketDetails(props) {

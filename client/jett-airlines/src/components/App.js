@@ -9,6 +9,10 @@ import EditProfile from './user/EditProfile';
 import Plane from './user/Plane'
 import ReturnPlane from './user/ReturnPlane'
 import TicketBoard from './user/TicketBoard'
+import SignUp from './SignUp'
+import SuccessPage from './SuccessPage'
+import FailurePage from './FailurePage'
+import EditSeats from './user/EditSeats';
 
 export default function App() {
   return (
@@ -22,6 +26,10 @@ export default function App() {
           <Route exact path='/Plane/:id' element={<Plane/>} />
           <Route exact path='/ReturnPlane/:id' element={<ReturnPlane/>} />
           <Route exact path='/TicketBoard' element={<TicketBoard/>} />
+          <Route exact path='/SignUp' element={<SignUp/>} />
+          <Route exact path='/Success' element={<SuccessPage/>} />
+          <Route exact path='/Failure' element={<FailurePage/>} />
+          <Route exact path='/EditSeats/:id' element={<EditSeats/>} />
           <Route path='/*' element={<NotFound/>} />
         </Routes>
     </div>

@@ -86,12 +86,12 @@
 }
 
 
-p.text {
+.p.text {
   margin: 40px 0;
   box-sizing: border-box;
 }
 
-p.text span {
+.p.text .span {
   color: #0081cb;
   font-weight: 600;
   box-sizing: content-box;

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import TicketCard from './TicketCard';
 import Reservation from './Reservation';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
-import {Paper} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Button from '@mui/material/Button';
 import { Typography,Toolbar,AppBar } from '@mui/material';
@@ -86,10 +84,16 @@ export default function TicketBoard() {
         </Toolbar>
 
       </AppBar>
+      <br/>
+      <br/>
+      <br/>
 
 
           
-                {noReservations? (<h1>maho mafeesh reservation gy tshoof ehhhhhhh</h1>) 
+                {noReservations? (<Typography sx={{
+     
+      fontSize: '3em',
+      fontWeight: 'bold',textAlign:"center"}}>No reservations yet</Typography>) 
                 :
                 (                <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
                 {reservations.map(reservation => (

@@ -14,24 +14,22 @@ import {
     Typography,
 } from "@mui/material";
 import Seat from "./Seat";
+import Alert from '@mui/material/Alert';
 import "../../css/Plane.css";
 import { useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import FlightCard from "./FlightCard";
 import PaidIcon from "@mui/icons-material/Paid";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import DiamondIcon from '@mui/icons-material/Diamond';
-import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFlatAngledTwoTone";
 import seatsBackground from '../../assets/seatsBackground.png';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import TicketDetails from "./TicketDetails";
+import AlertTitle from '@mui/material/AlertTitle';
 import { RingLoader } from 'react-spinners'
 
 
@@ -46,33 +44,31 @@ const colors = {
     occupiedColor: "#494848",
 };
 
-const styles = {
-    background: {
-        position: 'absolute',
-        height: '1000',
-        width: '100v',
-        justifyContent: 'center',
-        backgroundImage: `url(${seatsBackground})`,
-        backgroundRepeat: 'no-repeat'
-    }
-};
-
-export default function ReturnPlane(props) {
+export default function EditSeats() {
     const { id } = useParams();
+    const user = JSON.parse(sessionStorage.getItem('signedUser'));
+    const seatsData = JSON.parse(sessionStorage.getItem('seatsData'));
+    const Ticket = JSON.parse(sessionStorage.getItem('Ticket'));
+
 
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [childSelected, setChildSelected] = React.useState(false);
-    const [businessSelected, setBusinessSelected] = React.useState([]);
-    const [firstSelected, setFirstSelected] = React.useState([]);
-    const [economySelected, setEconomySelected] = React.useState([]);
     const [flight, setFlight] = React.useState({});
     const [notFound, setNotFound] = React.useState(false);
     const [confirmPop, setConfirmPop] = React.useState(false);
     const [toHome, setToHome] = React.useState(false);
-    const [openSuccess, setOpenSuccess] = React.useState(false);
-    const [toReservations, setToReservations] = React.useState(false);
-    const [openFailure, setOpenFailure] = React.useState(false);
     const [loadingPop, setLoadingPop] = React.useState(false);
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const [openFailure, setOpenFailure] = React.useState(false);
+
+
+
+    const [businessSelected, setBusinessSelected] = React.useState([]);
+    const [firstSelected, setFirstSelected] = React.useState([]);
+    const [economySelected, setEconomySelected] = React.useState([]);
+    const [prevBusiness, setPreviousBusiness] = React.useState([]);
+    const [prevFirst, setPreviousFirst] = React.useState([]);
+    const [prevEconomy, setPreviousEconomy] = React.useState([]);
 
     const authChannelRef = React.useRef(new BroadcastChannel("auth"));
     const authChannel = authChannelRef.current;
@@ -95,30 +91,25 @@ export default function ReturnPlane(props) {
         }
     };
 
+    const test = () => {
+
+    }
+
     const handleNo = () => {
         setConfirmPop(false);
     }
 
-    const handleOpen = () => {
-        setConfirmPop(true);
-    }
-
-    const redirectReservations = () => {
-        setToReservations(true);
+    const handleToHome = () => {
+        setToHome(true)
     }
 
     const handleCloseFailure = () => {
         setOpenFailure(false)
     }
 
+    
+
     const handleToPayment = async () => {
-        /*
-        let reservationNumber='';
-        await axios.post('http://localhost:8082/api/reservations/reservationcreate/', JSON.parse(sessionStorage.getItem('deptData')))
-            .then(res => reservationNumber=res.data)
-            .catch(err => console.log(err))
-        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', JSON.parse(sessionStorage.getItem('deptDataBooks')))
-            .catch(err => console.log(err))*/
 
         const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
         const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -128,7 +119,7 @@ export default function ReturnPlane(props) {
         const businessSeatsChildren = businessSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
         const firstSeatsChildren = firstSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
 
-        const returnTicket = {
+        const newTicket = {
             flight: flight._id,
             from: flight.from,
             to: flight.to,
@@ -145,36 +136,9 @@ export default function ReturnPlane(props) {
             totalPrice: totalPrice
         }
 
-        const data = {
-            token: sessionStorage.getItem('token'),
-            returnTicket: returnTicket,
-            returnFlight: flight._id,
-            // reservationNumber: reservationNumber
-        }
+        sessionStorage.setItem('newTicket', JSON.stringify(newTicket))
 
-        const dataBooks = {
-            token: sessionStorage.getItem('token'),
-            economySeatsAdults: economySeatsAdults,
-            businessSeatsAdults: businessSeatsAdults,
-            firstSeatsAdults: firstSeatsAdults,
-            economySeatsChildren: economySeatsChildren,
-            businessSeatsChildren: businessSeatsChildren,
-            firstSeatsChildren: firstSeatsChildren,
-            flightId: flight._id
-        }
-
-        sessionStorage.setItem('returnData', JSON.stringify(data))
-        sessionStorage.setItem('returnDataBooks', JSON.stringify(dataBooks))
-
-        /*await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data)
-            .catch(err => console.log(err))
-        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
-            .catch(err => console.log(err))
-
-        setToReservations(true);*/
-
-        const price = { totalPrice: JSON.parse(sessionStorage.getItem('deptData')).departureTicket.totalPrice + totalPrice }
-        axios.post('http://localhost:8082/api/reservations/payment', price).then(res => {
+        axios.post('http://localhost:8082/api/reservations/payment', { totalPrice: totalPrice }).then(res => {
             setOpenFailure(false)
             setConfirmPop(false)
             setLoadingPop(true)
@@ -182,13 +146,39 @@ export default function ReturnPlane(props) {
         })
     }
 
+    const handleYesConfirm = () => {
+        setConfirmPop(false);
+    }
+
+    const checkPrev = () => {
+        return JSON.stringify(economySelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevEconomy.sort((a, b) => a.seatIndex < b.seatIndex))
+            && JSON.stringify(firstSelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevFirst.sort((a, b) => a.seatIndex < b.seatIndex))
+            && JSON.stringify(businessSelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevBusiness.sort((a, b) => a.seatIndex < b.seatIndex))
+    }
+
+    const styles = {
+        background: {
+            position: 'absolute',
+            height: '1000',
+            width: '100v',
+            justifyContent: 'center',
+            backgroundImage: `url(${seatsBackground})`,
+            backgroundRepeat: 'no-repeat'
+        }
+    };
+
+    const clearStorageToHome = () => {
+        sessionStorage.removeItem('newTicket')
+        sessionStorage.removeItem('Ticket')
+        setToHome(true)
+    }
+
     useEffect(() => {
-        axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res => {
-            setFlight(res.data);
-        }).catch(err => {
-            setNotFound(true)
+        axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then((res) => {
+            setFlight(res.data)
         })
-    }, [])
+
+    }, []);
 
     useEffect(() => {
         authChannel.onmessage = (e) => {
@@ -203,14 +193,6 @@ export default function ReturnPlane(props) {
         };
     }, []);
 
-    const clearStorageToHome = () => {
-        sessionStorage.removeItem('deptData')
-        sessionStorage.removeItem('deptDataBooks')
-        sessionStorage.removeItem('returnData')
-        sessionStorage.removeItem('returnDataBooks')
-        setToHome(true)
-    }
-
     const failureButtons = (<>
         <Button onClick={handleToPayment} color="inherit" size="small" >
             Try Again
@@ -220,8 +202,11 @@ export default function ReturnPlane(props) {
         </Button></>)
 
     return (
+
         <Grid style={styles.background} container>
+
             <Grid>
+
                 <Dialog
                     open={openFailure}
                     TransitionComponent={Transition}
@@ -237,6 +222,24 @@ export default function ReturnPlane(props) {
                     </Alert>
 
                 </Dialog>
+
+                <Dialog
+                    open={openSuccess}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    aria-describedby="alert-dialog-slide-description"
+                >
+
+                    <Alert severity="success" variant='filled'>
+                        <AlertTitle>Success</AlertTitle>
+                        Your reservation is Complete. Have a safe flight!
+                        <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
+                            Check it Out!
+                        </Button>
+                    </Alert>
+
+                </Dialog>
+
                 <Dialog
                     open={loadingPop}
                     TransitionComponent={Transition}
@@ -269,25 +272,8 @@ export default function ReturnPlane(props) {
                     </DialogActions>
                 </Dialog>
 
-                <Dialog
-                    open={openSuccess}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    aria-describedby="alert-dialog-slide-description"
-                >
-
-                    <Alert severity="success" variant='filled'>
-                        <AlertTitle>Success</AlertTitle>
-                        Your reservation is Complete. Have a safe flight!
-                        <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
-                            Check it Out!
-                        </Button>
-                    </Alert>
-
-                </Dialog>
-
                 {notFound && <Navigate to='/wrongURL' />}
-                {(toHome || toReservations) && <Navigate to='/TicketBoard' />}
+                {toHome && <Navigate to='/TicketBoard' />}
 
                 <Grid class="plane-container">
                     <Paper sx={{ borderRadius: "20px" }} elevation={5}>
@@ -364,7 +350,7 @@ export default function ReturnPlane(props) {
                                     </RadioGroup>
                                 </FormControl>
                             </div>
-                            <List fullWidth>
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -380,31 +366,35 @@ export default function ReturnPlane(props) {
                                     First Class
                                 </Button>
                             </Grid>
-                            {splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
-                                <Grid key={rowNumber} class="row">
-                                    {row.map((element, seatNumber) => (
-                                        <Seat
-                                            key={seatNumber + 8 * rowNumber}
-                                            seatIndex={seatNumber + 8 * rowNumber}
-                                            isChild={childSelected}
-                                            price={flight.firstPrice}
-                                            totalPrice={totalPrice}
-                                            setTotalPrice={setTotalPrice}
-                                            available={element}
-                                            colors={colors}
-                                            seatNumber={
-                                                String.fromCharCode(code + seatNumber) + (1 + rowNumber)
-                                            }
-                                            //selectedCount={selectedCount}
-                                            //setSelectedCount={setSelectedCount}
-                                            selected={firstSelected}
-                                            setSelected={setFirstSelected}
-                                            pressed={0}
-                                        />
-                                    ))}
-                                </Grid>
-                            ))}
-                            <List fullWidth>
+                            {flight?.firstPrice &&
+                                splitArray([].concat(flight.firstSeats)).map((row, rowNumber) => (
+                                    <Grid key={rowNumber} class="row">
+                                        {row.map((element, seatNumber) => (
+                                            <Seat
+                                                id={id}
+                                                key={seatNumber + 8 * rowNumber}
+                                                seatIndex={seatNumber + 8 * rowNumber}
+                                                previous={prevFirst}
+                                                setPrevious={setPreviousFirst}
+                                                isChild={childSelected}
+                                                price={flight.firstPrice}
+                                                totalPrice={totalPrice}
+                                                setTotalPrice={setTotalPrice}
+                                                available={seatsData.firstSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.firstSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
+                                                colors={colors}
+                                                seatNumber={
+                                                    String.fromCharCode(code + seatNumber) + (1 + rowNumber)
+                                                }
+                                                //selectedCount={selectedCount}
+                                                //setSelectedCount={setSelectedCount}
+                                                selected={firstSelected}
+                                                setSelected={setFirstSelected}
+                                                pressed={seatsData.firstSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.firstSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
+                                            />
+                                        ))}
+                                    </Grid>
+                                ))}
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -421,36 +411,40 @@ export default function ReturnPlane(props) {
                                     Business Class
                                 </Button>
                             </Grid>
-                            {splitArray([].concat(flight.businessSeats)).map(
-                                (row, rowNumber) => (
-                                    <Grid key={rowNumber} class="row">
-                                        {row.map((element, seatNumber) => (
-                                            <Seat
-                                                key={seatNumber + 8 * rowNumber}
-                                                seatIndex={seatNumber + 8 * rowNumber}
-                                                isChild={childSelected}
-                                                price={flight.businessPrice}
-                                                totalPrice={totalPrice}
-                                                setTotalPrice={setTotalPrice}
-                                                available={element}
-                                                colors={colors}
-                                                seatNumber={
-                                                    String.fromCharCode(code + seatNumber) +
-                                                    (1 +
-                                                        rowNumber +
-                                                        splitArray([].concat(flight.firstSeats)).length)
-                                                }
-                                                //selectedCount={selectedCount}
-                                                //setSelectedCount={setSelectedCount}
-                                                selected={businessSelected}
-                                                setSelected={setBusinessSelected}
-                                                pressed={0}
-                                            />
-                                        ))}
-                                    </Grid>
-                                )
-                            )}
-                            <List fullWidth>
+                            {flight?.businessPrice &&
+                                splitArray([].concat(flight.businessSeats)).map(
+                                    (row, rowNumber) => (
+                                        <Grid key={rowNumber} class="row">
+                                            {row.map((element, seatNumber) => (
+                                                <Seat
+                                                    id={id}
+                                                    key={seatNumber + 8 * rowNumber}
+                                                    seatIndex={seatNumber + 8 * rowNumber}
+                                                    previous={prevBusiness}
+                                                    setPrevious={setPreviousBusiness}
+                                                    isChild={childSelected}
+                                                    price={flight.businessPrice}
+                                                    totalPrice={totalPrice ? totalPrice : 0}
+                                                    setTotalPrice={setTotalPrice}
+                                                    available={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
+                                                    colors={colors}
+                                                    seatNumber={
+                                                        String.fromCharCode(code + seatNumber) +
+                                                        (1 +
+                                                            rowNumber +
+                                                            splitArray([].concat(flight.firstSeats)).length)
+                                                    }
+                                                    //selectedCount={selectedCount}
+                                                    //setSelectedCount={setSelectedCount}
+                                                    selected={businessSelected}
+                                                    setSelected={setBusinessSelected}
+                                                    pressed={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
+                                                />
+                                            ))}
+                                        </Grid>
+                                    )
+                                )}
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -467,34 +461,38 @@ export default function ReturnPlane(props) {
                                     Economy Class
                                 </Button>
                             </Grid>
-                            {splitArray([].concat(flight.economySeats)).map(
-                                (row, rowNumber) => (
-                                    <Grid key={rowNumber} class="row">
-                                        {row.map((element, seatNumber) => (
-                                            <Seat
-                                                key={seatNumber + 8 * rowNumber}
-                                                seatIndex={seatNumber + 8 * rowNumber}
-                                                isChild={childSelected}
-                                                price={flight.economyPrice}
-                                                totalPrice={totalPrice}
-                                                setTotalPrice={setTotalPrice}
-                                                available={element}
-                                                colors={colors}
-                                                seatNumber={
-                                                    String.fromCharCode(code + seatNumber) +
-                                                    (1 +
-                                                        rowNumber +
-                                                        splitArray([].concat(flight.businessSeats)).length +
-                                                        splitArray([].concat(flight.firstSeats)).length)
-                                                }
-                                                selected={economySelected}
-                                                setSelected={setEconomySelected}
-                                                pressed={0}
-                                            />
-                                        ))}
-                                    </Grid>
-                                )
-                            )}
+                            {flight?.economyPrice &&
+                                splitArray([].concat(flight.economySeats)).map(
+                                    (row, rowNumber) => (
+                                        <Grid key={rowNumber} class="row">
+                                            {row.map((element, seatNumber) => (
+                                                <Seat
+                                                    id={id}
+                                                    key={seatNumber + 8 * rowNumber}
+                                                    seatIndex={seatNumber + 8 * rowNumber}
+                                                    previous={prevEconomy}
+                                                    setPrevious={setPreviousEconomy}
+                                                    isChild={childSelected}
+                                                    price={flight.economyPrice}
+                                                    totalPrice={totalPrice ? totalPrice : 0}
+                                                    setTotalPrice={setTotalPrice}
+                                                    available={seatsData.economySeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.economySeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
+                                                    colors={colors}
+                                                    seatNumber={
+                                                        String.fromCharCode(code + seatNumber) +
+                                                        (1 +
+                                                            rowNumber +
+                                                            splitArray([].concat(flight.businessSeats)).length +
+                                                            splitArray([].concat(flight.firstSeats)).length)
+                                                    }
+                                                    selected={economySelected}
+                                                    setSelected={setEconomySelected}
+                                                    pressed={seatsData.economySeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.economySeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
+                                                />
+                                            ))}
+                                        </Grid>
+                                    )
+                                )}
                         </Paper>
                         <Typography>
                             <p class="text">
@@ -511,14 +509,16 @@ export default function ReturnPlane(props) {
                             type="submit"
                             color="primary"
                             variant="contained"
-                            onClick={handleOpen}
-                            disabled={(businessSelected.length + economySelected.length + firstSelected.length) === 0}>
-                            Reserve Seat(s)
+                            onClick={()=>setConfirmPop(true)}
+                            disabled={((businessSelected.length + economySelected.length + firstSelected.length) === 0) || checkPrev() === true}>
+                            Edit Seat(s)
                         </Button>
                         <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
                     </Grid>
                 </Grid>
+                {notFound && <Navigate to="/randomURL" />}
             </Grid>
         </Grid>
+
     );
 }

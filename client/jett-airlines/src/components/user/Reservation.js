@@ -1,6 +1,6 @@
 import { React, useEffect, useState, forwardRef } from "react";
 import FlightDetails from "./FlightDetails";
-import FlightCard from "./FlightCard";
+import TicketDetails from "./TicketDetails";
 import TicketCard from "./TicketCard";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
@@ -14,11 +14,14 @@ import Alert from "@mui/material/Alert";
 import { Typography, Toolbar, AppBar } from "@mui/material";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import emailjs from "emailjs-com";
-import blueTexture from "../../assets/blueTexture.png";
+import blueTexture1 from "../../assets/blueTexture1.png";
+import blueTexture2 from "../../assets/blueTexture2.png";
 import { Box } from "@mui/system";
 import Config from "../../config.json";
-emailjs.init(Config.EMAIL_USER_ID);
+import ReactDOMServer from "react-dom/server";
 
+
+emailjs.init(Config.EMAIL_USER_ID);
 
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -37,11 +40,8 @@ export default function Reservation(props) {
   const [returnBusiness, setReturnBusiness] = useState(null);
   const [returnEco, setReturnEco] = useState(null);
 
-  const [returnFlights, setReturnFlights] = useState([]);
-  const [returnFlightsPop, setReturnFlightsPop] = useState(false);
-  const [noReturns, setNoReturns] = useState(false);
-  const [returnPop, setReturnPop] = useState(false);
   const [cancelPop, setCancelPop] = useState(false);
+  const [emailPop, setEmailPop] = useState(false);
 
   const getSeats = (seats, n) => {
     var code = 65;
@@ -84,7 +84,7 @@ export default function Reservation(props) {
               .concat(props.reservation.departureTicket.economySeatsChildren)
               .concat(props.reservation.departureTicket.economySeatsAdults),
             Math.ceil([].concat(res.data.firstSeats).length / 8) +
-              Math.ceil([].concat(res.data.businessSeats).length / 8)
+            Math.ceil([].concat(res.data.businessSeats).length / 8)
           );
           setDeptEco(x);
           /*
@@ -125,7 +125,7 @@ export default function Reservation(props) {
               .concat(props.reservation.returnTicket.economySeatsChildren)
               .concat(props.reservation.returnTicket.economySeatsAdults),
             Math.ceil([].concat(res.data.firstSeats).length / 8) +
-              Math.ceil([].concat(res.data.businessSeats).length / 8)
+            Math.ceil([].concat(res.data.businessSeats).length / 8)
           );
           setReturnEco(x);
         })
@@ -134,17 +134,28 @@ export default function Reservation(props) {
   }, []);
 
   const styles = {
-    background: {
-      width: "410px",
-      backgroundImage: `url(${blueTexture})`,
+    background1: {
+      width: "600px",
+      backgroundImage: `url(${blueTexture1})`,
       borderRadius: "16px",
+      backgroundRepeat: "no-repeat"
+      
     },
+    background2: {
+      width: "600px",
+      backgroundImage: `url(${blueTexture2})`,
+      borderRadius: "16px",
+      backgroundRepeat: "no-repeat"
+    }
   };
-  const handleonClick = () => {};
 
   const handleCancelClick = () => {
     setCancelPop(true);
   };
+
+  const handleEmailClick = () => {
+    setEmailPop(true)
+  }
 
   const handleYesCancel = () => {
 
@@ -156,7 +167,7 @@ export default function Reservation(props) {
       .then(() => {
         setCancelPop(false);
         props.setRefresh(!props.refresh);
-        
+
       });
 
     if (props.reservation.departureTicket) {
@@ -178,7 +189,7 @@ export default function Reservation(props) {
 
       axios
         .patch("http://localhost:8082/api/flights/flightcancelseats/", data)
-        .then(()=>{
+        .then(() => {
           let variables = {
             ticketNumber: props.reservation.departureTicket.ticketNumber,
             totalPrice: props.reservation.departureTicket.totalPrice,
@@ -250,33 +261,95 @@ export default function Reservation(props) {
     setCancelPop(false);
   };
 
+  const handleNoEmail = () => {
+    setEmailPop(false);
+  }
+
+  const handleYesEmail = () => {
+    //accumulate message string from frontend to pass it to email.js
+    let variables;
+    if (returnFlight) {
+      variables = {
+        depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
+        retFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={returnFlight} firstSelected={returnFirst} businessSelected={returnBusiness} economySelected={returnEco} totalPrice={props.reservation.returnTicket.totalPrice} />),
+        email: props.reservation.email
+      }
+    }
+    else {
+      variables = {
+        depFlight: ReactDOMServer.renderToStaticMarkup(<TicketDetails flight={deptFlight} firstSelected={deptFirst} businessSelected={deptBusiness} economySelected={deptEco} totalPrice={props.reservation.departureTicket.totalPrice} />),
+        retFlight: ReactDOMServer.renderToStaticMarkup(<p>No Return Flight</p>),
+        email: props.reservation.email
+      }    
+    }
+    emailjs.send(
+      Config.EMAIL_SERVICE_ID, Config.RESERVATION_TEMPLATE,
+      variables
+    ).then(res => {
+      console.log('Email successfully sent!')
+      setEmailPop(false);
+    })
+  }
+
   return (
-    <Box style={styles.background}>
-      <Grid sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography style={{ color: "#ffffff", fontSize: "2em", ju: "center" }}>
-          Reservation #{props.reservation.reservationNumber}
+    <Grid container sx={{justify:"space-around"}}
+    spacing={3}>
+      {deptFlight &&(!returnFlight) && 
+      ( <Grid item  xs={12}style={styles.background1}>
+      <Grid container direction={"column"}>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "3em"}}sx={{margin:"70px 0 0 150px" }}>
+          Reservation
         </Typography>
+        </Grid>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "2em",margin:"0 0 0 150px" }}>
+         {props.reservation.reservationNumber}
+        </Typography>
+        </Grid>
       </Grid>
 
-      <Grid sx={{ margin: "0 0 0 30px" }}>
-        {deptFlight && (
+      <Grid sx={{ margin: "170px 0 0 33px",paddingBottom:"70px" }}>
           <TicketCard
-            flight={deptFlight}
-            firstSelected={deptFirst}
-            businessSelected={deptBusiness}
-            economySelected={deptEco}
-            totalPrice={props.reservation.departureTicket.totalPrice}
+             flight={deptFlight}
+             firstSelected={deptFirst}
+             businessSelected={deptBusiness}
+             economySelected={deptEco}
+             firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
+             firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
+             businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
+             businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
+             economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
+             economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
+             totalPrice={props.reservation.departureTicket.totalPrice}
+             Ticket = {props.reservation.departureTicket}
+             depBool = {true}
+             resNo = {props.reservation.reservationNumber}
           />
-        )}
+        
         {returnFlight && (
           <TicketCard
-            flight={returnFlight}
-            firstSelected={returnFirst}
-            businessSelected={returnBusiness}
-            economySelected={returnEco}
-            totalPrice={props.reservation.returnTicket.totalPrice}
+          flight={returnFlight}
+          firstSelected={returnFirst}
+          businessSelected={returnBusiness}
+          economySelected={returnEco}
+          firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
+          firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
+          businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
+          businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
+          economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
+          economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
+          totalPrice={props.reservation.returnTicket.totalPrice}
+          Ticket = {props.reservation.returnTicket}
+          depBool = {false}
+          resNo = {props.reservation.reservationNumber}
           />
-        )}
+        )}<br/><br/>
+        <Button onClick={handleEmailClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Email Details
+          </Typography>
+        </Button>
         <Button onClick={handleCancelClick}>
           <Typography style={{ color: "#ffffff" }}>
             Cancel Reservation
@@ -297,6 +370,124 @@ export default function Reservation(props) {
               Yes
             </Button>
             <Button onClick={handleNoCancel}>No</Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={emailPop}
+          TransitionComponent={Transition}
+          onClose={handleNoEmail}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Email myself this reservation's details?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesEmail} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoEmail}>No</Button>
+          </DialogActions>
+        </Dialog>
+      </Grid>
+    </Grid>
+        )}
+        {returnFlight && (
+           <Grid item  xs={12}style={styles.background2}>
+      <Grid container direction={"column"}>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "3em"}}sx={{margin:"70px 0 0 150px" }}>
+          Reservation
+        </Typography>
+        </Grid>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "2em",margin:"0 0 0 150px" }}>
+         {props.reservation.reservationNumber}
+        </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid sx={{ margin: "170px 0 0 33px",paddingBottom:"70px" }}>
+        {deptFlight && (
+          <TicketCard
+            flight={deptFlight}
+            firstSelected={deptFirst}
+            businessSelected={deptBusiness}
+            economySelected={deptEco}
+            firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
+            totalPrice={props.reservation.departureTicket.totalPrice}
+            Ticket = {props.reservation.departureTicket}
+            depBool = {true}
+            resNo = {props.reservation.reservationNumber}
+          />
+        )}
+        {returnFlight && (
+          <TicketCard
+            flight={returnFlight}
+            firstSelected={returnFirst}
+            businessSelected={returnBusiness}
+            economySelected={returnEco}
+            firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
+            totalPrice={props.reservation.returnTicket.totalPrice}
+            Ticket = {props.reservation.returnTicket}
+            depBool = {false}
+            resNo = {props.reservation.reservationNumber}
+          />
+        )}<br/><br/>
+        <Button onClick={handleEmailClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Email Details
+          </Typography>
+        </Button>
+        <Button onClick={handleCancelClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Cancel Reservation
+          </Typography>
+        </Button>
+        <Dialog
+          open={cancelPop}
+          TransitionComponent={Transition}
+          onClose={handleNoCancel}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Are you sure you want to cancel this reservation?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesCancel} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoCancel}>No</Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={emailPop}
+          TransitionComponent={Transition}
+          onClose={handleNoEmail}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Email myself this reservation's details?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesEmail} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoEmail}>No</Button>
           </DialogActions>
         </Dialog>
 
@@ -347,6 +538,9 @@ export default function Reservation(props) {
                 </DialogContent>
             </Dialog> */}
       </Grid>
-    </Box>
+    </Grid>
+        )}
+   
+    </Grid>
   );
 }

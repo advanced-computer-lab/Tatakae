@@ -7,25 +7,49 @@ const verify = require('../../middleware/verifyTokenUser')
 // Load reservation model
 const reservation = require('../../models/reservation');
 
+const stripe = require('stripe')(process.env.STRIPE_KEY)
+
+router.post('/payment', async (req, res) => {
+  const {totalPrice} = req.body ;
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Flight Reservation',
+          },
+          unit_amount: 100*totalPrice,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: 'http://localhost:3000/Success',
+    cancel_url: 'http://localhost:3000/Failure',
+  });
+
+  res.send(session.url);
+});
 
 
 router.get('/reservationgetall', (req, res) => {
   reservation.find()
     .then(reservations => res.json(reservations))
-    .catch(err => res.status(404).json({ noreservationsfound: 'No reservations found' }));
+    .catch(err => res.status(404).json({ message: 'No reservations found.' }));
 });
 
 
 router.get('/reservationget/:id', (req, res) => {
   reservation.findById(req.params.id)
     .then(reservation => res.json(reservation))
-    .catch(err => res.status(404).json({ noreservationfound: 'No reservation found' }));
+    .catch(err => res.status(404).json({ message: 'No reservation found.' }));
 });
 router.patch('/reservationupdate/:id', (req, res) => {
   const reservation =  reservation.findByIdAndUpdate(req.params.id, req.body)
-     .then(reservation => res.json({ msg: 'Updated successfully' }))
+     .then(reservation => res.json({ message: 'Updated successfully.' }))
      .catch(err =>
-      res.status(400).json({ error: 'Unable to update the Database' })
+      res.status(400).json({ message: 'Unable to update the Database.' })
      );
 });
 
@@ -35,11 +59,11 @@ router.patch('/reservationupdate/:id', (req, res) => {
 router.post('/getuserreservations/',verify, (req, res) => {
 
   const {userId , admin} = req 
-  if (admin) return res.status(401).send("Unauthorized Action")
+  if (admin) return res.status(401).send({message: "Unauthorized Action."})
 
   reservation.find({user : userId})
     .then(reservation => res.json(reservation))
-    .catch(err => res.status(404).json({ noreservationfound: 'No reservation found' }));
+    .catch(err => res.status(404).json({ message: 'No reservation found.' }));
 });
 
 
@@ -47,7 +71,7 @@ router.post('/getuserreservations/',verify, (req, res) => {
 router.post('/reservationcreate/',verify,async (req, res) => {
   
   const {userId , admin} = req 
-  if (admin) return res.status(401).send("Unauthorized Action")
+  if (admin) return res.status(401).send({message :"Unauthorized Action."})
   
   let reservationNum 
    while (true){
@@ -70,7 +94,7 @@ router.post('/reservationcreate/',verify,async (req, res) => {
 
    reservation.create(req.body)
     .then(reservation => res.json(reservationNum))
-    .catch(err => res.status(400).json({ error: err }));
+    .catch(err => res.status(400).json({ message: err }));
 });
 
 router.patch('/bookhalfreservation/',verify,async (req,res)=>{
@@ -109,7 +133,7 @@ router.patch('/bookhalfreservation/',verify,async (req,res)=>{
 
 
 
-router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
+router.patch('/cancelhalfreservation/',verify, async(req, res) => {
   const {reservationNumber,departureTicket,returnTicket} = req.body 
 
   if (departureTicket){
@@ -127,8 +151,8 @@ router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
 router.delete('/deletefullreservation/:id',verify, async (req, res) => {
 
   reservation.findByIdAndRemove(req.params.id)
-    .then(ticket => res.json({ mgs: 'ticket entry deleted successfully' }))
-    .catch(err => res.status(404).json({ error: 'No such a ticket' }));
+    .then(ticket => res.json({ message: 'ticket entry deleted successfully.' }))
+    .catch(err => res.status(404).json({ message: 'No such a ticket.' }));
 });
 
 
