@@ -94,7 +94,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background-color: #D8E1E5;
+    background-color: #b5bec2;
   }
   .info::before {
     top: 0;
@@ -118,7 +118,7 @@
     content: '';
     display: block;
     width: 1px;
-    background-color: #D8E1E5;
+    background-color: #b5bec2;
     position: absolute;
     top: 0;
     
@@ -126,7 +126,7 @@
     right: 0;
   }
   .info__section dt {
-    color: #D8E1E5;
+    color: #b5bec2;
   
   }
   .info__section dd {

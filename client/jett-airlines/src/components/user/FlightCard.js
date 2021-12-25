@@ -107,17 +107,17 @@ export default function FlightCard(props) {
       <p class="section__to section__airport">{props.flight.to}</p>
       <dl class="info">
         <div class="info__section info__section--first">
-          <dt>Departure date</dt>
+          <dt>Dept date</dt>
           <dd> {new Date(props.flight.departureDate).toLocaleString()}</dd>
 
           <dt>Seats</dt>
           <dd>{props.flight.availableTotalSeats}</dd>
         </div>
         <div class="info__section">
-          <dt>Departure Terminal</dt>
+          <dt>Dept Terminal</dt>
           <dd>{props.flight.departureTerminal}</dd>
 
-          <dt>Arrival Terminal </dt>
+          <dt>Arr Terminal </dt>
           <dd>{props.flight.arrivalTerminal}</dd>
         </div>
       </dl>
