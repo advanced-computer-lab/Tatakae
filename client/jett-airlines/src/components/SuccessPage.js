@@ -1,17 +1,18 @@
 import React from 'react'
+import axios from 'axios';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
     Button,Grid
   } from "@mui/material";
 import '../css/Success.css'
 import $ from "jquery";
-  // DISCLAIMER: This function does require jQuery. I've used it here because the project I'm building this for already uses jQuery, so I thought why not. It can be modified quite simply to be done in raw JavaScript.  Just thought I'd let you know.
+import emailjs from "emailjs-com";
+import Config from "../config.json";
+
+const user = JSON.parse(sessionStorage.getItem('signedUser'));
 
 
 
-
-// This is the funtion you need to copy
-// Copy from line 9 to 34
 
 function autoType(elementClass, typingSpeed){
     var thhis = $(elementClass);
@@ -98,6 +99,20 @@ export default function SuccessPage() {
                     departureTicket: prevTicket.departureTicket,
                     reservationNumber: prevTicket.resNo
                 }
+                let variables = {
+                    ticketNumber: prevTicket.departureTicket.ticketNumber,
+                    totalPrice: prevTicket.departureTicket.totalPrice,
+                    email: user.email
+                  };
+                  emailjs
+                    .send(
+                      Config.EMAIL_SERVICE_ID,
+                      Config.EMAIL_TEMPLATE_ID,
+                      variables
+                    )
+                    .then((res) => {
+                      console.log("Email successfully sent for return ticket!");
+                    })
                // await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
                    // .catch(err => console.log(err))
 
@@ -126,6 +141,20 @@ export default function SuccessPage() {
                     returnTicket: prevTicket.returnTicket,
                     reservationNumber: prevTicket.resNo
                 }
+                let variables = {
+                    ticketNumber: prevTicket.returnTicket.ticketNumber,
+                    totalPrice: prevTicket.returnTicket.totalPrice,
+                    email: user.email
+                  };
+                  emailjs
+                    .send(
+                      Config.EMAIL_SERVICE_ID,
+                      Config.EMAIL_TEMPLATE_ID,
+                      variables
+                    )
+                    .then((res) => {
+                      console.log("Email successfully sent for return ticket!");
+                    })
                 //await axios.patch('http://localhost:8082/api/reservations/cancelhalfreservation/', token_oldTicket_reservNo)
                     //.catch(err => console.log(err))
 
@@ -136,6 +165,7 @@ export default function SuccessPage() {
                 }
                 await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', token_newTicket_reservNo)
                     .catch(err => console.log(err))
+                
             }
             const token_newSeats = {
                 token: sessionStorage.getItem('token'),
@@ -152,9 +182,9 @@ export default function SuccessPage() {
                 .catch(err => console.log(err))
         }
 
-sessionStorage.removeItem('newTicket')
+        sessionStorage.removeItem('newTicket')
         sessionStorage.removeItem('Ticket')
-        sessionStorage.removeItem('seatsData')
+        //sessionStorage.removeItem('seatsData')
 
         const authChannel = new BroadcastChannel("auth")
         authChannel.postMessage({success:true})

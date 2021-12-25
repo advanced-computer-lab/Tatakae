@@ -311,20 +311,38 @@ export default function Reservation(props) {
 
       <Grid sx={{ margin: "170px 0 0 33px",paddingBottom:"70px" }}>
           <TicketCard
-            flight={deptFlight}
-            firstSelected={deptFirst}
-            businessSelected={deptBusiness}
-            economySelected={deptEco}
-            totalPrice={props.reservation.departureTicket.totalPrice}
+             flight={deptFlight}
+             firstSelected={deptFirst}
+             businessSelected={deptBusiness}
+             economySelected={deptEco}
+             firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
+             firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
+             businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
+             businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
+             economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
+             economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
+             totalPrice={props.reservation.departureTicket.totalPrice}
+             Ticket = {props.reservation.departureTicket}
+             depBool = {true}
+             resNo = {props.reservation.reservationNumber}
           />
         
         {returnFlight && (
           <TicketCard
-            flight={returnFlight}
-            firstSelected={returnFirst}
-            businessSelected={returnBusiness}
-            economySelected={returnEco}
-            totalPrice={props.reservation.returnTicket.totalPrice}
+          flight={returnFlight}
+          firstSelected={returnFirst}
+          businessSelected={returnBusiness}
+          economySelected={returnEco}
+          firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
+          firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
+          businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
+          businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
+          economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
+          economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
+          totalPrice={props.reservation.returnTicket.totalPrice}
+          Ticket = {props.reservation.returnTicket}
+          depBool = {false}
+          resNo = {props.reservation.reservationNumber}
           />
         )}<br/><br/>
         <Button onClick={handleEmailClick}>
@@ -372,53 +390,6 @@ export default function Reservation(props) {
             <Button onClick={handleNoEmail}>No</Button>
           </DialogActions>
         </Dialog>
-
-        {/* <Dialog
-                open={returnPop}
-                TransitionComponent={Transition}
-                keepMounted
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>{"Do you want to reserve a return flight?"}</DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleYesReturn} size="small" color="primary">
-                        Yes
-                    </Button>
-                    <Button onClick={handleNoReturn}>
-                        No
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-
-            <Dialog
-                open={noReturns}
-                TransitionComponent={Transition}
-                keepMounted
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <Alert severity="info" variant="filled"
-                    action={
-                        <Button onClick={handleNoReturn} color="inherit" size="small" variant="outlined">
-                            Back to Home
-                        </Button>
-                    }
-                >
-                    Sorry this flight has no returns.
-                </Alert>
-            </Dialog>
-
-            <Dialog
-                open={returnFlightsPop}
-                TransitionComponent={Transition}
-                keepMounted
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>{"Return Flights"}</DialogTitle>
-                <DialogContent style={{ alignItems: "center", minWidth: "350px", minHeight: "400" }}>
-                    {returnFlights.map(f => <FlightCard key={f._id} flight={f} return={true} />)}
-                </DialogContent>
-            </Dialog> */}
       </Grid>
     </Grid>
         )}

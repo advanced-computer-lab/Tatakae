@@ -107,32 +107,7 @@ export default function EditSeats() {
         setOpenFailure(false)
     }
 
-    const handleOpen = () => {
-        if (Ticket.departureTicket) {
-            axios.patch(
-                'http://localhost:8082/api/reservations/cancelhalfreservation/',
-                { data: { token: sessionStorage.getItem("token"), departureTicket: Ticket.departureTicket } }
-            )
-                .then(() => {
-                    axios.patch(
-                        'http://localhost:8082/api/reservations/bookhalfreservation/',
-                        { data: { token: sessionStorage.getItem("token"), departureTicket: Ticket.departureTicket } }
-                    )
-                });
-        }
-
-        else {
-            axios.patch(
-                'http://localhost:8082/api/reservations/cancelhalfreservation/',
-                { data: { token: sessionStorage.getItem("token"), returnTicket: Ticket.returnTicket } }
-            )
-                .then(() => {
-
-
-                });
-        }
-
-    }
+    
 
     const handleToPayment = async () => {
 
