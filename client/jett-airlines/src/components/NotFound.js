@@ -1,81 +1,35 @@
 import React from 'react'
-import bg from '../assets/travelwallpaper-1.png'
-import logo from '../assets/Logo.png'
-import darktab from '../assets/darkglass.png'
-import { makeStyles } from "@mui/styles"
+import '../css/NotFound.css'
 
 export default function NotFound() {
-    const styles = {
-        background: {
-          position: 'absolute',
-          padding: 'auto',
-          height: '100vh',
-          width: '100vw',
-          backgroundImage: `url(${bg})`
-        },
-    
-        btnstyle: {
-          height: '40px',
-          width: '220px',
-          margin: '-130px 0px 0px 20px',
-          alignitems: 'center'
-        },
-    
-        logoStyle: {
-          height: '50px',
-          margin: '50px',
-          alignitems: 'left'
-    
-        },
-        dg: {
-          height: '150px',
-          width: '100vw',
-          margin: '-2.5vh -1.25vw',
-    
-          backgroundImage: `url(${darktab})`
-        },
-        media: {
-          height: '150px',
-          width: '100vw',
-          margin: '0px auto',
-        },
-        paperStyle: {
-          padding: 20,
-          conetentFit: 'contain',
-          minHeight: '100vh',
-          maxHeight: 'auto',
-          width: '90vw',
-          margin: "0% 0% 0% 2.5%"
-        },
-        textStyle: {
-          margin: '5px 0 0 0',
-          Color: 'white'
-        },
-        checkboxContainer: {
-          textAlign: 'right',
-          height: '200px',
-          margin: "0% 5% 0% 2.5%",
-        },
-        checkboxStyle: {
-          margin: "12% 2% 0% 0%",
-          color: 'white'
-        },
-      };
+   
 
-      const useStyles = makeStyles({
-        typographyStyle: {
-          color: "white",
-          font: "Roboto",
-        }
-      });
-
-      const classes = useStyles();
 
     return (
-        <div style={styles.background}>
-            <div style={styles.dg}>
-            <img src={logo} alt='' style={styles.logoStyle} />
-            </div>
-        </div>
+      <div class="main">
+      <div class="cloud-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="31 111 450 290">
+          <text x="120" y="320" font-size="100">Error</text>
+          <path d="M399.3 232.8c0-1.2.2-2.4.2-3.6 0-64.3-52.8-117.2-116.8-117.2-46.1 0-85.8 27.9-104.4 67-8.1-4.1-17.1-6.4-26.8-6.4-29.6 0-54.1 23.7-58.9 52C57.4 236.8 32 268.8 32 308.4c0 49.8 40.1 91.6 89.6 91.6H398c45 0 82-38.9 82-84.3 0-45.6-35.4-82.8-80.7-82.9zm-1.8 150.8l-3.2.4H122.4c-40.9 0-74.2-34.9-74.2-76.1 0-31.9 20.2-58.4 50.2-68.8l8.4-3 1.5-8.8c3.6-21.6 22.1-39.3 43.9-39.3 6.9 0 13.7 1.6 19.9 4.8l13.5 6.8 6.5-13.7c16.6-34.9 52.1-58.2 90.4-58.2 55.3 0 100.9 44.1 100.9 99.7 0 13.3-.2 20.3-.2 20.3l15.2.1c36.7.5 65.6 30.5 65.6 67.4 0 36.9-29.8 68.2-66.5 68.4z" />
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="31 111 450 290">
+      <text x="150" y="320" font-size="100">500</text>
+      <path d="M399.3 232.8c0-1.2.2-2.4.2-3.6 0-64.3-52.8-117.2-116.8-117.2-46.1 0-85.8 27.9-104.4 67-8.1-4.1-17.1-6.4-26.8-6.4-29.6 0-54.1 23.7-58.9 52C57.4 236.8 32 268.8 32 308.4c0 49.8 40.1 91.6 89.6 91.6H398c45 0 82-38.9 82-84.3 0-45.6-35.4-82.8-80.7-82.9zm-1.8 150.8l-3.2.4H122.4c-40.9 0-74.2-34.9-74.2-76.1 0-31.9 20.2-58.4 50.2-68.8l8.4-3 1.5-8.8c3.6-21.6 22.1-39.3 43.9-39.3 6.9 0 13.7 1.6 19.9 4.8l13.5 6.8 6.5-13.7c16.6-34.9 52.1-58.2 90.4-58.2 55.3 0 100.9 44.1 100.9 99.7 0 13.3-.2 20.3-.2 20.3l15.2.1c36.7.5 65.6 30.5 65.6 67.4 0 36.9-29.8 68.2-66.5 68.4z" />
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="31 111 450 290">
+      <text x="200" y="320" font-size="100">:(</text>
+      <path d="M399.3 232.8c0-1.2.2-2.4.2-3.6 0-64.3-52.8-117.2-116.8-117.2-46.1 0-85.8 27.9-104.4 67-8.1-4.1-17.1-6.4-26.8-6.4-29.6 0-54.1 23.7-58.9 52C57.4 236.8 32 268.8 32 308.4c0 49.8 40.1 91.6 89.6 91.6H398c45 0 82-38.9 82-84.3 0-45.6-35.4-82.8-80.7-82.9zm-1.8 150.8l-3.2.4H122.4c-40.9 0-74.2-34.9-74.2-76.1 0-31.9 20.2-58.4 50.2-68.8l8.4-3 1.5-8.8c3.6-21.6 22.1-39.3 43.9-39.3 6.9 0 13.7 1.6 19.9 4.8l13.5 6.8 6.5-13.7c16.6-34.9 52.1-58.2 90.4-58.2 55.3 0 100.9 44.1 100.9 99.7 0 13.3-.2 20.3-.2 20.3l15.2.1c36.7.5 65.6 30.5 65.6 67.4 0 36.9-29.8 68.2-66.5 68.4z" />
+  </svg>
+  </div>
+  
+  <div class="cont">
+      <div class="content">
+          <div class="heading">System Error</div>
+          <div class="sorry">
+              There&apos;s a good chance what you were working on is gone forever. Sorry.
+          </div>
+      </div>
+  </div>
+  </div>
     )
 }

@@ -139,9 +139,12 @@ export default function MainPage() {
     background: {
       position: 'absolute',
       padding: 'auto',
-      height: '100vh',
+      minHeight:'100vh',
+      height: 'auto',
       width: '100vw',
-      backgroundImage: `url(${bg})`
+      backgroundImage: `url(${bg})`,
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment:"fixed",
     },
 
     btnstyle: {
@@ -179,7 +182,7 @@ export default function MainPage() {
     },
     dg: {
       height: '125px',
-      width: '100vw',
+      width: '101vw',
       margin: '-2.5vh -1.25vw',
 
       backgroundImage: `url(${darktab})`

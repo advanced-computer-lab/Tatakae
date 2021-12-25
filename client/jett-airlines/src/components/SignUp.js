@@ -16,7 +16,10 @@ import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import bg from "../assets/travelwallpaper22.jpg";
+import logo from "../assets/Logo.png";
 import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -29,6 +32,28 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const theme = createTheme();
+
+const styles = {
+    background: {
+      position: "absolute",
+      height: "120vh",
+      width: "100vw",
+      backgroundImage: `url(${bg})`,
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment:"fixed",
+    },
+    logoStyle: {
+        height: "50px",
+        margin: "20px",
+      },
+    paperStyle: {
+      padding: 20,
+      conetentFit: "contain",
+      width: "550px",
+      margin: "0 auto",
+      height:"750px"
+      
+    }}
 
 export default class SignUp extends Component {
     state = {
@@ -102,7 +127,12 @@ export default class SignUp extends Component {
     };
 
     render() {
-        return (<div>
+        return (
+            <div style={styles.background}>
+                <Grid>
+                <img src={logo} alt="" style={styles.logoStyle} />
+                <Paper elevation={10} style={styles.paperStyle}>
+        
             <Dialog
             open={this.state.openSuccess}
             TransitionComponent={Transition}
@@ -125,7 +155,7 @@ export default class SignUp extends Component {
               <CssBaseline />
               <Box
                 sx={{
-                  marginTop: 8,
+                 
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -270,7 +300,10 @@ export default class SignUp extends Component {
             </Container>
             <br/>
             <br/>
+            
           </ThemeProvider>
+          </Paper>
+          </Grid>
           </div>
         )
     }

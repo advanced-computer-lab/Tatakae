@@ -111,9 +111,12 @@ export default function Dashboard() {
     background: {
       position: 'absolute',
       padding: 'auto',
-      height: '100vh',
+      minHeight:'100vh',
+      height: 'auto',
       width: '100vw',
-      backgroundImage: `url(${bg})`
+      backgroundImage: `url(${bg})`,
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment:"fixed",
     },
 
     btnstyle: {
@@ -181,7 +184,7 @@ export default function Dashboard() {
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
-      margin: "-9vh 0 0 3.75vw"
+      margin: "10vh 0 0 3.75vw"
     }
     ,
     textStyle: {
