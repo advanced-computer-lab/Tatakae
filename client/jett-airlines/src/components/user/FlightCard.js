@@ -15,6 +15,7 @@ import FlightDetails from './FlightDetails';
 import Alert from '@mui/material/Alert';
 import TicketDetails from './TicketDetails';
 import { Navigate } from 'react-router-dom';
+
 import Plane from './Plane'
 import '../../css/flightCard.css'
 var img="";
@@ -23,7 +24,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-
+function timeDiffCalc(dateFuture, dateNow) {
+  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
+}
 export default function FlightCard(props) {
 
   const [openDetails, setOpenDetails] = React.useState(false);
@@ -32,6 +35,7 @@ export default function FlightCard(props) {
   const [toPlane, setToPlane] = React.useState(false);
   const [toReturnPlane, setToReturnPlane]= React.useState(false);
 
+ 
   if(props.flight.to==="LAX"){
     img="https://s26162.pcdn.co/wp-content/uploads/2019/07/los-angeles-echo-park.jpg";
   }  else  if(props.flight.to==="JFK"){
@@ -106,15 +110,15 @@ export default function FlightCard(props) {
           <dt>Departure date</dt>
           <dd> {new Date(props.flight.departureDate).toLocaleString()}</dd>
 
-          <dt>Seat</dt>
-          <dd>G050</dd>
+          <dt>Seats</dt>
+          <dd>{props.flight.availableTotalSeats}</dd>
         </div>
         <div class="info__section">
-          <dt>Terminal</dt>
-          <dd>14</dd>
+          <dt>Departure Terminal</dt>
+          <dd>{props.flight.departureTerminal}</dd>
 
-          <dt>Gate</dt>
-          <dd>3</dd>
+          <dt>Arrival Terminal </dt>
+          <dd>{props.flight.arrivalTerminal}</dd>
         </div>
       </dl>
       
