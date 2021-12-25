@@ -288,6 +288,9 @@ export default function Reservation(props) {
             economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
             economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
             totalPrice={props.reservation.departureTicket.totalPrice}
+            Ticket = {props.reservation.departureTicket}
+            depBool = {true}
+            resNo = {props.reservation.reservationNumber}
           />
         )}
         {returnFlight && (
@@ -303,6 +306,9 @@ export default function Reservation(props) {
             economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
             economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
             totalPrice={props.reservation.returnTicket.totalPrice}
+            Ticket = {props.reservation.returnTicket}
+            depBool = {false}
+            resNo = {props.reservation.reservationNumber}
           />
         )}
         <Button onClick={handleEmailClick}>

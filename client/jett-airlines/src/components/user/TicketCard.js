@@ -48,10 +48,23 @@ export default function TicketCard(props) {
       totalPrice:props.totalPrice
     }
 
+    let Ticket;
+    if(props.depBool){
+      Ticket = {
+        departureTicket: props.Ticket,
+        resNo: props.resNo
+      }
+    }
+    else{
+      Ticket = {
+        returnTicket: props.Ticket,
+        resNo: props.resNo
+      }
+    }
+
     sessionStorage.setItem('seatsData', JSON.stringify(seatsData))
-
+    sessionStorage.setItem('Ticket', JSON.stringify(Ticket))
     setToEdit(true);
-
   }
 
   const styles = {

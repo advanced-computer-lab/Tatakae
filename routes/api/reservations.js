@@ -133,7 +133,7 @@ router.patch('/bookhalfreservation/',verify,async (req,res)=>{
 
 
 
-router.patch('/cancelhalfreservation/:id',verify, async(req, res) => {
+router.patch('/cancelhalfreservation/',verify, async(req, res) => {
   const {reservationNumber,departureTicket,returnTicket} = req.body 
 
   if (departureTicket){

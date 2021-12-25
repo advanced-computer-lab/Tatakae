@@ -5,38 +5,53 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export default function Seat(props) {
- 
+
   const [pressed, setPressed] = React.useState(props.pressed);
+  const [price, setPrice] = React.useState(props.price)
 
+  useEffect(() => {
+    if (props.pressed != 0) {
+      if (props.pressed === 1) {
+        props.setSelected((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: false,
+            price: price,
+          })
+        );
+        props.setPrevious((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: false,
+            price: price,
+          })
+        );
+        props.setTotalPrice(total => total + price);
 
- 
-  useEffect(()=>{  if (props.pressed != 0) {
-    if (props.pressed === 1) {
-      props.setSelected((prevArray) => 
-        prevArray.concat({
-          seatIndex: props.seatIndex,
-          seatNumber: props.seatNumber,
-          isChild: false,
-          price: props.price,
-        })
-      );
-      props.setTotalPrice(props.totalPrice + props.price);
-
+      }
+      else {
+        props.setSelected((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: true,
+            price: 0.5 * price,
+          })
+        );
+        props.setPrevious((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: true,
+            price: 0.5 * price,
+          })
+        );
+        props.setTotalPrice(total => (total + 0.5 * price));
+      }
     }
-    else {
-      props.setSelected((prevArray) => 
-        prevArray.concat({
-          seatIndex: props.seatIndex,
-          seatNumber: props.seatNumber,
-          isChild: true,
-          price: 0.5 * props.price,
-        })
-        
-      );
-      props.setTotalPrice(props.totalPrice + 0.5 * props.price);
-    }
-    console.log(props.totalPrice)
-  }},[])
+  }, [])
 
   var seatColor;
   if (pressed === 1) {
