@@ -14,6 +14,7 @@ import {
     Typography,
 } from "@mui/material";
 import Seat from "./Seat";
+import Alert from '@mui/material/Alert';
 import "../../css/Plane.css";
 import { useEffect } from "react";
 import { useParams, Link } from 'react-router-dom';
@@ -23,15 +24,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import FlightCard from "./FlightCard";
 import PaidIcon from "@mui/icons-material/Paid";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import DiamondIcon from '@mui/icons-material/Diamond';
-import AirlineSeatFlatAngledTwoToneIcon from "@mui/icons-material/AirlineSeatFlatAngledTwoTone";
 import seatsBackground from '../../assets/seatsBackground.png';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import TicketDetails from "./TicketDetails";
+import AlertTitle from '@mui/material/AlertTitle';
 import { RingLoader } from 'react-spinners'
 
 
@@ -46,19 +44,10 @@ const colors = {
     occupiedColor: "#494848",
 };
 
-const styles = {
-    background: {
-        position: 'absolute',
-        height: '1000',
-        width: '100v',
-        justifyContent: 'center',
-        backgroundImage: `url(${seatsBackground})`,
-        backgroundRepeat: 'no-repeat'
-    }
-};
-
-export default function ReturnPlane(props) {
+export default function EditSeats(props) {
     const { id } = useParams();
+    const user = JSON.parse(sessionStorage.getItem('signedUser'));
+    const seatsData = JSON.parse(sessionStorage.getItem('seatsData'));
 
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [childSelected, setChildSelected] = React.useState(false);
@@ -69,10 +58,9 @@ export default function ReturnPlane(props) {
     const [notFound, setNotFound] = React.useState(false);
     const [confirmPop, setConfirmPop] = React.useState(false);
     const [toHome, setToHome] = React.useState(false);
-    const [openSuccess, setOpenSuccess] = React.useState(false);
-    const [toReservations, setToReservations] = React.useState(false);
-    const [openFailure, setOpenFailure] = React.useState(false);
     const [loadingPop, setLoadingPop] = React.useState(false);
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const [openFailure, setOpenFailure] = React.useState(false);
 
     const authChannelRef = React.useRef(new BroadcastChannel("auth"));
     const authChannel = authChannelRef.current;
@@ -99,26 +87,19 @@ export default function ReturnPlane(props) {
         setConfirmPop(false);
     }
 
-    const handleOpen = () => {
-        setConfirmPop(true);
-    }
-
-    const redirectReservations = () => {
-        setToReservations(true);
+    const handleToHome = () => {
+        setToHome(true)
     }
 
     const handleCloseFailure = () => {
         setOpenFailure(false)
     }
 
+    const handleOpen = () => {
+        setConfirmPop(true);
+    }
+
     const handleToPayment = async () => {
-        /*
-        let reservationNumber='';
-        await axios.post('http://localhost:8082/api/reservations/reservationcreate/', JSON.parse(sessionStorage.getItem('deptData')))
-            .then(res => reservationNumber=res.data)
-            .catch(err => console.log(err))
-        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', JSON.parse(sessionStorage.getItem('deptDataBooks')))
-            .catch(err => console.log(err))*/
 
         const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
         const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -128,7 +109,7 @@ export default function ReturnPlane(props) {
         const businessSeatsChildren = businessSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
         const firstSeatsChildren = firstSelected.filter(e => e.isChild === true).map(e => e.seatIndex)
 
-        const returnTicket = {
+        const deptTicket = {
             flight: flight._id,
             from: flight.from,
             to: flight.to,
@@ -147,9 +128,11 @@ export default function ReturnPlane(props) {
 
         const data = {
             token: sessionStorage.getItem('token'),
-            returnTicket: returnTicket,
-            returnFlight: flight._id,
-            // reservationNumber: reservationNumber
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            departureTicket: deptTicket,
+            departureFlight: flight._id,
         }
 
         const dataBooks = {
@@ -163,32 +146,56 @@ export default function ReturnPlane(props) {
             flightId: flight._id
         }
 
-        sessionStorage.setItem('returnData', JSON.stringify(data))
-        sessionStorage.setItem('returnDataBooks', JSON.stringify(dataBooks))
+        sessionStorage.setItem('deptData', JSON.stringify(data))
+        sessionStorage.setItem('deptDataBooks', JSON.stringify(dataBooks))
 
-        /*await axios.patch('http://localhost:8082/api/reservations/bookhalfreservation/', data)
-            .catch(err => console.log(err))
-        await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
-            .catch(err => console.log(err))
-
-        setToReservations(true);*/
-
-        const price = { totalPrice: JSON.parse(sessionStorage.getItem('deptData')).departureTicket.totalPrice + totalPrice }
-        axios.post('http://localhost:8082/api/reservations/payment', price).then(res => {
+        axios.post('http://localhost:8082/api/reservations/payment', { totalPrice: totalPrice }).then(res => {
             setOpenFailure(false)
-            setConfirmPop(false)
             setLoadingPop(true)
             window.open(res.data, '_blank');
         })
+
+        /* await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data)
+           .catch(err => console.log(err))
+         await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
+           .catch(err => console.log(err))*/
+
+        //setToHome(true);
+    }
+
+    const handleYesConfirm = () => {
+        setConfirmPop(false);
+    }
+
+    const styles = {
+        background: {
+            position: 'absolute',
+            height: '1000',
+            width: '100v',
+            justifyContent: 'center',
+            backgroundImage: `url(${seatsBackground})`,
+            backgroundRepeat: 'no-repeat'
+        }
+    };
+
+    const clearStorageToHome = () => {
+        sessionStorage.removeItem('deptData')
+        sessionStorage.removeItem('deptDataBooks')
+        sessionStorage.removeItem('returnData')
+        sessionStorage.removeItem('returnDataBooks')
+        setToHome(true)
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8082/api/flights/flightget/${id}`).then(res => {
-            setFlight(res.data);
-        }).catch(err => {
-            setNotFound(true)
-        })
-    }, [])
+        axios
+            .get(`http://localhost:8082/api/flights/flightget/${id}`)
+            .then((res) => {
+                setFlight(res.data);
+            })
+            .catch((err) => {
+                setNotFound(true);
+            });
+    }, []);
 
     useEffect(() => {
         authChannel.onmessage = (e) => {
@@ -203,14 +210,6 @@ export default function ReturnPlane(props) {
         };
     }, []);
 
-    const clearStorageToHome = () => {
-        sessionStorage.removeItem('deptData')
-        sessionStorage.removeItem('deptDataBooks')
-        sessionStorage.removeItem('returnData')
-        sessionStorage.removeItem('returnDataBooks')
-        setToHome(true)
-    }
-
     const failureButtons = (<>
         <Button onClick={handleToPayment} color="inherit" size="small" >
             Try Again
@@ -222,6 +221,7 @@ export default function ReturnPlane(props) {
     return (
         <Grid style={styles.background} container>
             <Grid>
+
                 <Dialog
                     open={openFailure}
                     TransitionComponent={Transition}
@@ -237,6 +237,24 @@ export default function ReturnPlane(props) {
                     </Alert>
 
                 </Dialog>
+
+                <Dialog
+                    open={openSuccess}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    aria-describedby="alert-dialog-slide-description"
+                >
+
+                    <Alert severity="success" variant='filled'>
+                        <AlertTitle>Success</AlertTitle>
+                        Your reservation is Complete. Have a safe flight!
+                        <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
+                            Check it Out!
+                        </Button>
+                    </Alert>
+
+                </Dialog>
+
                 <Dialog
                     open={loadingPop}
                     TransitionComponent={Transition}
@@ -260,7 +278,7 @@ export default function ReturnPlane(props) {
                         <TicketDetails flight={flight} firstSelected={firstSelected} businessSelected={businessSelected} economySelected={economySelected} totalPrice={totalPrice} />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleToPayment} size="small" color="primary">
+                        <Button onClick={handleYesConfirm} size="small" color="primary">
                             Yes
                         </Button>
                         <Button onClick={handleNo}>
@@ -269,25 +287,8 @@ export default function ReturnPlane(props) {
                     </DialogActions>
                 </Dialog>
 
-                <Dialog
-                    open={openSuccess}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    aria-describedby="alert-dialog-slide-description"
-                >
-
-                    <Alert severity="success" variant='filled'>
-                        <AlertTitle>Success</AlertTitle>
-                        Your reservation is Complete. Have a safe flight!
-                        <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
-                            Check it Out!
-                        </Button>
-                    </Alert>
-
-                </Dialog>
-
                 {notFound && <Navigate to='/wrongURL' />}
-                {(toHome || toReservations) && <Navigate to='/TicketBoard' />}
+                {toHome && <Navigate to='/TicketBoard' />}
 
                 <Grid class="plane-container">
                     <Paper sx={{ borderRadius: "20px" }} elevation={5}>
@@ -364,7 +365,7 @@ export default function ReturnPlane(props) {
                                     </RadioGroup>
                                 </FormControl>
                             </div>
-                            <List fullWidth>
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -390,7 +391,7 @@ export default function ReturnPlane(props) {
                                             price={flight.firstPrice}
                                             totalPrice={totalPrice}
                                             setTotalPrice={setTotalPrice}
-                                            available={element}
+                                            available={seatsData.firstSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.firstSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
                                             colors={colors}
                                             seatNumber={
                                                 String.fromCharCode(code + seatNumber) + (1 + rowNumber)
@@ -399,12 +400,12 @@ export default function ReturnPlane(props) {
                                             //setSelectedCount={setSelectedCount}
                                             selected={firstSelected}
                                             setSelected={setFirstSelected}
-                                            pressed={0}
+                                            pressed={seatsData.firstSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.firstSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
                                         />
                                     ))}
                                 </Grid>
                             ))}
-                            <List fullWidth>
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -432,7 +433,7 @@ export default function ReturnPlane(props) {
                                                 price={flight.businessPrice}
                                                 totalPrice={totalPrice}
                                                 setTotalPrice={setTotalPrice}
-                                                available={element}
+                                                available={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false: element}
                                                 colors={colors}
                                                 seatNumber={
                                                     String.fromCharCode(code + seatNumber) +
@@ -444,13 +445,13 @@ export default function ReturnPlane(props) {
                                                 //setSelectedCount={setSelectedCount}
                                                 selected={businessSelected}
                                                 setSelected={setBusinessSelected}
-                                                pressed={0}
+                                                pressed={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
                                             />
                                         ))}
                                     </Grid>
                                 )
                             )}
-                            <List fullWidth>
+                            <List fullwidth>
                                 <Divider />
                             </List>
                             <Grid
@@ -478,7 +479,7 @@ export default function ReturnPlane(props) {
                                                 price={flight.economyPrice}
                                                 totalPrice={totalPrice}
                                                 setTotalPrice={setTotalPrice}
-                                                available={element}
+                                                available={seatsData.economySeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.economySeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
                                                 colors={colors}
                                                 seatNumber={
                                                     String.fromCharCode(code + seatNumber) +
@@ -489,7 +490,7 @@ export default function ReturnPlane(props) {
                                                 }
                                                 selected={economySelected}
                                                 setSelected={setEconomySelected}
-                                                pressed={0}
+                                                pressed={seatsData.economySeatsAdults.includes((seatNumber + 8 * rowNumber)) ? 1 : seatsData.economySeatsChildren.includes((seatNumber + 8 * rowNumber)) ? 2 : 0}
                                             />
                                         ))}
                                     </Grid>
@@ -513,11 +514,12 @@ export default function ReturnPlane(props) {
                             variant="contained"
                             onClick={handleOpen}
                             disabled={(businessSelected.length + economySelected.length + firstSelected.length) === 0}>
-                            Reserve Seat(s)
+                            Edit Seat(s)
                         </Button>
                         <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
                     </Grid>
                 </Grid>
+                {notFound && <Navigate to="/randomURL" />}
             </Grid>
         </Grid>
     );
