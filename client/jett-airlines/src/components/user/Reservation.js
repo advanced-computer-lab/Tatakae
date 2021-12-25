@@ -14,7 +14,8 @@ import Alert from "@mui/material/Alert";
 import { Typography, Toolbar, AppBar } from "@mui/material";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import emailjs from "emailjs-com";
-import blueTexture from "../../assets/blueTexture.png";
+import blueTexture1 from "../../assets/blueTexture1.png";
+import blueTexture2 from "../../assets/blueTexture2.png";
 import { Box } from "@mui/system";
 import Config from "../../config.json";
 import ReactDOMServer from "react-dom/server";
@@ -133,11 +134,19 @@ export default function Reservation(props) {
   }, []);
 
   const styles = {
-    background: {
-      width: "410px",
-      backgroundImage: `url(${blueTexture})`,
+    background1: {
+      width: "600px",
+      backgroundImage: `url(${blueTexture1})`,
       borderRadius: "16px",
+      backgroundRepeat: "no-repeat"
+      
     },
+    background2: {
+      width: "600px",
+      backgroundImage: `url(${blueTexture2})`,
+      borderRadius: "16px",
+      backgroundRepeat: "no-repeat"
+    }
   };
 
   const handleCancelClick = () => {
@@ -283,50 +292,41 @@ export default function Reservation(props) {
   }
 
   return (
-    <Box style={styles.background}>
-      <Grid sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography style={{ color: "#ffffff", fontSize: "2em", ju: "center" }}>
-          Reservation #{props.reservation.reservationNumber}
+    <Grid container sx={{justify:"space-around"}}
+    spacing={3}>
+      {deptFlight &&(!returnFlight) && 
+      ( <Grid item  xs={12}style={styles.background1}>
+      <Grid container direction={"column"}>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "3em"}}sx={{margin:"70px 0 0 150px" }}>
+          Reservation
         </Typography>
+        </Grid>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "2em",margin:"0 0 0 150px" }}>
+         {props.reservation.reservationNumber}
+        </Typography>
+        </Grid>
       </Grid>
 
-      <Grid sx={{ margin: "0 0 0 30px" }}>
-        {deptFlight && (
+      <Grid sx={{ margin: "170px 0 0 33px",paddingBottom:"70px" }}>
           <TicketCard
             flight={deptFlight}
             firstSelected={deptFirst}
             businessSelected={deptBusiness}
             economySelected={deptEco}
-            firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
-            firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
-            businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
-            businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
-            economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
-            economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
             totalPrice={props.reservation.departureTicket.totalPrice}
-            Ticket = {props.reservation.departureTicket}
-            depBool = {true}
-            resNo = {props.reservation.reservationNumber}
           />
-        )}
+        
         {returnFlight && (
           <TicketCard
             flight={returnFlight}
             firstSelected={returnFirst}
             businessSelected={returnBusiness}
             economySelected={returnEco}
-            firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
-            firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
-            businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
-            businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
-            economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
-            economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
             totalPrice={props.reservation.returnTicket.totalPrice}
-            Ticket = {props.reservation.returnTicket}
-            depBool = {false}
-            resNo = {props.reservation.reservationNumber}
           />
-        )}
+        )}<br/><br/>
         <Button onClick={handleEmailClick}>
           <Typography style={{ color: "#ffffff" }}>
             Email Details
@@ -420,6 +420,156 @@ export default function Reservation(props) {
                 </DialogContent>
             </Dialog> */}
       </Grid>
-    </Box>
+    </Grid>
+        )}
+        {returnFlight && (
+           <Grid item  xs={12}style={styles.background2}>
+      <Grid container direction={"column"}>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "3em"}}sx={{margin:"70px 0 0 150px" }}>
+          Reservation
+        </Typography>
+        </Grid>
+        <Grid item>
+        <Typography style={{ color: "#ffffff", fontSize: "2em",margin:"0 0 0 150px" }}>
+         {props.reservation.reservationNumber}
+        </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid sx={{ margin: "170px 0 0 33px",paddingBottom:"70px" }}>
+        {deptFlight && (
+          <TicketCard
+            flight={deptFlight}
+            firstSelected={deptFirst}
+            businessSelected={deptBusiness}
+            economySelected={deptEco}
+            firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
+            totalPrice={props.reservation.departureTicket.totalPrice}
+            Ticket = {props.reservation.departureTicket}
+            depBool = {true}
+            resNo = {props.reservation.reservationNumber}
+          />
+        )}
+        {returnFlight && (
+          <TicketCard
+            flight={returnFlight}
+            firstSelected={returnFirst}
+            businessSelected={returnBusiness}
+            economySelected={returnEco}
+            firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
+            totalPrice={props.reservation.returnTicket.totalPrice}
+            Ticket = {props.reservation.returnTicket}
+            depBool = {false}
+            resNo = {props.reservation.reservationNumber}
+          />
+        )}<br/><br/>
+        <Button onClick={handleEmailClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Email Details
+          </Typography>
+        </Button>
+        <Button onClick={handleCancelClick}>
+          <Typography style={{ color: "#ffffff" }}>
+            Cancel Reservation
+          </Typography>
+        </Button>
+        <Dialog
+          open={cancelPop}
+          TransitionComponent={Transition}
+          onClose={handleNoCancel}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Are you sure you want to cancel this reservation?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesCancel} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoCancel}>No</Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={emailPop}
+          TransitionComponent={Transition}
+          onClose={handleNoEmail}
+          keepMounted
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Email myself this reservation's details?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleYesEmail} size="small" color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleNoEmail}>No</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* <Dialog
+                open={returnPop}
+                TransitionComponent={Transition}
+                keepMounted
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{"Do you want to reserve a return flight?"}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleYesReturn} size="small" color="primary">
+                        Yes
+                    </Button>
+                    <Button onClick={handleNoReturn}>
+                        No
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Dialog
+                open={noReturns}
+                TransitionComponent={Transition}
+                keepMounted
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <Alert severity="info" variant="filled"
+                    action={
+                        <Button onClick={handleNoReturn} color="inherit" size="small" variant="outlined">
+                            Back to Home
+                        </Button>
+                    }
+                >
+                    Sorry this flight has no returns.
+                </Alert>
+            </Dialog>
+
+            <Dialog
+                open={returnFlightsPop}
+                TransitionComponent={Transition}
+                keepMounted
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{"Return Flights"}</DialogTitle>
+                <DialogContent style={{ alignItems: "center", minWidth: "350px", minHeight: "400" }}>
+                    {returnFlights.map(f => <FlightCard key={f._id} flight={f} return={true} />)}
+                </DialogContent>
+            </Dialog> */}
+      </Grid>
+    </Grid>
+        )}
+   
+    </Grid>
   );
 }

@@ -28,7 +28,9 @@ import darktab from '../assets/darkglass.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
+import Slide from '@mui/material/Slide';
+import { scroller } from "react-scroll";
 
 const darktheme = createTheme({
   palette: {
@@ -58,8 +60,18 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
   const [logOut, setLogOut] = React.useState(false);
   const [mainView, setMainView] = useState(true);
+  const [checked, setChecked] = React.useState(false);
 
   const user = JSON.parse(sessionStorage.getItem('signedUser'));
+
+  const scrollToSection = () => {
+    scroller.scrollTo("scroll", {
+      duration: 1300,
+      delay: 200,
+      smooth: "easeInOutQuart",
+    });
+  };
+
 
   const handleLogOut = () => {
     setLogOut(true);
@@ -98,9 +110,12 @@ export default function Dashboard() {
   }
 
   const handleClickOpen = () => {
+   
     setOpen(true);
     setMainView(false);
   };
+ 
+
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
@@ -111,9 +126,12 @@ export default function Dashboard() {
     background: {
       position: 'absolute',
       padding: 'auto',
-      height: '100vh',
+      minHeight:'100vh',
+      height: 'auto',
       width: '100vw',
-      backgroundImage: `url(${bg})`
+      backgroundImage: `url(${bg})`,
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment:"fixed",
     },
 
     btnstyle: {
@@ -156,7 +174,7 @@ export default function Dashboard() {
     },
     dg: {
       height: '125px',
-      width: '100vw',
+      width: '101vw',
       margin: '-2.5vh -1.25vw',
 
       backgroundImage: `url(${darktab})`
@@ -181,7 +199,7 @@ export default function Dashboard() {
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
-      margin: "-9vh 0 0 3.75vw"
+      margin: "0vh 0 0 3.75vw"
     }
     ,
     textStyle: {
@@ -221,9 +239,14 @@ export default function Dashboard() {
   };
 
   const handleChoice = () => {
+    setChecked(true);
     setMainView(false);
+   
     filtering()
+  
     handleClose()
+    scrollToSection();
+   
   }
   const handleHomeClick = () => {
     setMainView(true);
@@ -470,7 +493,7 @@ export default function Dashboard() {
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
 
-            <Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button>
+            <div class="scroll"><Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button></div>
           </ThemeProvider>
         </Grid>
       </Grid>
@@ -488,14 +511,15 @@ export default function Dashboard() {
           )
           }</Grid></Paper>}
 
-      {(!user.admin) && (!mainView && <Paper elevation={20} style={styles.paperStyle2}>
-        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+      {(!user.admin) && (<Slide direction="up" in={checked} mountOnEnter unmountOnExit><Paper elevation={20} style={styles.paperStyle2}>
+        <Grid container spacing={5} style={{ margin:"0 0 0 -18px" }}>
           {filteredFlights.map(flight => (
-            <Grid key={flight._id} item xs={4} >
+            <Grid key={flight._id} item xs={4}>
               <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />
             </Grid>)
           )
-          }</Grid></Paper>)}
+          }</Grid></Paper></Slide>
+          )}
 
       {logOut && (<Navigate to='/logIn' />)}
     </div>

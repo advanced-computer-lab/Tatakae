@@ -1,0 +1,140 @@
+* {
+   
+  }
+  .card {
+    margin: 20px;
+    width: 400px;
+    border-radius: 4px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2),
+                0 3px 3px -2px rgba(0, 0, 0, 0.14),
+                0 1px 8px 0 rgba(0, 0, 0, 0.12);
+    color: #6d7487;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+  .image {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+  .button {
+    background-color: #3559a5;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 20px;
+    height: 50px;
+    width: 150px;
+    float: right;
+    cursor: pointer;
+    
+  }
+  .section {
+    padding: 30px;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+  .section::after {
+    content: '';
+    clear: both;
+    display: block;
+    
+  }
+  .section__airport {
+    font-size: 60px;
+    display: inline-block;
+    width: 49%;
+    line-height: 1;
+ 
+    position: relative;
+  }
+  .section__from::after {
+    content: '';
+    background-image: url(https://i.imgur.com/ppufFur.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    height: 20px;
+   
+    width: 20px;
+    transform: translateX(50%) translateY(-50%);
+  }
+  .section__to {
+    text-align: center;
+    
+  }
+  .barcode {
+    float: left;
+    height: 50px;
+    width: 150px;
+    opacity: .5;
+  }
+  .info {
+    margin: 30px 0;
+    display: block;
+    clear: both;
+    position: relative;
+ 
+  }
+  .info::before,
+  .info::after {
+    content: '';
+    display: block;
+    
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #b5bec2;
+  }
+  .info::before {
+    top: 0;
+   
+  }
+  .info::after {
+    bottom: 0;
+  
+  }
+  .info__section {
+    padding: 30px 0 30px 30px;
+    position: relative;
+    width: 49%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+  .info__section--first::after {
+    content: '';
+    display: block;
+    width: 1px;
+    background-color: #b5bec2;
+    position: absolute;
+    top: 0;
+    
+    bottom: 0;
+    right: 0;
+  }
+  .info__section dt {
+    color: #b5bec2;
+  
+  }
+  .info__section dd {
+    font-size: 15px;
+    
+  }
+  .info__section dt:not(:first-child) {
+    margin-top: 20px;
+    
+  }
+  

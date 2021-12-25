@@ -29,6 +29,16 @@ import darktab from '../assets/darkglass.png'
 import searchbox from '../assets/searchbox.png'
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { width } from '@mui/system';
+import Slide from '@mui/material/Slide';
+import { scroller } from "react-scroll";
+
+const scrollToSection = () => {
+  scroller.scrollTo("scroll", {
+    duration: 1300,
+    delay: 0,
+    smooth: "easeInOutQuart",
+  });
+}
 
 const darktheme = createTheme({
   palette: {
@@ -53,6 +63,7 @@ export default function MainPage() {
   const [passengerQuery, setPassengerQuery] = useState('');
   const [cabinQuery, setCabinQuery] = useState('');
   const [mainView, setMainView] = useState(true);
+  const [checked, setChecked] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
 
@@ -88,10 +99,13 @@ export default function MainPage() {
   };
 
   const handleChoice = () => {
-    
-    setRefresh(!refresh);
+    setChecked(true);
     setMainView(false);
+   
+    filtering()
+  
     handleClose()
+    scrollToSection();
   }
 
   const handleHomeClick= ()=>{
@@ -136,12 +150,15 @@ export default function MainPage() {
   }, [refresh])
 
   const styles = {
-    background: {
+      background: {
       position: 'absolute',
       padding: 'auto',
-      height: '100vh',
+      minHeight:'100vh',
+      height: 'auto',
       width: '100vw',
-      backgroundImage: `url(${bg})`
+      backgroundImage: `url(${bg})`,
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment:"fixed",
     },
 
     btnstyle: {
@@ -332,7 +349,7 @@ export default function MainPage() {
             </LocalizationProvider>
             </Grid>
             <img src={searchbox} alt='' style={styles.sbStyle} />
-          <Button endIcon={<SearchIcon style={{color:"#ffffff"}} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice }><Typography style={{fontSize:"30",color:"#ffffff"}}>Search</Typography></Button>
+            <div class="scroll"><Button endIcon={<SearchIcon style={{ color: "#ffffff" }} />} style={styles.srchbtnstyle} variant="contained" onClick={handleChoice}><Typography style={{ fontSize: "30", color: "#ffffff" }}>Search</Typography></Button></div>
           </ThemeProvider>
 
         </Grid>
@@ -341,13 +358,13 @@ export default function MainPage() {
         <ThemeProvider theme={darktheme}>
         </ThemeProvider>
       </div>
-      {!mainView && (<Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+      {!mainView && (<Slide direction="up" in={checked} mountOnEnter unmountOnExit><Paper elevation={20} style={styles.paperStyle}><Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
         {filteredFlights.map(flight => (
           <Grid key={flight._id} item xs={4} >
             <FlightCard flight={flight} />
           </Grid>
         ))}
-      </Grid></Paper>)}
+      </Grid></Paper></Slide>)}
 
       
     </div>
