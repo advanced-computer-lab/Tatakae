@@ -113,18 +113,8 @@ export default function Plane(props) {
     setToHome(true)
   }
 
-  const handleCloseFailure= ()=>{
+  const handleCloseFailure = () => {
     setOpenFailure(false)
-  }
-
-  const handleNoReturn = () => {
-    axios.post('http://localhost:8082/api/reservations/payment', {totalPrice: totalPrice}).then(res => {
-      setReturnPop(false)
-      setNoReturns(false)
-      setOpenFailure(false)
-      setLoadingPop(true)
-      window.open(res.data, '_blank');
-    })
   }
 
   const handleOpen = () => {
@@ -262,7 +252,7 @@ export default function Plane(props) {
       .catch(err => console.log(err))
   }
 
-  const handleConfirm = async () => {
+  const handleToPayment = async () => {
 
     const economySeatsAdults = economySelected.filter(e => e.isChild === false).map(e => e.seatIndex)
     const businessSeatsAdults = businessSelected.filter(e => e.isChild === false).map(e => e.seatIndex)
@@ -309,12 +299,23 @@ export default function Plane(props) {
       flightId: flight._id
     }
 
-    await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data)
-      .catch(err => console.log(err))
-    await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
-      .catch(err => console.log(err))
+    sessionStorage.setItem('deptData', JSON.stringify(data))
+    sessionStorage.setItem('deptDataBooks', JSON.stringify(dataBooks))
 
-    setToHome(true);
+    axios.post('http://localhost:8082/api/reservations/payment', { totalPrice: totalPrice }).then(res => {
+      setReturnPop(false)
+      setNoReturns(false)
+      setOpenFailure(false)
+      setLoadingPop(true)
+      window.open(res.data, '_blank');
+    })
+
+    /* await axios.post('http://localhost:8082/api/reservations/reservationcreate/', data)
+       .catch(err => console.log(err))
+     await axios.patch('http://localhost:8082/api/flights/flightbookseats/', dataBooks)
+       .catch(err => console.log(err))*/
+
+    //setToHome(true);
   }
 
   const handleYesConfirm = () => {
@@ -332,6 +333,14 @@ export default function Plane(props) {
       backgroundRepeat: 'no-repeat'
     }
   };
+
+  const clearStorageToHome = () => {
+    sessionStorage.removeItem('deptData')
+    sessionStorage.removeItem('deptDataBooks')
+    sessionStorage.removeItem('returnData')
+    sessionStorage.removeItem('returnDataBooks')
+    setToHome(true)
+  }
 
   useEffect(() => {
     axios
@@ -457,12 +466,12 @@ export default function Plane(props) {
   )
 
   const failureButtons = (<>
-  <Button onClick={handleNoReturn} color="inherit" size="small" >
-  Try Again
-</Button>
-<Button href='/home' color="inherit" size="small" >
-Back to Home
-</Button></>)
+    <Button onClick={handleToPayment} color="inherit" size="small" >
+      Try Again
+    </Button>
+    <Button href='/home' color="inherit" size="small" >
+      Back to Home
+    </Button></>)
 
   return (
     <Grid style={styles.background} container>
@@ -494,7 +503,7 @@ Back to Home
           <Alert severity="success" variant='filled'>
             <AlertTitle>Success</AlertTitle>
             Your reservation is Complete. Have a safe flight!
-            <Button onClick={handleConfirm} color="inherit" size="small" variant="filled">
+            <Button onClick={clearStorageToHome} color="inherit" size="small" variant="filled">
               Check it Out!
             </Button>
           </Alert>
@@ -541,13 +550,13 @@ Back to Home
         >
           <Alert severity="info" variant="filled"
             action={<>
-              <Button onClick={handleNoReturn} color="inherit" size="small" variant="outlined">
+              <Button onClick={handleToPayment} color="inherit" size="small" variant="outlined">
                 Pay for Dept. Flight
               </Button>
               <Button href='/home' color="inherit" size="small" variant="outlined">
                 Back to Home
               </Button>
-              </>
+            </>
             }
           >
             Sorry this flight has no returns.
@@ -565,7 +574,7 @@ Back to Home
             <Button onClick={handleYesReturn} size="small" color="primary">
               Yes
             </Button>
-            <Button onClick={handleNoReturn}>
+            <Button onClick={handleToPayment}>
               No
             </Button>
           </DialogActions>
@@ -722,6 +731,7 @@ Back to Home
                       //setSelectedCount={setSelectedCount}
                       selected={firstSelected}
                       setSelected={setFirstSelected}
+                      pressed={0}
                     />
                   ))}
                 </Grid>
@@ -766,6 +776,7 @@ Back to Home
                         //setSelectedCount={setSelectedCount}
                         selected={businessSelected}
                         setSelected={setBusinessSelected}
+                        pressed={0}
                       />
                     ))}
                   </Grid>
@@ -810,6 +821,7 @@ Back to Home
                         }
                         selected={economySelected}
                         setSelected={setEconomySelected}
+                        pressed={0}
                       />
                     ))}
                   </Grid>
