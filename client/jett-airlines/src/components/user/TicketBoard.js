@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import TicketCard from './TicketCard';
 import Reservation from './Reservation';
 import Grid from '@mui/material/Grid';
 import axios from 'axios'
-import {Paper} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import Button from '@mui/material/Button';
 import { Typography,Toolbar,AppBar } from '@mui/material';

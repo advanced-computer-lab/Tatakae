@@ -1,19 +1,62 @@
 import React from "react";
-import { Box, Typography} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import "../../css/Plane.css";
 import { useEffect } from "react";
+import axios from "axios";
 
 export default function Seat(props) {
-  //const [refresh, setRefresh] = React.useState(false);
-  //const [pressed, setPressed] = React.useState(false);
-  const [pressed, setPressed] = React.useState(0);
+  const [pressed, setPressed] = React.useState(props.pressed);
+  const [price, setPrice] = React.useState(props.price);
+
+  useEffect(() => {
+    if (props.pressed != 0) {
+      if (props.pressed === 1) {
+        props.setSelected((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: false,
+            price: price,
+          })
+        );
+        props.setPrevious((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: false,
+            price: price,
+          })
+        );
+        props.setTotalPrice((total) => total + price);
+      } else {
+        props.setSelected((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: true,
+            price: 0.5 * price,
+          })
+        );
+        props.setPrevious((prevArray) =>
+          prevArray.concat({
+            seatIndex: props.seatIndex,
+            seatNumber: props.seatNumber,
+            isChild: true,
+            price: 0.5 * price,
+          })
+        );
+        props.setTotalPrice((total) => total + 0.5 * price);
+      }
+    }
+  }, []);
+
   var seatColor;
-  if(pressed === 1){
-    seatColor = {backgroundColor:props.colors.selectedColor};
-  }else{
+  if (pressed === 1) {
+    seatColor = { backgroundColor: props.colors.selectedColor };
+  } else if (pressed === 2) {
     seatColor = { backgroundColor: props.colors.selectedChildColor };
   }
-  
+
   let className = "seat";
   if (!props.available) {
     if (pressed === 0) {
@@ -77,12 +120,12 @@ export default function Seat(props) {
     }
   };
 
-  useEffect(() => {}, [pressed]);
-
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
       <Typography>
-      <span style={{color: "white", textAlign: "center"}}>{props.seatNumber}</span>
+        <span style={{ color: "white", textAlign: "center" }}>
+          {props.seatNumber}
+        </span>
       </Typography>
     </Box>
   );

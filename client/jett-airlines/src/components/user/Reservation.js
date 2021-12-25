@@ -39,10 +39,6 @@ export default function Reservation(props) {
   const [returnBusiness, setReturnBusiness] = useState(null);
   const [returnEco, setReturnEco] = useState(null);
 
-  const [returnFlights, setReturnFlights] = useState([]);
-  const [returnFlightsPop, setReturnFlightsPop] = useState(false);
-  const [noReturns, setNoReturns] = useState(false);
-  const [returnPop, setReturnPop] = useState(false);
   const [cancelPop, setCancelPop] = useState(false);
   const [emailPop, setEmailPop] = useState(false);
 
@@ -299,7 +295,16 @@ export default function Reservation(props) {
             firstSelected={deptFirst}
             businessSelected={deptBusiness}
             economySelected={deptEco}
+            firstSeatsAdults={props.reservation.departureTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.departureTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.departureTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.departureTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.departureTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.departureTicket.economySeatsChildren}
             totalPrice={props.reservation.departureTicket.totalPrice}
+            Ticket = {props.reservation.departureTicket}
+            depBool = {true}
+            resNo = {props.reservation.reservationNumber}
           />
         )}
         {returnFlight && (
@@ -308,7 +313,16 @@ export default function Reservation(props) {
             firstSelected={returnFirst}
             businessSelected={returnBusiness}
             economySelected={returnEco}
+            firstSeatsAdults={props.reservation.returnTicket.firstSeatsAdults}
+            firstSeatsChildren={props.reservation.returnTicket.firstSeatsChildren}
+            businessSeatsAdults={props.reservation.returnTicket.businessSeatsAdults}
+            businessSeatsChildren={props.reservation.returnTicket.businessSeatsChildren}
+            economySeatsAdults={props.reservation.returnTicket.economySeatsAdults}
+            economySeatsChildren={props.reservation.returnTicket.economySeatsChildren}
             totalPrice={props.reservation.returnTicket.totalPrice}
+            Ticket = {props.reservation.returnTicket}
+            depBool = {false}
+            resNo = {props.reservation.reservationNumber}
           />
         )}
         <Button onClick={handleEmailClick}>
