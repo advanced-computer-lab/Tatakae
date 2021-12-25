@@ -184,7 +184,7 @@ export default function Dashboard() {
       minHeight: '100vh',
       maxHeight: 'auto',
       width: '90vw',
-      margin: "10vh 0 0 3.75vw"
+      margin: "0vh 0 0 3.75vw"
     }
     ,
     textStyle: {
@@ -492,7 +492,7 @@ export default function Dashboard() {
           }</Grid></Paper>}
 
       {(!user.admin) && (!mainView && <Paper elevation={20} style={styles.paperStyle2}>
-        <Grid container spacing={5} style={{ margin: ' 0vh 0vw' }}>
+        <Grid container spacing={5} style={{ margin:"0 0 0 -18px" }}>
           {filteredFlights.map(flight => (
             <Grid key={flight._id} item xs={4} >
               <UserFlightCard flight={flight} refresh={refresh} setRefresh={setRefresh} />

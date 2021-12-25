@@ -16,10 +16,12 @@ import Alert from '@mui/material/Alert';
 import TicketDetails from './TicketDetails';
 import { Navigate } from 'react-router-dom';
 import Plane from './Plane'
-
+import '../../css/flightCard.css'
+var img="";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 
 
 export default function FlightCard(props) {
@@ -29,6 +31,38 @@ export default function FlightCard(props) {
   const [toSignIn, setToSignIn] = React.useState(false);
   const [toPlane, setToPlane] = React.useState(false);
   const [toReturnPlane, setToReturnPlane]= React.useState(false);
+
+  if(props.flight.to==="LAX"){
+    img="https://s26162.pcdn.co/wp-content/uploads/2019/07/los-angeles-echo-park.jpg";
+  }  else  if(props.flight.to==="JFK"){
+    img="http://yourusacityguide.com/wp-content/uploads/2021/03/Queens.jpg";
+  } 
+  else  if(props.flight.to==="LHR"){
+    img="https://www.checkin.pk/frontend/tours/images/brands/tours/lahore.jpg";
+  }
+  else  if(props.flight.to==="DXB"){
+    img="http://www.travelinbusiness.co.uk/gallery/dubai.png";
+  } 
+  else  if(props.flight.to==="CAI"){
+    img="http://vancouvertravel.net/wp-content/uploads/%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9.jpg";
+  } 
+  else  if(props.flight.to==="MUC"){
+    img="https://w0.peakpx.com/wallpaper/406/31/HD-wallpaper-munich-city-building-cars-city-lights.jpg";
+  }
+  else  if(props.flight.to==="CDG"){
+    img="http://www.agazaonline.com/media/k2/galleries/390/nature-cloud-ocean-cliff-landscape-city-paris-ultrahd-4k-wallpaper-198277.jpg";
+  } 
+  else  if(props.flight.to==="MUC"){
+    img="https://w0.peakpx.com/wallpaper/406/31/HD-wallpaper-munich-city-building-cars-city-lights.jpg";
+  } 
+  else  if(props.flight.to==="RUH"){
+    img="https://i.pinimg.com/originals/35/42/23/3542239c76506917a3254ee3a8e88b8d.png";
+  } 
+  else  if(props.flight.to==="YYZ"){
+    img="https://w0.peakpx.com/wallpaper/350/209/HD-wallpaper-cities-toronto.jpg";
+  }  else{
+    img="";
+  }
 
   const handleClickOpenDetails = () => {
     setOpenDetails(true);
@@ -55,29 +89,41 @@ export default function FlightCard(props) {
   const redirectSignIn = ()=>{
     setToSignIn(true)
   }
-
+ 
+ 
   return (
     <div className='center'>
-      <Card sx={{ maxWidth: 350 }} elevation={10}>
-        <CardActionArea>
-          <AirplaneTicketIcon color="primary" sx={{ fontSize: 50 }} />
+      <div class='main3'>
+     <div class="card">
 
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              From {props.flight.from} To {props.flight.to}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {new Date(props.flight.departureDate).toLocaleString()}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button onClick={handleClickOpenDetails} size="small" color="primary">
+   
+    <img src={img} alt="New York" class="image"/>
+    <div class="section">
+      <p class="section__from section__airport">{props.flight.from}</p>
+      <p class="section__to section__airport">{props.flight.to}</p>
+      <dl class="info">
+        <div class="info__section info__section--first">
+          <dt>Departure date</dt>
+          <dd> {new Date(props.flight.departureDate).toLocaleString()}</dd>
+
+          <dt>Seat</dt>
+          <dd>G050</dd>
+        </div>
+        <div class="info__section">
+          <dt>Terminal</dt>
+          <dd>14</dd>
+
+          <dt>Gate</dt>
+          <dd>3</dd>
+        </div>
+      </dl>
+      
+     <Button onClick={handleClickOpenDetails} size="small" color="primary">
             View Details
           </Button>
-        </CardActions>
-      </Card>
-
+    </div>
+  </div>
+  </div>
       <Dialog style={{
     }}
         open={openDetails}
