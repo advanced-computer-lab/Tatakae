@@ -5,9 +5,8 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export default function Seat(props) {
-
   const [pressed, setPressed] = React.useState(props.pressed);
-  const [price, setPrice] = React.useState(props.price)
+  const [price, setPrice] = React.useState(props.price);
 
   useEffect(() => {
     if (props.pressed != 0) {
@@ -28,10 +27,8 @@ export default function Seat(props) {
             price: price,
           })
         );
-        props.setTotalPrice(total => total + price);
-
-      }
-      else {
+        props.setTotalPrice((total) => total + price);
+      } else {
         props.setSelected((prevArray) =>
           prevArray.concat({
             seatIndex: props.seatIndex,
@@ -48,10 +45,10 @@ export default function Seat(props) {
             price: 0.5 * price,
           })
         );
-        props.setTotalPrice(total => (total + 0.5 * price));
+        props.setTotalPrice((total) => total + 0.5 * price);
       }
     }
-  }, [])
+  }, []);
 
   var seatColor;
   if (pressed === 1) {
@@ -126,7 +123,9 @@ export default function Seat(props) {
   return (
     <Box onClick={handleClick} class={className} style={seatColor}>
       <Typography>
-        <span style={{ color: "white", textAlign: "center" }}>{props.seatNumber}</span>
+        <span style={{ color: "white", textAlign: "center" }}>
+          {props.seatNumber}
+        </span>
       </Typography>
     </Box>
   );
