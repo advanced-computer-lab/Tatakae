@@ -48,19 +48,31 @@ export default function EditSeats(props) {
     const { id } = useParams();
     const user = JSON.parse(sessionStorage.getItem('signedUser'));
     const seatsData = JSON.parse(sessionStorage.getItem('seatsData'));
+    const Ticket = JSON.parse(sessionStorage.getItem('Ticket'));
+
+    
 
     const [totalPrice, setTotalPrice] = React.useState(0);
     const [childSelected, setChildSelected] = React.useState(false);
-    const [businessSelected, setBusinessSelected] = React.useState([]);
-    const [firstSelected, setFirstSelected] = React.useState([]);
-    const [economySelected, setEconomySelected] = React.useState([]);
-    const [flight, setFlight] = React.useState({});
+    const [flight, setFlight] = React.useState(null);
     const [notFound, setNotFound] = React.useState(false);
     const [confirmPop, setConfirmPop] = React.useState(false);
     const [toHome, setToHome] = React.useState(false);
     const [loadingPop, setLoadingPop] = React.useState(false);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openFailure, setOpenFailure] = React.useState(false);
+    const [fPrice, setF] = React.useState(calcPrice());
+
+    const calcPrice=()=>{
+         setF(flight.firstPrice)
+    }
+
+    const [businessSelected, setBusinessSelected] = React.useState([]);
+    const [firstSelected, setFirstSelected] = React.useState([]);
+    const [economySelected, setEconomySelected] = React.useState([]);
+    const [prevBusiness, setPreviousBusiness] = React.useState([]);
+    const [prevFirst, setPreviousFirst] = React.useState([]);
+    const [prevEconomy, setPreviousEconomy] = React.useState([]);
 
     const authChannelRef = React.useRef(new BroadcastChannel("auth"));
     const authChannel = authChannelRef.current;
@@ -96,7 +108,30 @@ export default function EditSeats(props) {
     }
 
     const handleOpen = () => {
-        setConfirmPop(true);
+        if (Ticket.departureTicket) {
+            axios.patch(
+                'http://localhost:8082/api/reservations/cancelhalfreservation/',
+                { data: { token: sessionStorage.getItem("token"), departureTicket: Ticket.departureTicket} }
+            )
+                .then(() => {
+                    axios.patch(
+                        'http://localhost:8082/api/reservations/bookhalfreservation/',
+                        { data: { token: sessionStorage.getItem("token"), departureTicket: Ticket.departureTicket} }
+                    )
+                });
+        }
+
+        else {
+            axios.patch(
+                'http://localhost:8082/api/reservations/cancelhalfreservation/',
+                { data: { token: sessionStorage.getItem("token"), returnTicket: Ticket.returnTicket} }
+            )
+                .then(() => {
+
+
+                });
+        }
+
     }
 
     const handleToPayment = async () => {
@@ -167,6 +202,12 @@ export default function EditSeats(props) {
         setConfirmPop(false);
     }
 
+    const checkPrev = () => {
+        return JSON.stringify(economySelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevEconomy.sort((a, b) => a.seatIndex < b.seatIndex))
+            && JSON.stringify(firstSelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevFirst.sort((a, b) => a.seatIndex < b.seatIndex))
+            && JSON.stringify(businessSelected.sort((a, b) => a.seatIndex < b.seatIndex)) === JSON.stringify(prevBusiness.sort((a, b) => a.seatIndex < b.seatIndex))
+    }
+
     const styles = {
         background: {
             position: 'absolute',
@@ -191,10 +232,8 @@ export default function EditSeats(props) {
             .get(`http://localhost:8082/api/flights/flightget/${id}`)
             .then((res) => {
                 setFlight(res.data);
+                fPrice()
             })
-            .catch((err) => {
-                setNotFound(true);
-            });
     }, []);
 
     useEffect(() => {
@@ -387,8 +426,10 @@ export default function EditSeats(props) {
                                         <Seat
                                             key={seatNumber + 8 * rowNumber}
                                             seatIndex={seatNumber + 8 * rowNumber}
+                                            previous={prevFirst}
+                                            setPrevious={setPreviousFirst}
                                             isChild={childSelected}
-                                            price={flight.firstPrice}
+                                            price={Number(flight.firstPrice)}
                                             totalPrice={totalPrice}
                                             setTotalPrice={setTotalPrice}
                                             available={seatsData.firstSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.firstSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
@@ -429,11 +470,13 @@ export default function EditSeats(props) {
                                             <Seat
                                                 key={seatNumber + 8 * rowNumber}
                                                 seatIndex={seatNumber + 8 * rowNumber}
+                                                previous={prevBusiness}
+                                                setPrevious={setPreviousBusiness}
                                                 isChild={childSelected}
                                                 price={flight.businessPrice}
-                                                totalPrice={totalPrice}
+                                                totalPrice={totalPrice ? totalPrice : 0}
                                                 setTotalPrice={setTotalPrice}
-                                                available={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false: element}
+                                                available={seatsData.businessSeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.businessSeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
                                                 colors={colors}
                                                 seatNumber={
                                                     String.fromCharCode(code + seatNumber) +
@@ -475,9 +518,11 @@ export default function EditSeats(props) {
                                             <Seat
                                                 key={seatNumber + 8 * rowNumber}
                                                 seatIndex={seatNumber + 8 * rowNumber}
+                                                previous={prevEconomy}
+                                                setPrevious={setPreviousEconomy}
                                                 isChild={childSelected}
                                                 price={flight.economyPrice}
-                                                totalPrice={totalPrice}
+                                                totalPrice={totalPrice ? totalPrice : 0}
                                                 setTotalPrice={setTotalPrice}
                                                 available={seatsData.economySeatsAdults.includes((seatNumber + 8 * rowNumber)) ? false : seatsData.economySeatsChildren.includes((seatNumber + 8 * rowNumber)) ? false : element}
                                                 colors={colors}
@@ -513,7 +558,7 @@ export default function EditSeats(props) {
                             color="primary"
                             variant="contained"
                             onClick={handleOpen}
-                            disabled={(businessSelected.length + economySelected.length + firstSelected.length) === 0}>
+                            disabled={((businessSelected.length + economySelected.length + firstSelected.length) === 0) || checkPrev() === true}>
                             Edit Seat(s)
                         </Button>
                         <Button variant="contained" href='/home' sx={{ mt: 3, ml: 1 }}>Back to Home</Button>
